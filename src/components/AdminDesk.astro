@@ -1,0 +1,114 @@
+---
+const queueClaims = [
+  { id: 'FC-9912', claim: 'State Govt announces new tax exemption scheme for agricultural land transfers.', category: 'Elections & Agriculture', risk: 'High', date: '5 mins ago' },
+  { id: 'FC-9915', claim: 'Local water supply disruption scheduled in District 4 due to pipeline repairs.', category: 'Hyperlocal Public Health', risk: 'Medium', date: '12 mins ago' },
+];
+---
+
+<section id="admin-desk" class="w-full py-12 bg-white dark:bg-[#000000] border-b border-[#ebebeb] dark:border-[#262626] transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+    
+    <!-- Section Header -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <span class="font-mono-caption text-[#0070f3]">PHASE 8 • ADMIN & CONTROL PANEL</span>
+        <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-[-0.96px]">
+          Operations Desk & Moderation Queue
+        </h2>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white rounded font-mono text-xs">
+          Role: Super Admin
+        </span>
+      </div>
+    </div>
+
+    <!-- Analytics & Health Dashboard Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      
+      <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
+        <div class="text-xs font-mono-caption text-[#888888] mb-1">CRAWLER STATUS</div>
+        <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">142 Sources</div>
+        <div class="text-xs text-[#29bc9b] mt-1 flex items-center gap-1 font-medium">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#29bc9b]"></span>
+          1,480 articles scraped/hr
+        </div>
+      </div>
+
+      <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
+        <div class="text-xs font-mono-caption text-[#888888] mb-1">FACT-CHECK QUEUE</div>
+        <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">2 Pending</div>
+        <div class="text-xs text-[#ab570a] dark:text-[#f5a623] mt-1 flex items-center gap-1 font-medium">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#f5a623]"></span>
+          High-Stakes Election Claim
+        </div>
+      </div>
+
+      <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
+        <div class="text-xs font-mono-caption text-[#888888] mb-1">LIVE MONETIZATION (RPM)</div>
+        <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">$4.85 RPM</div>
+        <div class="text-xs text-[#0070f3] mt-1 flex items-center gap-1 font-medium">
+          AdSense + Subscriptions Active
+        </div>
+      </div>
+
+      <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
+        <div class="text-xs font-mono-caption text-[#888888] mb-1">DAILY READERSHIP</div>
+        <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">1.2M Views</div>
+        <div class="text-xs text-[#29bc9b] mt-1 flex items-center gap-1 font-medium">
+          +18.4% from yesterday
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Human Review Queue Table -->
+    <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden shadow-stacked-sm">
+      <div class="px-5 py-4 bg-white dark:bg-[#141414] border-b border-[#ebebeb] dark:border-[#262626] flex items-center justify-between">
+        <h3 class="text-sm font-semibold text-[#171717] dark:text-white flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#ee0000]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          Fact-Check Human Moderation Desk
+        </h3>
+        <span class="text-xs font-mono text-[#888888]">Auto-routed by AI Verification Pipeline</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-[#171717] dark:text-[#a1a1a1]">
+          <thead class="bg-[#fafafa] dark:bg-[#0a0a0a] text-[#888888] font-mono-caption border-b border-[#ebebeb] dark:border-[#262626]">
+            <tr>
+              <th class="px-4 py-3">Audit ID</th>
+              <th class="px-4 py-3">Submitted Claim</th>
+              <th class="px-4 py-3">Category</th>
+              <th class="px-4 py-3">Risk Level</th>
+              <th class="px-4 py-3 text-right">Moderator Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] bg-white dark:bg-[#141414]">
+            {queueClaims.map((item) => (
+              <tr class="hover:bg-[#fafafa] dark:hover:bg-[#1a1a1a] transition-colors">
+                <td class="px-4 py-3 font-mono font-medium text-[#0070f3]">{item.id}</td>
+                <td class="px-4 py-3 max-w-xs font-medium text-[#171717] dark:text-white">{item.claim}</td>
+                <td class="px-4 py-3 text-[#4d4d4d] dark:text-[#a1a1a1]">{item.category}</td>
+                <td class="px-4 py-3">
+                  <span class={`px-2 py-0.5 rounded text-[11px] font-semibold ${item.risk === 'High' ? 'bg-[#f7d4d6] dark:bg-[#521b1e] text-[#ee0000] dark:text-[#ff6b6b]' : 'bg-[#ffefcf] dark:bg-[#4a3410] text-[#ab570a] dark:text-[#f5a623]'}`}>
+                    {item.risk} Risk
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-right space-x-2">
+                  <button onclick={`alert('Claim ${item.id} Approved & Verdict Published!')`} class="px-2.5 py-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] rounded text-[11px] font-medium transition-colors">
+                    Approve Verdict
+                  </button>
+                  <button onclick={`alert('Claim ${item.id} Rejected!')`} class="px-2.5 py-1 bg-[#fafafa] dark:bg-[#1a1a1a] hover:bg-[#ebebeb] dark:hover:bg-[#262626] border border-[#ebebeb] dark:border-[#262626] text-[#ee0000] rounded text-[11px] font-medium transition-colors">
+                    Reject Claim
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>

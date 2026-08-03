@@ -1,0 +1,163 @@
+---
+import LogoIcon from './LogoIcon.astro';
+
+const languages = [
+  { code: 'en', name: 'English' },
+  { code: 'hi', name: 'हिंदी (Hindi)' },
+  { code: 'bn', name: 'বাংলা (Bengali)' },
+  { code: 'mr', name: 'मराठी (Marathi)' },
+  { code: 'te', name: 'తెలుగు (Telugu)' },
+  { code: 'ta', name: 'தமிழ் (Tamil)' },
+  { code: 'gu', name: 'ગુજરાતી (Gujarati)' },
+  { code: 'kn', name: 'ಕನ್ನಡ (Kannada)' },
+  { code: 'ml', name: 'മലയാളം (Malayalam)' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
+  { code: 'or', name: 'ଓଡ଼ିଆ (Odia)' },
+  { code: 'as', name: 'অসমীয়া (Assamese)' },
+  { code: 'ur', name: 'اردو (Urdu)' },
+  { code: 'bho', name: 'भोजपुरी (Bhojpuri)' },
+  { code: 'ks', name: 'कॉशुर (Kashmiri)' },
+  { code: 'doi', name: 'डोगरी (Dogri)' },
+  { code: 'kok', name: 'कोंकणी (Konkani)' },
+  { code: 'mai', name: 'मैथिली (Maithili)' },
+  { code: 'mni', name: 'ꯃꯤꯇꯩꯂꯣᓐ (Manipuri)' },
+  { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ (Santali)' },
+  { code: 'ne', name: 'नेपाली (Nepali)' },
+];
+
+const states = [
+  'All Regions', 'Karnataka', 'Tamil Nadu', 'Kerala', 'Telangana', 
+  'Andhra Pradesh', 'Maharashtra', 'Gujarat', 'Delhi', 'Rajasthan', 
+  'Uttar Pradesh', 'Bihar', 'West Bengal', 'Punjab', 'Odisha', 'Assam', 'Jammu & Kashmir'
+];
+---
+
+<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[#ebebeb] dark:border-[#262626] h-[64px] transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto h-full px-4 sm:px-6 flex items-center justify-between">
+    <!-- Brand & Live Indicator -->
+    <div class="flex items-center gap-3">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <!-- New Newspaper-Microphone Logo Icon -->
+        <div class="relative flex items-center justify-center group-hover:scale-105 transition-transform">
+          <LogoIcon className="w-8 h-8 text-[#171717] dark:text-white" />
+          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#0070f3] rounded-full animate-ping"></span>
+          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#0070f3] rounded-full"></span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-semibold text-base tracking-tight leading-tight text-[#171717] dark:text-white">HeadlineHub <span class="text-[#0070f3]">AI</span></span>
+          <span class="font-mono-caption text-[10px] text-[#0070f3] dark:text-[#50e3c2] font-semibold tracking-widest leading-none">Only Facts</span>
+        </div>
+      </a>
+
+      <span class="hidden md:inline-block h-4 w-[1px] bg-[#ebebeb] dark:bg-[#262626] mx-1"></span>
+
+      <!-- Live Pipeline Health Chip -->
+      <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-full text-xs text-[#4d4d4d] dark:text-[#a1a1a1]">
+        <span class="w-1.5 h-1.5 bg-[#50e3c2] rounded-full animate-pulse"></span>
+        <span class="font-mono text-[11px]">24/7 Live Fact Scraper</span>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="hidden md:flex items-center gap-1">
+      <a href="/" class="px-3 py-1.5 text-sm text-[#171717] dark:text-white font-medium hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors">
+        Live News
+      </a>
+      <a href="#language-hub" class="px-3 py-1.5 text-sm text-[#0070f3] dark:text-[#50e3c2] font-semibold hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors flex items-center gap-1">
+        <span>🇮🇳 Bharat Languages</span>
+      </a>
+      <a href="/verify" class="px-3 py-1.5 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] font-medium hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-[#0070f3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Fact Check
+      </a>
+      <a href="#podcasts" class="px-3 py-1.5 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] font-medium hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors">
+        Audio Briefings
+      </a>
+      <a href="/admin" class="px-3 py-1.5 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] font-medium hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors flex items-center gap-1">
+        <svg class="w-3.5 h-3.5 text-[#888888]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        Ops Desk
+      </a>
+    </nav>
+
+    <!-- Controls & Action Pills -->
+    <div class="flex items-center gap-2">
+      <!-- Dark / Light Mode Toggle Pill Button -->
+      <button 
+        id="theme-toggle-btn" 
+        type="button"
+        aria-label="Toggle Theme"
+        class="px-3 py-1.5 h-[28px] flex items-center gap-1.5 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] border border-[#171717] dark:border-white rounded-[6px] text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+      >
+        <!-- Sun Icon (Active in Dark Mode) -->
+        <svg id="theme-sun-icon" class="hidden dark:block w-3.5 h-3.5 text-[#171717]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+        <!-- Moon Icon (Active in Light Mode) -->
+        <svg id="theme-moon-icon" class="block dark:hidden w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+        </svg>
+        <span id="theme-btn-text" class="text-[11px] uppercase tracking-wide">
+          <span class="block dark:hidden">Dark</span>
+          <span class="hidden dark:block">Light</span>
+        </span>
+      </button>
+
+      <!-- Language Selector -->
+      <div class="relative group">
+        <select id="language-select" class="appearance-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-medium px-2.5 py-1.5 pr-7 border border-[#ebebeb] dark:border-[#262626] rounded-md cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#171717]">
+          {languages.map(lang => (
+            <option value={lang.code}>{lang.name}</option>
+          ))}
+        </select>
+        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#888888]">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+
+      <!-- State / Region Picker -->
+      <div class="relative hidden sm:block">
+        <select id="state-select" class="appearance-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-medium px-2.5 py-1.5 pr-7 border border-[#ebebeb] dark:border-[#262626] rounded-md cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#171717]">
+          {states.map(state => (
+            <option value={state.toLowerCase().replace(/\s+/g, '-')}>{state}</option>
+          ))}
+        </select>
+        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#888888]">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <a href="/verify" class="hidden xs:inline-flex items-center justify-center px-3 h-[28px] bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] text-xs font-medium rounded-[6px] transition-colors shadow-sm">
+        Verify Claim
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
+  themeToggleBtn?.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  const langSelect = document.getElementById('language-select') as HTMLSelectElement;
+  langSelect?.addEventListener('change', (e) => {
+    const code = (e.target as HTMLSelectElement).value;
+    const name = langSelect.options[langSelect.selectedIndex].text;
+    
+    localStorage.setItem('userLanguage', code);
+    localStorage.setItem('userLanguageName', name);
+
+    window.dispatchEvent(new CustomEvent('language-changed', {
+      detail: { langCode: code, langName: name }
+    }));
+  });
+
+  window.addEventListener('language-changed', (e: any) => {
+    const { langCode } = e.detail;
+    if (langSelect && langCode) {
+      langSelect.value = langCode;
+    }
+  });
+</script>

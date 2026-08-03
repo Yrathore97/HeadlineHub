@@ -1,0 +1,282 @@
+---
+interface Article {
+  id: string;
+  headline: string;
+  shortNews: string;
+  category: string;
+  region: string;
+  state?: string;
+  district?: string;
+  language: string;
+  imageUrl: string;
+  source: string;
+  publishedAt: string;
+  verdict: 'verified' | 'likely_true' | 'unverified';
+}
+
+const categories = [
+  'All News', 'National', 'Politics', 'Business & Economy', 
+  'Startups & Tech', 'Sports', 'Entertainment', 'International', 'Hyperlocal'
+];
+
+const mockArticles: Article[] = [
+  {
+    id: 'art-001',
+    headline: 'RBI Keeps Repo Rate Steady at 6.5%, Projects 7.2% GDP Growth',
+    shortNews: 'The RBI Monetary Policy Committee unanimously maintained the benchmark repo rate at 6.5%, citing strong macroeconomic fundamentals and stable inflation forecasts.',
+    category: 'Business & Economy',
+    region: 'India',
+    state: 'Maharashtra',
+    district: 'Mumbai',
+    language: 'English',
+    imageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80',
+    source: 'RBI Gazette / PTI',
+    publishedAt: '12m ago',
+    verdict: 'verified'
+  },
+  {
+    id: 'art-002',
+    headline: 'ISRO Assembles INSAT-3DS Satellite for Sriharikota Launch',
+    shortNews: 'Indian Space Research Organisation has completed final payload integration for INSAT-3DS, expanding weather forecasting and disaster tracking capabilities.',
+    category: 'Startups & Tech',
+    region: 'India',
+    state: 'Andhra Pradesh',
+    district: 'Tirupati',
+    language: 'English',
+    imageUrl: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=600&q=80',
+    source: 'ISRO Official',
+    publishedAt: '28m ago',
+    verdict: 'verified'
+  },
+  {
+    id: 'art-003',
+    headline: 'Karnataka Cabinet Approves ₹1,500 Cr AI Tech Hub in Bengaluru',
+    shortNews: 'Karnataka announces a flagship GPU compute credit program and specialized AI innovation parks across Bengaluru to incubate deep-tech startups.',
+    category: 'Hyperlocal',
+    region: 'State',
+    state: 'Karnataka',
+    district: 'Bengaluru Urban',
+    language: 'English',
+    imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
+    source: 'Karnataka Govt',
+    publishedAt: '45m ago',
+    verdict: 'verified'
+  },
+  {
+    id: 'art-004',
+    headline: 'India Leads T20 Series Against Australia After Dominant Victory',
+    shortNews: 'A stellar top-order batting display led India to a comfortable win with 4 overs remaining in the second T20 match at M. Chinnaswamy Stadium.',
+    category: 'Sports',
+    region: 'India',
+    state: 'Karnataka',
+    district: 'Bengaluru',
+    language: 'English',
+    imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=600&q=80',
+    source: 'BCCI / ANI',
+    publishedAt: '1h ago',
+    verdict: 'verified'
+  },
+  {
+    id: 'art-005',
+    headline: 'Semiconductor Summit 2026 Inaugrated in New Delhi',
+    shortNews: 'Global technology executives gather in New Delhi to finalize multi-billion dollar fabrication facility investments under India Semiconductor Mission.',
+    category: 'National',
+    region: 'India',
+    state: 'Delhi',
+    district: 'New Delhi',
+    language: 'English',
+    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80',
+    source: 'MeitY Press Release',
+    publishedAt: '2h ago',
+    verdict: 'verified'
+  },
+  {
+    id: 'art-006',
+    headline: 'Tamil Nadu Renewable Grid Crosses 20GW Clean Energy Benchmark',
+    shortNews: 'With new wind-solar hybrid projects operational, Tamil Nadu now fulfills over 45% of peak industrial power demand from clean energy.',
+    category: 'Hyperlocal',
+    region: 'State',
+    state: 'Tamil Nadu',
+    district: 'Coimbatore',
+    language: 'English',
+    imageUrl: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=600&q=80',
+    source: 'TANGEDCO',
+    publishedAt: '3h ago',
+    verdict: 'verified'
+  }
+];
+---
+
+<section id="news-feed" class="w-full py-10 bg-[#fafafa] dark:bg-[#050505] transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+    
+    <!-- Header & Streamlined Filter Controls -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-[#ebebeb] dark:border-[#262626] pb-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-2 h-2 rounded-full bg-[#0070f3] animate-pulse"></span>
+          <span class="font-mono-caption text-[#888888]">VERIFIED WIRE STREAM</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-[-0.96px]">
+          Live AI News
+        </h2>
+      </div>
+
+      <!-- Item 1 Fix: Circled area redesign - Clean Search & Toggle Bar -->
+      <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-64">
+          <input 
+            type="text" 
+            id="feed-search-input" 
+            placeholder="Search news stories..." 
+            class="w-full bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white placeholder-[#888888] rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]"
+          />
+          <svg class="w-3.5 h-3.5 text-[#888888] absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+
+        <!-- Fixed Circled Button: Short News Toggle Pill -->
+        <button 
+          id="short-news-toggle-btn" 
+          type="button"
+          class="px-3.5 py-1.5 bg-[#0070f3] hover:bg-[#0761d1] text-white rounded-lg text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          <span id="toggle-label">Short News Mode</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Pill Selector -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
+      {categories.map((cat, idx) => (
+        <button 
+          class={`cat-pill px-3.5 py-1.5 text-xs font-medium rounded-full shrink-0 transition-all cursor-pointer ${
+            idx === 0 
+              ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717] shadow-sm' 
+              : 'bg-white dark:bg-[#141414] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] dark:hover:border-[#404040]'
+          }`}
+          data-category={cat}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Item 3: Live News Cards (Headline + Short News Only) -->
+    <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {mockArticles.map((article) => (
+        <article data-article-id={article.id} class="article-card bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-[#0070f3] dark:hover:border-[#0070f3] transition-all flex flex-col group">
+          
+          <!-- Image Cap with Category Badge -->
+          <div class="relative h-44 w-full overflow-hidden bg-[#f5f5f5] dark:bg-[#1f1f1f]">
+            <img 
+              src={article.imageUrl} 
+              alt={article.headline} 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+            <div class="absolute top-3 left-3 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#171717] dark:text-white border border-[#ebebeb] dark:border-[#262626] flex items-center gap-1.5 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#0070f3]"></span>
+              {article.category}
+            </div>
+
+            <div class="absolute bottom-2.5 right-2.5 bg-black/80 backdrop-blur-md text-white text-[10px] font-mono px-2 py-0.5 rounded">
+              {article.publishedAt}
+            </div>
+          </div>
+
+          <!-- Article Body: Headline + Short News -->
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="text-[11px] font-mono text-[#888888] mb-1.5">
+                {article.source} {article.state ? `• ${article.state}` : ''}
+              </div>
+
+              <!-- Headline -->
+              <h3 class="article-headline text-base font-semibold text-[#171717] dark:text-white leading-snug tracking-[-0.3px] mb-2 group-hover:text-[#0070f3] transition-colors">
+                {article.headline}
+              </h3>
+
+              <!-- Short News Snippet -->
+              <p class="article-short-news text-xs text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed line-clamp-3">
+                {article.shortNews}
+              </p>
+            </div>
+
+            <!-- Footer: Fact Check Status & Quick Action -->
+            <div class="pt-2.5 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1 text-[#29bc9b] font-medium bg-[#aaffec]/50 dark:bg-[#064e3b]/50 px-2 py-0.5 rounded border border-[#29bc9b]/20">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                AI Verified
+              </div>
+
+              <a 
+                href={`/verify?query=${encodeURIComponent(article.headline)}`}
+                class="text-[#0070f3] hover:underline font-semibold text-xs flex items-center gap-1"
+              >
+                Verify Fact
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </a>
+            </div>
+
+          </div>
+        </article>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // Category Pill Filter
+  const catPills = document.querySelectorAll('.cat-pill');
+  catPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      catPills.forEach(p => {
+        p.className = 'cat-pill px-3.5 py-1.5 text-xs font-medium rounded-full shrink-0 transition-all cursor-pointer bg-white dark:bg-[#141414] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] dark:hover:border-[#404040]';
+      });
+      const target = e.target as HTMLElement;
+      target.className = 'cat-pill px-3.5 py-1.5 text-xs font-medium rounded-full shrink-0 transition-all cursor-pointer bg-[#171717] dark:bg-white text-white dark:text-[#171717] shadow-sm';
+    });
+  });
+
+  // Short News Toggle Button Logic
+  const toggleBtn = document.getElementById('short-news-toggle-btn');
+  const toggleLabel = document.getElementById('toggle-label');
+  let isShortMode = true;
+
+  toggleBtn?.addEventListener('click', () => {
+    isShortMode = !isShortMode;
+    if (toggleLabel) {
+      toggleLabel.innerText = isShortMode ? 'Short News Mode' : 'Expanded Mode';
+    }
+  });
+
+  // Listen for language change events from IndianLanguageHub & Navbar
+  window.addEventListener('language-changed', (e: any) => {
+    const { translations } = e.detail;
+    if (!translations) return;
+
+    const idMap: Record<string, string> = {
+      'art-001': 'art001',
+      'art-002': 'art002',
+      'art-003': 'art003',
+      'art-004': 'art004',
+      'art-005': 'art005',
+      'art-006': 'art006',
+    };
+
+    const articleCards = document.querySelectorAll<HTMLElement>('.article-card');
+    articleCards.forEach(card => {
+      const artId = card.getAttribute('data-article-id');
+      if (artId && idMap[artId] && translations[idMap[artId]]) {
+        const headlineEl = card.querySelector<HTMLElement>('.article-headline');
+        const shortNewsEl = card.querySelector<HTMLElement>('.article-short-news');
+
+        if (headlineEl) headlineEl.innerText = translations[idMap[artId]].headline;
+        if (shortNewsEl) shortNewsEl.innerText = translations[idMap[artId]].short;
+      }
+    });
+  });
+</script>

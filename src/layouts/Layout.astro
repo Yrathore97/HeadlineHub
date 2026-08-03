@@ -1,23 +1,77 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'HeadlineHub AI | Autonomous Multilingual Media & AI Fact-Check Engine',
+  description = 'HeadlineHub AI is India & South Asia’s 24/7 autonomous news ecosystem powered by artificial intelligence. Discover breaking news, verified claims, hyperlocal updates, and multi-format media.',
+  image = 'https://headlinehub.ai/og-default.jpg'
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://headlinehub.ai');
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Anti-FOUC Dark Mode Inline Initialization Script -->
+    <script is:inline>
+      (function() {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme === 'dark' || (!storedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Schema Markup JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "NewsMediaOrganization",
+      "name": "HeadlineHub AI",
+      "url": "https://headlinehub.ai",
+      "logo": "https://headlinehub.ai/logo.png",
+      "sameAs": [
+        "https://twitter.com/HeadlineHubAI",
+        "https://instagram.com/headlinehub.ai",
+        "https://t.me/headlinehubai"
+      ],
+      "knowsLanguage": ["en", "hi", "kn", "mr", "bn", "ta", "te", "gu", "ml", "pa"]
+    })} />
+  </head>
+  <body class="bg-[#fafafa] dark:bg-[#000000] text-[#171717] dark:text-[#ffffff] min-h-screen flex flex-col antialiased transition-colors duration-200">
+    <slot />
+  </body>
+</html>

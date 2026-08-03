@@ -1,0 +1,107 @@
+---
+const audioTracks = [
+  { id: 't-1', title: 'India Morning Briefing: RBI Policy & ISRO Mission', duration: '03:45', category: 'Daily Bulletin', lang: 'English' },
+  { id: 't-2', title: 'हिंदी समाचार सार: अर्थव्यवस्था एवं तकनीकी समाचार', duration: '04:12', category: 'Financial Wrap', lang: 'Hindi' },
+  { id: 't-3', title: 'ಕರ್ನಾಟಕ ಬೆಳಗಿನ ವರದಿ: ತಂತ್ರಜ್ಞಾನ ನಾವೀನ್ಯತೆ', duration: '02:50', category: 'Regional Digest', lang: 'Kannada' },
+];
+---
+
+<section id="podcasts" class="w-full py-12 bg-white dark:bg-[#000000] border-y border-[#ebebeb] dark:border-[#262626] transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <span class="font-mono-caption text-[#7928ca]">PHASE 6 • PODCAST & VOICE ENGINE</span>
+          <h2 class="text-2xl font-semibold text-[#171717] dark:text-white tracking-[-0.6px]">
+            AI Daily Audio Briefings
+          </h2>
+        </div>
+
+        <span class="text-xs bg-[#d8ccf1]/40 dark:bg-[#7928ca]/20 text-[#4c2889] dark:text-[#d8ccf1] font-medium px-2.5 py-1 rounded-full border border-[#7928ca]/20 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-[#7928ca] animate-pulse"></span>
+          ElevenLabs / Whisper AI TTS
+        </span>
+      </div>
+
+      <!-- Player Console -->
+      <div class="bg-[#171717] dark:bg-[#0a0a0a] border border-transparent dark:border-[#262626] text-white rounded-xl p-5 sm:p-6 shadow-stacked-lg">
+        
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-[#7928ca] rounded-lg flex items-center justify-center text-white shadow-sm shrink-0">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+            </div>
+            <div>
+              <div class="text-xs text-[#50e3c2] font-mono mb-0.5">NOW PLAYING • TODAY's BULLETIN</div>
+              <h3 id="current-track-title" class="text-base font-semibold text-white leading-tight">
+                India Morning Briefing: RBI Policy & ISRO Mission
+              </h3>
+            </div>
+          </div>
+
+          <!-- Play / Pause Main Button -->
+          <div class="flex items-center gap-3">
+            <button id="main-play-btn" class="w-11 h-11 bg-white hover:bg-[#fafafa] text-[#171717] rounded-full flex items-center justify-center transition-transform hover:scale-105 shadow-md">
+              <svg id="play-icon" class="w-5 h-5 text-[#171717] ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+              <svg id="pause-icon" class="hidden w-5 h-5 text-[#171717]" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="space-y-1 mb-6">
+          <div class="w-full bg-[#333333] h-1.5 rounded-full overflow-hidden cursor-pointer">
+            <div id="progress-bar" class="bg-gradient-to-r from-[#007cf0] to-[#00dfd8] h-full w-[35%] transition-all"></div>
+          </div>
+          <div class="flex justify-between text-[11px] font-mono text-[#888888]">
+            <span>01:18</span>
+            <span>03:45</span>
+          </div>
+        </div>
+
+        <!-- Playlist Selection -->
+        <div class="space-y-2 border-t border-[#333333] pt-4">
+          <div class="text-xs font-mono-caption text-[#888888]">SELECT AUDIO BRIEFING</div>
+          <div class="space-y-1.5">
+            {audioTracks.map((track, i) => (
+              <div class={`track-item p-3 rounded-lg flex items-center justify-between cursor-pointer transition-colors text-xs ${i === 0 ? 'bg-[#333333] text-white' : 'hover:bg-[#262626] text-[#a1a1a1]'}`}>
+                <div class="flex items-center gap-2.5">
+                  <span class="font-mono text-[#50e3c2] text-[11px]">0{i+1}</span>
+                  <span class="font-medium">{track.title}</span>
+                </div>
+                <div class="flex items-center gap-3 font-mono text-[11px]">
+                  <span class="px-2 py-0.5 bg-[#444444] rounded text-white">{track.lang}</span>
+                  <span>{track.duration}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const mainPlayBtn = document.getElementById('main-play-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const progressBar = document.getElementById('progress-bar');
+  let isPlaying = false;
+
+  mainPlayBtn?.addEventListener('click', () => {
+    isPlaying = !isPlaying;
+    if (isPlaying) {
+      playIcon?.classList.add('hidden');
+      pauseIcon?.classList.remove('hidden');
+      progressBar!.style.width = '65%';
+    } else {
+      playIcon?.classList.remove('hidden');
+      pauseIcon?.classList.add('hidden');
+    }
+  });
+</script>

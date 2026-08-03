@@ -1,0 +1,209 @@
+---
+---
+<section id="fact-checker" class="w-full py-12 bg-white dark:bg-[#000000] border-b border-[#ebebeb] dark:border-[#262626] transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col items-center text-center mb-8">
+        <span class="font-mono-caption text-[#0070f3] mb-2 font-medium">LIVE INTERNET SCRAPER • FACT CHECK ENGINE</span>
+        <h2 class="text-2xl sm:text-4xl font-semibold text-[#171717] dark:text-white tracking-[-1.28px] mb-3">
+          Instant News Verification
+        </h2>
+        <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] max-w-xl">
+          Paste any headline, WhatsApp message, or claim. HeadlineHub AI instantly scrapes live wire feeds and government portals to give you a clear <strong>TRUE</strong> or <strong>FALSE</strong> short answer.
+        </p>
+      </div>
+
+      <!-- Verification Tool Panel -->
+      <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 sm:p-6 shadow-stacked-md">
+        
+        <!-- Input Tabs -->
+        <div class="flex items-center gap-2 border-b border-[#ebebeb] dark:border-[#262626] pb-3 mb-4 overflow-x-auto">
+          <button id="tab-text" class="tab-btn active px-3 py-1.5 text-xs font-medium text-[#171717] dark:text-white bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-md shadow-sm">
+            Text / Claim
+          </button>
+          <button id="tab-url" class="tab-btn px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white rounded-md">
+            URL / Article Link
+          </button>
+          <button id="tab-forward" class="tab-btn px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white rounded-md flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-[#29bc9b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            WhatsApp Forward
+          </button>
+        </div>
+
+        <!-- Input Area -->
+        <div id="input-container" class="space-y-3 mb-4">
+          <textarea 
+            id="claim-text" 
+            rows="3" 
+            placeholder="Paste news headline or claim to verify (e.g. 'RBI keeps repo rate steady at 6.5%')"
+            class="w-full bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-lg p-3 text-sm text-[#171717] dark:text-white placeholder-[#888888] focus:outline-none focus:ring-1 focus:ring-[#0070f3] resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Pre-set Demo Prompts for Instant Testing -->
+        <div class="flex items-center gap-2 mb-5 overflow-x-auto pb-1 text-xs">
+          <span class="text-[#888888] font-mono-caption text-[10px] shrink-0">Try Quick Demos:</span>
+          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-colors shrink-0">
+            "RBI Repo Rate FY27"
+          </button>
+          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-colors shrink-0">
+            "Viral WhatsApp 2000 Note Bank Holiday"
+          </button>
+          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-colors shrink-0">
+            "ISRO INSAT-3DS Satellite Launch"
+          </button>
+        </div>
+
+        <!-- Verification Action -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs text-[#888888]">
+            <svg class="w-3.5 h-3.5 text-[#0070f3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            Live Web Scraper cross-references PTI, ANI, PIB & Wire Agencies
+          </div>
+
+          <button 
+            id="verify-submit-btn" 
+            class="px-5 py-2.5 bg-[#0070f3] hover:bg-[#0761d1] text-white text-xs font-semibold rounded-md shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <span id="btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            <span>Scrape & Verify Now</span>
+          </button>
+        </div>
+
+        <!-- Item 4: Output Result Panel with Prominent TRUE/FALSE Short Answer -->
+        <div id="verdict-card" class="hidden mt-6 pt-6 border-t border-[#ebebeb] dark:border-[#262626] animate-fade-in">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 p-4 rounded-lg bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626]">
+            <div class="flex items-center gap-3">
+              <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider shadow-sm">
+                <!-- Injected via JS -->
+              </span>
+              <div class="text-xs text-[#888888]">Confidence: <span id="verdict-confidence" class="font-mono text-[#171717] dark:text-white font-semibold">96%</span> • ID: <span id="verdict-id" class="font-mono text-[#171717] dark:text-white">FC-2026-8841</span></div>
+            </div>
+
+            <button id="escalate-btn" class="px-3 py-1.5 bg-[#fafafa] dark:bg-[#1a1a1a] hover:bg-[#f5f5f5] text-[#ee0000] border border-[#f7d4d6] dark:border-[#521b1e] rounded text-xs font-medium transition-colors flex items-center gap-1">
+              Escalate to Moderator
+            </button>
+          </div>
+
+          <!-- Short Answer Callout Box -->
+          <div class="mb-4">
+            <h4 class="text-xs font-mono-caption text-[#888888] mb-1">SHORT VERDICT & FACT SUMMARY</h4>
+            <div id="verdict-short-answer" class="text-sm font-medium text-[#171717] dark:text-white bg-white dark:bg-[#141414] p-4 rounded-lg border border-[#ebebeb] dark:border-[#262626] leading-relaxed shadow-sm">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <!-- Scraped Internet Sources -->
+          <div>
+            <h4 class="text-xs font-mono-caption text-[#888888] mb-2">LIVE SOURCES SCRAPED & CITED</h4>
+            <div id="sources-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const submitBtn = document.getElementById('verify-submit-btn');
+  const claimInput = document.getElementById('claim-text') as HTMLTextAreaElement;
+  const verdictCard = document.getElementById('verdict-card');
+  const verdictBadge = document.getElementById('verdict-badge');
+  const verdictConfidence = document.getElementById('verdict-confidence');
+  const verdictId = document.getElementById('verdict-id');
+  const verdictShortAnswer = document.getElementById('verdict-short-answer');
+  const sourcesList = document.getElementById('sources-list');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const escalateBtn = document.getElementById('escalate-btn');
+
+  // Pre-set Demo Buttons
+  document.querySelectorAll('.demo-prompt-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const prompt = (e.target as HTMLElement).innerText.replace(/"/g, '');
+      if (prompt.includes('RBI Repo Rate')) {
+        claimInput.value = "RBI keeps repo rate unchanged at 6.5% for FY27 projecting 7.2% GDP growth.";
+      } else if (prompt.includes('WhatsApp')) {
+        claimInput.value = "Emergency bank holiday declared across India starting tomorrow for 3 days due to currency audit.";
+      } else {
+        claimInput.value = "ISRO INSAT-3DS satellite launch assembly completed in Sriharikota.";
+      }
+    });
+  });
+
+  // Check URL query param on page load (if user clicked "Verify Fact" from Live News)
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialQuery = urlParams.get('query');
+  if (initialQuery && claimInput) {
+    claimInput.value = initialQuery;
+    setTimeout(() => {
+      submitBtn?.click();
+    }, 300);
+  }
+
+  // Handle Real-Time Live Scraper Verification Call
+  submitBtn?.addEventListener('click', async () => {
+    const text = claimInput.value.trim();
+    if (!text) {
+      alert('Please enter a headline or claim to verify.');
+      return;
+    }
+
+    btnSpinner?.classList.remove('hidden');
+    submitBtn.setAttribute('disabled', 'true');
+
+    try {
+      const res = await fetch('/api/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ claim: text })
+      });
+
+      const data = await res.json();
+      btnSpinner?.classList.add('hidden');
+      submitBtn.removeAttribute('disabled');
+      verdictCard?.classList.remove('hidden');
+
+      if (data.verdict === 'FALSE') {
+        verdictBadge!.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#f7d4d6] dark:bg-[#521b1e] text-[#ee0000] dark:text-[#ff6b6b] border border-[#ee0000]/20';
+        verdictBadge!.innerHTML = '❌ VERDICT: FALSE';
+      } else {
+        verdictBadge!.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#aaffec] dark:bg-[#064e3b] text-[#29bc9b] dark:text-[#34d399] border border-[#29bc9b]/20';
+        verdictBadge!.innerHTML = '✅ VERDICT: TRUE';
+      }
+
+      verdictConfidence!.innerText = `${Math.round(data.confidence_score * 100)}%`;
+      verdictId!.innerText = data.id || 'FC-2026-9981';
+      verdictShortAnswer!.innerText = data.short_answer;
+
+      if (data.sources_checked && data.sources_checked.length > 0) {
+        sourcesList!.innerHTML = data.sources_checked.map((src: any) => `
+          <a href="${src.url}" target="_blank" class="p-3 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#0070f3] rounded flex items-center justify-between text-xs text-[#171717] dark:text-white transition-colors">
+            <span class="font-medium truncate max-w-[240px]">${src.name}</span>
+            <span class="text-[#0070f3] text-[11px] font-mono shrink-0">Scraped Link ↗</span>
+          </a>
+        `).join('');
+      } else {
+        sourcesList!.innerHTML = `<div class="text-xs text-[#888888]">Scraped from verified wire sources (PTI / ANI / PIB).</div>`;
+      }
+
+      verdictCard?.scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      btnSpinner?.classList.add('hidden');
+      submitBtn.removeAttribute('disabled');
+      alert('Verification request failed. Please try again.');
+    }
+  });
+
+  escalateBtn?.addEventListener('click', () => {
+    alert('Claim escalated to HeadlineHub Human Moderator Review Queue.');
+  });
+</script>

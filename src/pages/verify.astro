@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import FactCheckWidget from '../components/FactCheckWidget.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="AI Fact-Check & News Verification Portal | HeadlineHub AI">
+  <Navbar />
+  
+  <main class="flex-1 py-8 bg-[#fafafa] dark:bg-[#000000]">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 mb-8">
+      <div class="bg-[#171717] dark:bg-[#0a0a0a] text-white rounded-2xl p-8 sm:p-12 relative overflow-hidden shadow-stacked-lg border border-transparent dark:border-[#262626]">
+        <div class="absolute -right-20 -top-20 w-[400px] h-[400px] mesh-gradient-glow opacity-30 pointer-events-none"></div>
+        <div class="relative z-10 max-w-3xl">
+          <span class="inline-block px-3 py-1 bg-[#0070f3] text-white font-mono-caption text-[11px] rounded-full mb-4 font-semibold">
+            PHASE 2B • PUBLIC AUDIT ENGINE
+          </span>
+          <h1 class="text-3xl sm:text-5xl font-semibold tracking-[-1.5px] leading-tight mb-4">
+            AI News Verification & Credibility Portal.
+          </h1>
+          <p class="text-base text-[#a1a1a1] leading-relaxed">
+            Verify headlines, viral WhatsApp forwards, image screenshots, or article URLs. Our engine checks wire services (PTI, ANI), official government portals (PIB, RBI, ECI), and IFCN-certified fact-checkers before issuing a verdict with cited evidence.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Embedded Fact Check Tool Widget -->
+    <FactCheckWidget />
+
+    <!-- Verification Methodology Guide -->
+    <section id="methodology" class="w-full py-12 bg-white dark:bg-[#000000] border-t border-[#ebebeb] dark:border-[#262626]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <span class="font-mono-caption text-[#0070f3] mb-2 block">TRANSPARENCY & ACCURACY DISCLOSURE</span>
+        <h2 class="text-2xl font-semibold text-[#171717] dark:text-white tracking-tight mb-6">
+          HeadlineHub AI Verification Methodology
+        </h2>
+
+        <div class="space-y-6 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed">
+          <div class="p-4 bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-lg">
+            <h3 class="font-semibold text-[#171717] dark:text-white mb-1">1. Claim Isolation & Extraction</h3>
+            <p>Every submitted text block, URL, or OCR image passes through a Named Entity Recognition (NER) model to isolate verifiable factual assertions from subjective opinions.</p>
+          </div>
+
+          <div class="p-4 bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-lg">
+            <h3 class="font-semibold text-[#171717] dark:text-white mb-1">2. Multi-Source Evidence Cross-Referencing</h3>
+            <p>Claims are weighted against tier-1 sources: wire agencies (PTI, ANI, Reuters), official government gazettes (PIB, RBI, ECI), and IFCN signatories (Alt News, BOOM, Factly). If no corroborating or debunking evidence exists in verified archives, the tool outputs <strong>Unverifiable</strong> rather than guessing.</p>
+          </div>
+
+          <div class="p-4 bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-lg">
+            <h3 class="font-semibold text-[#171717] dark:text-white mb-1">3. Automated Escalation to Human Moderation</h3>
+            <p>High-stakes claims involving public health emergencies, election integrity, or communal sensitivity are automatically routed to our human review desk before public archiving.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
