@@ -9,7 +9,10 @@
 		"binding": "ASSETS"
 	},
 	"kv_namespaces": [
-		{ "binding": "NEWZ_CACHE", "id": "e05934d898ea4c90b96f0df3bade9191" }
+		{ "binding": "NEWZ_CACHE", "id": "e05934d898ea4c90b96f0df3bade9191" },
+		// The Astro Cloudflare adapter auto-enables sessions and injects a
+		// SESSION binding with no id. Declared here so deploys don't fail.
+		{ "binding": "SESSION", "id": "1850d81959b6492fa926dea8cbe993f2" }
 	],
 	"ai": { "binding": "AI" },
 	"observability": {
