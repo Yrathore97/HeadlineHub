@@ -19,6 +19,18 @@ describe('normalizeRating', () => {
     expect(normalizeRating('Mostly cromulent')).toBe('insufficient_evidence');
     expect(normalizeRating('')).toBe('insufficient_evidence');
   });
+
+  // Regression: naked substring matching routed these to 'verified' because
+  // "Untrue" contains "true" and "Inaccurate" contains "accurate".
+  it('does not read negated ratings as verified', () => {
+    expect(normalizeRating('Untrue')).toBe('false');
+    expect(normalizeRating('Not true')).toBe('false');
+    expect(normalizeRating('Inaccurate')).toBe('false');
+  });
+
+  it('treats unconfirmed as unproven, not as verified or false', () => {
+    expect(normalizeRating('Unconfirmed')).toBe('insufficient_evidence');
+  });
 });
 
 describe('coerceVerdict', () => {

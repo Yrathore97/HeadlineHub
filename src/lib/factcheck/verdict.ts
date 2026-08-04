@@ -1,6 +1,12 @@
 import type { FactCheckResult, Verdict } from './types';
 
-const FALSE_WORDS = ['false', 'fake', 'pants on fire', 'incorrect', 'debunked', 'hoax', 'no evidence'];
+// Negated forms are listed explicitly because they are ratings real
+// fact-checkers publish, and substring matching would otherwise route
+// "Untrue" and "Inaccurate" to the positive branch.
+const FALSE_WORDS = [
+  'false', 'fake', 'pants on fire', 'incorrect', 'debunked', 'hoax', 'no evidence',
+  'untrue', 'not true', 'inaccurate', 'not accurate',
+];
 const MISLEADING_WORDS = ['misleading', 'partly', 'partially', 'half', 'mixture', 'exaggerated', 'out of context'];
 const TRUE_WORDS = ['true', 'correct', 'accurate', 'confirmed'];
 
@@ -9,7 +15,9 @@ export function normalizeRating(rating: string): Verdict {
   if (!r) return 'insufficient_evidence';
   if (MISLEADING_WORDS.some((w) => r.includes(w))) return 'misleading';
   if (FALSE_WORDS.some((w) => r.includes(w))) return 'false';
-  if (TRUE_WORDS.some((w) => r.includes(w))) return 'verified';
+  // Word-boundary matched, so "unconfirmed" does not match "confirmed".
+  // Anything we cannot place stays insufficient_evidence - never a guess.
+  if (TRUE_WORDS.some((w) => new RegExp(`\\b${w}\\b`).test(r))) return 'verified';
   return 'insufficient_evidence';
 }
 
