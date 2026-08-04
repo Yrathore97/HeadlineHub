@@ -1,37 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-  <!-- Sleek Dark Container Background -->
-  <rect width="100" height="100" rx="22" fill="#0d0d0f"/>
-  
-  <!-- Newspaper Scroll Body (Yellow Accent with White Outline) -->
-  <path 
-    d="M38 18 C38 14, 62 14, 62 18 L62 56 C62 62, 38 62, 38 56 Z" 
-    fill="#facc15" 
-    stroke="#ffffff" 
-    stroke-width="4.5" 
-    stroke-linejoin="round" 
-  />
-  
-  <!-- Rolled Scroll Top Curve -->
-  <ellipse cx="50" cy="18" rx="12" ry="5" fill="#fef08a" stroke="#ffffff" stroke-width="3" />
-  
-  <!-- News Headline Lines -->
-  <line x1="44" y1="28" x2="56" y2="28" stroke="#0d0d0f" stroke-width="3.5" stroke-linecap="round" />
-  <line x1="44" y1="35" x2="56" y2="35" stroke="#0d0d0f" stroke-width="3.5" stroke-linecap="round" />
-  <line x1="44" y1="42" x2="56" y2="42" stroke="#0d0d0f" stroke-width="3.5" stroke-linecap="round" />
-  <circle cx="41" cy="28" r="1.5" fill="#0d0d0f" />
-  <circle cx="41" cy="35" r="1.5" fill="#0d0d0f" />
-  <circle cx="41" cy="42" r="1.5" fill="#0d0d0f" />
+  <!-- Outer Royal Blue Rounded Box Background -->
+  <rect width="100" height="100" rx="22" fill="#2563eb" />
 
-  <!-- Microphone U-Stand Cradle -->
+  <!-- Left Folded Newspaper Page -->
   <path 
-    d="M28 42 V54 C28 66, 72 66, 72 54 V42" 
-    stroke="#0070f3" 
+    d="M 27 38 C 17 38 17 44 17 50 L 17 71 C 17 78 22 79 28 79 L 28 38 Z" 
+    fill="#dbeafe" 
+    stroke="#0f172a" 
     stroke-width="5" 
     stroke-linecap="round" 
-    fill="none" 
+    stroke-linejoin="round" 
   />
 
-  <!-- Microphone Vertical Stem & Base Stand -->
-  <line x1="50" y1="65" x2="50" y2="78" stroke="#0070f3" stroke-width="5" stroke-linecap="round" />
-  <path d="M34 82 C34 78, 66 78, 66 82 L70 85 H30 Z" fill="#0070f3" stroke="#0070f3" stroke-width="2" stroke-linejoin="round" />
+  <!-- Main Newspaper Body -->
+  <rect 
+    x="29" 
+    y="16" 
+    width="53" 
+    height="64" 
+    rx="10" 
+    fill="#ffffff" 
+    stroke="#0f172a" 
+    stroke-width="5.5" 
+    stroke-linejoin="round" 
+  />
+
+  <!-- Top Headline Feature Box -->
+  <rect 
+    x="39" 
+    y="27" 
+    width="32" 
+    height="17" 
+    rx="4" 
+    fill="#ffffff" 
+    stroke="#121212" 
+    stroke-width="4.5" 
+  />
+
+  <!-- Headline Bar 1 -->
+  <rect 
+    x="39" 
+    y="51" 
+    width="32" 
+    height="5.5" 
+    rx="2.75" 
+    fill="#121212" 
+  />
+
+  <!-- Headline Bar 2 -->
+  <rect 
+    x="39" 
+    y="63" 
+    width="22" 
+    height="5.5" 
+    rx="2.75" 
+    fill="#121212" 
+  />
 </svg>

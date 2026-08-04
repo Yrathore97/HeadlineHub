@@ -11,14 +11,14 @@ const queueClaims = [
     <!-- Section Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
-        <span class="font-mono-caption text-[#0070f3]">OPERATIONS & CONTROL PANEL</span>
+        <span class="font-mono-caption text-[#ca8a04] dark:text-[#facc15] font-semibold">OPERATIONS & CONTROL PANEL</span>
         <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-[-0.96px]">
           Operations Desk & Moderation Queue
         </h2>
       </div>
 
       <div class="flex items-center gap-2">
-        <button id="refresh-crawler-btn" type="button" class="px-3 py-1 bg-[#0070f3] hover:bg-[#0761d1] text-white rounded text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
+        <button id="refresh-crawler-btn" type="button" class="px-3 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white rounded text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
           <span id="crawler-btn-text">Sync Crawler</span>
         </button>
@@ -29,7 +29,7 @@ const queueClaims = [
     </div>
 
     <!-- Operational Notification Banner -->
-    <div id="admin-toast-banner" class="hidden mb-6 p-3 bg-[#e0f2fe] dark:bg-[#075985] text-[#0284c7] dark:text-[#38bdf8] text-xs font-medium rounded-xl border border-[#bae6fd] dark:border-[#0369a1] animate-fade-in">
+    <div id="admin-toast-banner" class="hidden mb-6 p-3 bg-[#dbeafe]/80 dark:bg-[#172554] text-[#1e40af] dark:text-[#93c5fd] text-xs font-medium rounded-xl border border-[#2563eb]/40 animate-fade-in">
       Action status updated successfully.
     </div>
 
@@ -57,7 +57,7 @@ const queueClaims = [
       <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
         <div class="text-xs font-mono-caption text-[#888888] mb-1">LIVE MONETIZATION (RPM)</div>
         <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">$4.85 RPM</div>
-        <div class="text-xs text-[#0070f3] mt-1 flex items-center gap-1 font-medium">
+        <div class="text-xs text-[#ca8a04] dark:text-[#facc15] mt-1 flex items-center gap-1 font-medium">
           AdSense + Subscriptions Active
         </div>
       </div>
@@ -96,7 +96,7 @@ const queueClaims = [
           <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] bg-white dark:bg-[#141414]">
             {queueClaims.map((item) => (
               <tr data-row-id={item.id} class="hover:bg-[#fafafa] dark:hover:bg-[#1a1a1a] transition-colors">
-                <td class="px-4 py-3 font-mono font-medium text-[#0070f3]">{item.id}</td>
+                <td class="px-4 py-3 font-mono font-bold text-[#ca8a04] dark:text-[#facc15]">{item.id}</td>
                 <td class="px-4 py-3 max-w-xs font-medium text-[#171717] dark:text-white">{item.claim}</td>
                 <td class="px-4 py-3 text-[#4d4d4d] dark:text-[#a1a1a1]">{item.category}</td>
                 <td class="px-4 py-3">

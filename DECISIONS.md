@@ -1,4 +1,4 @@
-# DECISIONS.md — UncosHub AI Architectural & Design Decisions
+# DECISIONS.md — NewzWale Architectural & Design Decisions
 
 ## 1. Information Architecture (IA) Simplification
 
@@ -19,7 +19,7 @@
 **Rationale**:
 - **Benchmark Performance**: Independent evaluation (Josh Talks, 20,000+ votes across 11 languages) ranked Bulbul V3 ahead of ElevenLabs v3/v2.5 and Cartesia on naturalness for Indian languages.
 - **Indic Content Accuracy**: Lowest character-error-rate (CER) on Indic-specific content including numbers, regional entities, and code-mixed Hinglish.
-- **Native Language Coverage**: Native support for the 10+ Indian languages targeted by UncosHub AI (Hindi, Kannada, Tamil, Telugu, Marathi, Bengali, Gujarati, Malayalam, Punjabi, Odia).
+- **Native Language Coverage**: Native support for the 10+ Indian languages targeted by NewzWale (Hindi, Kannada, Tamil, Telugu, Marathi, Bengali, Gujarati, Malayalam, Punjabi, Odia).
 - **Latency & Integration**: Sub-250ms streaming via OpenAI-compatible API and official SDKs.
 
 **Fallback / Secondary Provider**: **ElevenLabs**.

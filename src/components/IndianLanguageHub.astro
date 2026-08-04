@@ -351,27 +351,28 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
       <div>
         <div class="flex items-center gap-2 mb-2 flex-wrap">
-          <span class="px-2.5 py-0.5 rounded-full bg-[#0070f3]/10 text-[#0070f3] dark:text-[#50e3c2] font-mono-caption text-[11px] font-bold border border-[#0070f3]/20">
+        <div class="flex items-center gap-2 mb-2 flex-wrap">
+          <span class="px-2.5 py-0.5 rounded-full bg-[#dbeafe]/80 dark:bg-[#172554] text-[#1e40af] dark:text-[#93c5fd] font-mono-caption text-[11px] font-bold border border-[#2563eb]/40">
             BHARAT BHASHA ENGINE • भारत की हर भाषा
           </span>
-          <span class="flex items-center gap-1 text-xs text-[#29bc9b] font-medium bg-[#aaffec]/40 dark:bg-[#064e3b]/50 px-2 py-0.5 rounded">
-            <span class="w-1.5 h-1.5 rounded-full bg-[#29bc9b] animate-ping"></span>
+          <span class="flex items-center gap-1 text-xs text-[#1e40af] dark:text-[#93c5fd] font-medium bg-[#dbeafe]/80 dark:bg-[#172554] px-2 py-0.5 rounded border border-[#bfdbfe]/50 dark:border-[#1d4ed8]/50">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb] animate-ping"></span>
             28 States & 8 UTs Supported
           </span>
         </div>
         <h2 class="text-3xl sm:text-4xl font-semibold text-[#171717] dark:text-white tracking-[-1.28px]">
-          Read News in <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#007cf0] via-[#7928ca] to-[#ff0080]">Your State Language</span>
+          Read News in <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#2563eb] via-[#3b82f6] to-[#1d4ed8]">Your State Language</span>
         </h2>
-        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] mt-1 max-w-2xl">
+        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1aa] mt-1 max-w-2xl">
           Select any State or Indian Scheduled Language below to translate the entire news website instantly with AI speech playback.
         </p>
       </div>
 
       <!-- Quick Reset / Active Badge -->
       <div class="flex items-center gap-3">
-        <div id="active-lang-badge" class="flex items-center gap-2 px-3 py-1.5 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-lg text-xs font-mono text-[#171717] dark:text-white shadow-sm">
+        <div id="active-lang-badge" class="flex items-center gap-2 px-3 py-1.5 bg-[#fafafa] dark:bg-[#141414] border border-[#bfdbfe] dark:border-[#1e293b] rounded-lg text-xs font-mono text-[#171717] dark:text-white shadow-sm">
           <span class="text-[#888888]">Active:</span>
-          <span id="active-lang-name" class="font-bold text-[#0070f3]">English</span>
+          <span id="active-lang-name" class="font-bold text-[#1d4ed8] dark:text-[#60a5fa]">English</span>
           <span id="active-state-name" class="text-[#888888] text-[11px]">(All India)</span>
         </div>
 
@@ -380,7 +381,7 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
           type="button"
           class="px-3.5 py-1.5 bg-[#171717] dark:bg-white text-white dark:text-[#171717] hover:bg-[#333333] dark:hover:bg-[#e5e5e5] rounded-lg text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
         >
-          <svg class="w-3.5 h-3.5 text-[#50e3c2] dark:text-[#0070f3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+          <svg class="w-3.5 h-3.5 text-[#2563eb] dark:text-[#60a5fa]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
           <span id="speech-btn-label">Listen Sample</span>
         </button>
       </div>
@@ -395,7 +396,7 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
           type="text" 
           id="hub-search-input" 
           placeholder="Search State or Language (e.g. Maharashtra, Tamil, Punjabi, Assamese)..." 
-          class="w-full bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white placeholder-[#888888] rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]"
+          class="w-full bg-white dark:bg-[#141414] border border-[#bfdbfe] dark:border-[#1e293b] text-[#171717] dark:text-white placeholder-[#888888] rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]"
         />
         <svg class="w-4 h-4 text-[#888888] absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
       </div>
@@ -426,7 +427,7 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
         <div>
           <div class="flex items-center justify-between border-b border-[#ebebeb] dark:border-[#262626] pb-3 mb-3">
             <span class="text-xs font-mono-caption text-[#888888]">SELECT BY LANGUAGE</span>
-            <span class="text-[11px] text-[#0070f3] font-semibold">22 Scheduled + Regional</span>
+            <span class="text-[11px] text-[#1d4ed8] dark:text-[#60a5fa] font-semibold">22 Scheduled + Regional</span>
           </div>
 
           <!-- Language Buttons Grid -->
@@ -434,15 +435,15 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
             {indianLanguages.map((lang) => (
               <button
                 type="button"
-                class="lang-card-btn p-2.5 rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#141414] hover:border-[#0070f3] dark:hover:border-[#0070f3] transition-all text-left group cursor-pointer"
+                class="lang-card-btn p-2.5 rounded-lg border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#141414] hover:border-[#2563eb] dark:hover:border-[#3b82f6] transition-all text-left group cursor-pointer"
                 data-langcode={lang.code}
                 data-langname={lang.name}
                 data-nativename={lang.native}
               >
                 <div class="flex items-center justify-between mb-0.5">
-                  <span class="text-sm font-semibold text-[#171717] dark:text-white group-hover:text-[#0070f3] transition-colors">{lang.native}</span>
+                  <span class="text-sm font-semibold text-[#171717] dark:text-white group-hover:text-[#1d4ed8] dark:group-hover:text-[#60a5fa] transition-colors">{lang.native}</span>
                   {lang.isScheduled && (
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#50e3c2]" title="Official Scheduled Language"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb]" title="Official Scheduled Language"></span>
                   )}
                 </div>
                 <div class="flex items-center justify-between text-[11px] text-[#888888] font-mono">
@@ -456,7 +457,7 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
 
         <div class="mt-4 pt-3 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-xs text-[#888888]">
           <span>AI Speech Supported</span>
-          <span class="font-mono text-[#0070f3]">Auto-Detect State</span>
+          <span class="font-mono text-[#1d4ed8] dark:text-[#60a5fa]">Auto-Detect State</span>
         </div>
       </div>
 
@@ -465,14 +466,14 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
         
         <div class="flex items-center justify-between">
           <span class="text-xs font-mono-caption text-[#888888]">SELECT BY STATE & UNION TERRITORY</span>
-          <span class="text-xs text-[#4d4d4d] dark:text-[#a1a1a1]">Showing <strong id="visible-state-count" class="text-[#171717] dark:text-white">{indianStates.length}</strong> States/UTs</span>
+          <span class="text-xs text-[#4d4d4d] dark:text-[#a1a1aa]">Showing <strong id="visible-state-count" class="text-[#171717] dark:text-white">{indianStates.length}</strong> States/UTs</span>
         </div>
 
         <!-- States Grid -->
         <div id="states-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[380px] overflow-y-auto pr-1">
           {indianStates.map((st) => (
             <div 
-              class="state-card p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] hover:border-[#0070f3] dark:hover:border-[#0070f3] hover:shadow-stacked-sm transition-all cursor-pointer group flex flex-col justify-between"
+              class="state-card p-3 rounded-xl border border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] hover:border-[#2563eb] dark:hover:border-[#3b82f6] hover:shadow-stacked-sm transition-all cursor-pointer group flex flex-col justify-between"
               data-state-id={st.id}
               data-state-name={st.name}
               data-region={st.region}
@@ -486,20 +487,20 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
                 <div class="flex items-center justify-between mb-2">
                   <div class="flex items-center gap-2">
                     <span class="text-base">{st.flagIcon}</span>
-                    <span class="text-xs font-bold text-[#171717] dark:text-white group-hover:text-[#0070f3] transition-colors">{st.name}</span>
+                    <span class="text-xs font-bold text-[#171717] dark:text-white group-hover:text-[#1d4ed8] dark:group-hover:text-[#60a5fa] transition-colors">{st.name}</span>
                   </div>
                   <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#f5f5f5] dark:bg-[#1f1f1f] text-[#888888] border border-[#ebebeb] dark:border-[#262626]">
                     {st.code}
                   </span>
                 </div>
-                <div class="text-[11px] text-[#4d4d4d] dark:text-[#a1a1a1] flex items-center justify-between">
+                <div class="text-[11px] text-[#4d4d4d] dark:text-[#a1a1aa] flex items-center justify-between">
                   <span>Language: <strong class="text-[#171717] dark:text-white">{st.nativeLangName}</strong></span>
                   <span class="font-mono text-[10px] text-[#888888]">{st.region}</span>
                 </div>
               </div>
 
               <!-- Action Indicator -->
-              <div class="mt-2.5 pt-2 border-t border-[#f5f5f5] dark:border-[#1a1a1a] flex items-center justify-between text-[11px] text-[#0070f3] font-medium opacity-80 group-hover:opacity-100">
+              <div class="mt-2.5 pt-2 border-t border-[#f5f5f5] dark:border-[#1a1a1a] flex items-center justify-between text-[11px] text-[#1d4ed8] dark:text-[#60a5fa] font-medium opacity-80 group-hover:opacity-100">
                 <span>Translate Site to {st.primaryLang}</span>
                 <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
               </div>
@@ -517,7 +518,7 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
       <!-- Source (English Wire) -->
       <div class="flex-1 space-y-2 border-b md:border-b-0 md:border-r border-[#333333] pb-4 md:pb-0 md:pr-6">
         <div class="flex items-center gap-2 text-xs font-mono text-[#888888]">
-          <span class="w-2 h-2 rounded-full bg-[#0070f3]"></span>
+          <span class="w-2 h-2 rounded-full bg-[#2563eb]"></span>
           <span>ORIGINAL ENGLISH WIRE</span>
           <span class="px-1.5 py-0.5 bg-[#262626] rounded text-[10px]">Source News</span>
         </div>
@@ -949,8 +950,8 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
   const stateCards = document.querySelectorAll('.state-card');
   stateCards.forEach(card => {
     card.addEventListener('click', () => {
-      stateCards.forEach(c => c.classList.remove('border-[#0070f3]', 'ring-1', 'ring-[#0070f3]'));
-      card.classList.add('border-[#0070f3]', 'ring-1', 'ring-[#0070f3]');
+      stateCards.forEach(c => c.classList.remove('border-[#2563eb]', 'ring-1', 'ring-[#2563eb]'));
+      card.classList.add('border-[#2563eb]', 'ring-1', 'ring-[#2563eb]');
 
       const langCode = card.getAttribute('data-langcode') || 'en';
       const langName = card.getAttribute('data-langname') || 'English';
@@ -964,8 +965,8 @@ const regions = ['All Regions', 'North', 'South', 'West & Central', 'East', 'Nor
   const langBtns = document.querySelectorAll('.lang-card-btn');
   langBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      langBtns.forEach(b => b.classList.remove('border-[#0070f3]', 'ring-1', 'ring-[#0070f3]'));
-      btn.classList.add('border-[#0070f3]', 'ring-1', 'ring-[#0070f3]');
+      langBtns.forEach(b => b.classList.remove('border-[#2563eb]', 'ring-1', 'ring-[#2563eb]'));
+      btn.classList.add('border-[#2563eb]', 'ring-1', 'ring-[#2563eb]');
 
       const langCode = btn.getAttribute('data-langcode') || 'en';
       const langName = btn.getAttribute('data-langname') || 'English';

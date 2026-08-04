@@ -8,12 +8,12 @@ interface Props {
 }
 
 const {
-  title = 'UncosHub AI | Autonomous Multilingual Media & AI Fact-Check Engine',
-  description = 'UncosHub AI is India & South Asia’s 24/7 autonomous news ecosystem powered by artificial intelligence. Discover breaking news, verified claims, hyperlocal updates, and multi-format media.',
-  image = 'https://uncoshub.ai/og-default.jpg'
+  title = 'NewzWale | Only Facts News - Autonomous Multilingual Ecosystem',
+  description = 'NewzWale is India & South Asia’s 24/7 autonomous news ecosystem. Discover breaking news, verified claims, hyperlocal updates, and multi-format media.',
+  image = 'https://newzwale.com/og-default.jpg'
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://uncoshub.ai');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://newzwale.com');
 ---
 
 <!doctype html>
@@ -21,13 +21,23 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://uncoshub
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="apple-mobile-web-app-title" content="UncosHub" />
+    <meta name="apple-mobile-web-app-title" content="NewzWale" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-GB803SMK37"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GB803SMK37');
+    </script>
 
     <!-- Anti-FOUC Dark Mode Inline Initialization Script -->
     <script is:inline>
@@ -45,36 +55,67 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://uncoshub
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="keywords" content="news, news today, google news, breaking news, latest news, tech news, hindi news, news in hindi, india news, fact check, fact check status true, fact check explorer, fact check india, newzwale, real-time news" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="NewzWale Autonomous Media Network" />
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
+    <meta property="og:site_name" content="NewzWale" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="NewzWale - Latest News, India News & AI Fact Check Portal" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:locale:alternate" content="hi_IN" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@NewzWale" />
+    <meta name="twitter:creator" content="@NewzWale" />
+    <meta name="twitter:url" content={Astro.url} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content="NewzWale - Latest News, India News & AI Fact Check Portal" />
 
     <!-- Schema Markup JSON-LD -->
-    <script type="application/ld+json" is:inline set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "NewsMediaOrganization",
-      "name": "UncosHub AI",
-      "url": "https://uncoshub.ai",
-      "logo": "https://uncoshub.ai/logo.png",
-      "sameAs": [
-        "https://twitter.com/UncosHubAI",
-        "https://instagram.com/uncoshub.ai",
-        "https://t.me/uncoshubai"
-      ],
-      "knowsLanguage": ["en", "hi", "kn", "mr", "bn", "ta", "te", "gu", "ml", "pa"]
-    })} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify([
+      {
+        "@context": "https://schema.org",
+        "@type": "NewsMediaOrganization",
+        "name": "NewzWale",
+        "alternateName": ["NewzWale News", "NewzWale India"],
+        "url": "https://newzwale.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://newzwale.com/logo.png",
+          "width": 512,
+          "height": 512
+        },
+        "sameAs": [
+          "https://twitter.com/NewzWale",
+          "https://instagram.com/newzwale",
+          "https://t.me/newzwale"
+        ],
+        "knowsLanguage": ["en", "hi", "kn", "mr", "bn", "ta", "te", "gu", "ml", "pa"]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "NewzWale",
+        "url": "https://newzwale.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://newzwale.com/news?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ])} />
   </head>
   <body class="bg-[#fafafa] dark:bg-[#000000] text-[#171717] dark:text-[#ffffff] min-h-screen flex flex-col antialiased transition-colors duration-200">
     <slot />

@@ -5,7 +5,7 @@ import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Subscriber Profile & Reading Preferences | UncosHub AI">
+<Layout title="Subscriber Profile & Reading Preferences | NewzWale">
   <Navbar />
   <MastheadInfoStrip />
   
@@ -13,7 +13,7 @@ import Footer from '../components/Footer.astro';
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       
       <div class="mb-8">
-        <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">SUBSCRIBER DASHBOARD</span>
+        <span class="font-mono-caption text-[#1d4ed8] dark:text-[#60a5fa] text-xs font-semibold">SUBSCRIBER DASHBOARD</span>
         <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
           Profile & Preferences
         </h1>
@@ -25,17 +25,17 @@ import Footer from '../components/Footer.astro';
       <!-- Profile Information Card -->
       <div class="bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6 mb-6">
         <div class="flex items-center gap-4">
-          <div class="w-16 h-16 rounded-full bg-[#0070f3] text-white flex items-center justify-center font-bold text-2xl shadow-sm">
-            <span id="profile-avatar-initial">U</span>
+          <div class="w-16 h-16 rounded-full bg-[#2563eb] text-white flex items-center justify-center font-bold text-2xl shadow-sm border border-[#2563eb]">
+            <span id="profile-avatar-initial">P</span>
           </div>
           <div>
             <h2 id="profile-user-name" class="text-xl font-bold text-[#171717] dark:text-white">
-              UncosHub Subscriber
+              NewzWale Subscriber
             </h2>
             <p id="profile-user-email" class="text-xs text-[#71717a] dark:text-[#a1a1aa] font-mono mt-0.5">
-              user@uncoshub.ai
+              user@newzwale.com
             </p>
-            <span class="inline-block mt-2 px-2.5 py-0.5 bg-[#e0f2fe] dark:bg-[#075985] text-[#0284c7] dark:text-[#38bdf8] text-[10px] font-semibold font-mono rounded">
+            <span class="inline-block mt-2 px-2.5 py-0.5 bg-[#dbeafe]/80 dark:bg-[#172554] text-[#1e40af] dark:text-[#93c5fd] text-[10px] font-semibold font-mono rounded border border-[#2563eb]/30">
               VERIFIED ACCOUNT
             </span>
           </div>
@@ -47,7 +47,7 @@ import Footer from '../components/Footer.astro';
             <span class="text-[11px] text-[#71717a] font-mono">LANGUAGES AVAILABLE</span>
           </div>
           <div class="p-4 bg-[#fafafa] dark:bg-[#141414] rounded-xl border border-[#ebebeb] dark:border-[#262626]">
-            <span class="block text-2xl font-bold text-[#0070f3]">Sarvam V3</span>
+            <span class="block text-2xl font-bold text-[#1d4ed8] dark:text-[#60a5fa]">Sarvam V3</span>
             <span class="text-[11px] text-[#71717a] font-mono">VOICE ENGINE ACTIVE</span>
           </div>
           <div class="p-4 bg-[#fafafa] dark:bg-[#141414] rounded-xl border border-[#ebebeb] dark:border-[#262626]">
@@ -65,7 +65,7 @@ import Footer from '../components/Footer.astro';
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
-    const savedUser = localStorage.getItem('uncoshub_user') || localStorage.getItem('headlinehub_user');
+    const savedUser = localStorage.getItem('newzwale_user') || localStorage.getItem('printnewz_user');
     if (savedUser) {
       try {
         const u = JSON.parse(savedUser);

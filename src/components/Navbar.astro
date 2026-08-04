@@ -8,6 +8,11 @@ const isVerifyActive = currentPath.startsWith('/verify');
 const isTrendingActive = currentPath.startsWith('/trending');
 const isCategoriesActive = currentPath.startsWith('/categories');
 const isSavedActive = currentPath.startsWith('/saved');
+const isAboutActive = currentPath.startsWith('/about');
+const isContactActive = currentPath.startsWith('/contact');
+const isPrivacyActive = currentPath.startsWith('/privacy');
+const isTermsActive = currentPath.startsWith('/terms');
+const isFaqActive = currentPath.startsWith('/faq');
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -33,13 +38,13 @@ const languages = [
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
       <a href="/" class="flex items-center gap-2 group">
         <div class="relative flex items-center justify-center group-hover:scale-105 transition-transform">
-          <LogoIcon className="w-7 h-7 sm:w-8 sm:h-8 text-[#171717] dark:text-white" />
-          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#0070f3] rounded-full animate-ping"></span>
-          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#0070f3] rounded-full"></span>
+          <LogoIcon className="w-7 h-7 sm:w-8 sm:h-8" />
+          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#2563eb] rounded-full animate-ping"></span>
+          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#2563eb] rounded-full"></span>
         </div>
         <div class="flex flex-col">
-          <span class="font-semibold text-sm sm:text-base tracking-tight leading-tight text-[#171717] dark:text-white">UncosHub <span class="text-[#0070f3]">AI</span></span>
-          <span class="font-mono-caption text-[9px] sm:text-[10px] text-[#0070f3] dark:text-[#50e3c2] font-semibold tracking-widest leading-none">Only Facts</span>
+          <span class="font-semibold text-sm sm:text-base tracking-tight leading-tight text-[#171717] dark:text-white">NewzWale</span>
+          <span class="font-mono-caption text-[9px] sm:text-[10px] text-[#1d4ed8] dark:text-[#60a5fa] font-semibold tracking-widest leading-none">Only Facts News</span>
         </div>
       </a>
     </div>
@@ -51,8 +56,8 @@ const languages = [
         aria-current={isHomeActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
           isHomeActive 
-            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         Home
@@ -63,8 +68,8 @@ const languages = [
         aria-current={isNewsActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
           isNewsActive 
-            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         News
@@ -75,11 +80,11 @@ const languages = [
         aria-current={isVerifyActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 ${
           isVerifyActive 
-            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
-        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-white' : 'text-[#0070f3]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-white' : 'text-[#1d4ed8] dark:text-[#60a5fa]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         Fact Check
       </a>
 
@@ -88,8 +93,8 @@ const languages = [
         aria-current={isTrendingActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
           isTrendingActive 
-            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         Trending
@@ -100,8 +105,8 @@ const languages = [
         aria-current={isCategoriesActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
           isCategoriesActive 
-            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         Categories
@@ -112,12 +117,47 @@ const languages = [
         aria-current={isSavedActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
           isSavedActive 
-            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         Saved
       </a>
+
+      <div class="relative group">
+        <a 
+          href="/about"
+          aria-haspopup="true"
+          class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 inline-flex items-center gap-1 ${
+            isAboutActive || isContactActive || isPrivacyActive || isTermsActive
+              ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+              : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
+          }`}
+        >
+          More
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </a>
+        <div class="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-150 z-50">
+          <div class="w-52 bg-white dark:bg-[#0d0d0f] border border-[#ebebeb] dark:border-[#262626] rounded-xl shadow-stacked-lg overflow-hidden text-xs font-medium">
+            <a href="/faq" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isFaqActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
+              Fact Check FAQ
+            </a>
+            <a href="/about" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isAboutActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
+              About Us
+            </a>
+            <a href="/contact" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isContactActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
+              Contact Us
+            </a>
+            <div class="border-t border-[#ebebeb] dark:border-[#262626]"></div>
+            <a href="/privacy" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isPrivacyActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
+              Privacy Policy
+            </a>
+            <a href="/terms" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isTermsActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
+              Terms & Conditions
+            </a>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <!-- Controls & Action Pills -->
@@ -143,12 +183,12 @@ const languages = [
 
       <!-- Global Language Selector -->
       <div class="relative group">
-        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-[#0070f3]/40 dark:border-[#0070f3]/50 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#0070f3] h-[32px] truncate">
+        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-[#2563eb]/50 dark:border-[#3b82f6]/60 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#2563eb] h-[32px] truncate">
           {languages.map(lang => (
             <option value={lang.code}>{lang.name}</option>
           ))}
         </select>
-        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#0070f3]">
+        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#1d4ed8] dark:text-[#60a5fa]">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
@@ -158,7 +198,7 @@ const languages = [
         <div id="guest-auth-buttons" class="flex items-center gap-2">
           <button 
             type="button" 
-            class="open-auth-modal-trigger inline-flex items-center justify-center px-3.5 h-[32px] bg-[#0070f3] hover:bg-[#0761d1] text-white text-xs font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer whitespace-nowrap shrink-0 gap-1.5 border border-[#0070f3]"
+            class="open-auth-modal-trigger inline-flex items-center justify-center px-3.5 h-[32px] bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-xs font-bold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer whitespace-nowrap shrink-0 gap-1.5 border border-[#2563eb]"
           >
             <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
             <span>Sign In</span>
@@ -167,7 +207,7 @@ const languages = [
 
         <div id="user-profile-menu" class="hidden items-center gap-2">
           <div class="flex items-center gap-2 px-3 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-full text-xs shadow-sm">
-            <div id="user-avatar" class="w-5 h-5 rounded-full bg-gradient-to-r from-[#007cf0] to-[#7928ca] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+            <div id="user-avatar" class="w-5 h-5 rounded-full bg-gradient-to-r from-[#2563eb] to-[#7928ca] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
               U
             </div>
             <span id="user-display-name" class="font-semibold text-[#171717] dark:text-white max-w-[100px] truncate">User</span>
@@ -196,23 +236,26 @@ const languages = [
 
   <!-- Mobile Drawer Menu -->
   <div id="mobile-menu-drawer" class="hidden lg:hidden border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-4 space-y-2 shadow-lg text-xs font-semibold">
-    <a href="/" class={`block px-3.5 py-2 rounded-lg ${isHomeActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/" class={`block px-3.5 py-2 rounded-lg ${isHomeActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       Home
     </a>
-    <a href="/news" class={`block px-3.5 py-2 rounded-lg ${isNewsActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/news" class={`block px-3.5 py-2 rounded-lg ${isNewsActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       News Feed
     </a>
-    <a href="/verify" class={`block px-3.5 py-2 rounded-lg flex items-center gap-2 ${isVerifyActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#0070f3] hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/verify" class={`block px-3.5 py-2 rounded-lg flex items-center gap-2 ${isVerifyActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#1d4ed8] dark:text-[#60a5fa] hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       Fact Check Engine
     </a>
-    <a href="/trending" class={`block px-3.5 py-2 rounded-lg ${isTrendingActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/faq" class={`block px-3.5 py-2 rounded-lg ${isFaqActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      Fact Check FAQ
+    </a>
+    <a href="/trending" class={`block px-3.5 py-2 rounded-lg ${isTrendingActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       Trending Topics
     </a>
-    <a href="/categories" class={`block px-3.5 py-2 rounded-lg ${isCategoriesActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/categories" class={`block px-3.5 py-2 rounded-lg ${isCategoriesActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       News Categories
     </a>
-    <a href="/saved" class={`block px-3.5 py-2 rounded-lg ${isSavedActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/saved" class={`block px-3.5 py-2 rounded-lg ${isSavedActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       Saved Bookmarks
     </a>
     <a href="/profile" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
@@ -227,11 +270,17 @@ const languages = [
     <a href="/contact" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
       Contact Editorial
     </a>
+    <a href="/privacy" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
+      Privacy Policy
+    </a>
+    <a href="/terms" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
+      Terms & Conditions
+    </a>
 
     <div class="pt-2 border-t border-[#ebebeb] dark:border-[#262626] sm:hidden">
       <button 
         type="button" 
-        class="open-auth-modal-trigger w-full py-2 bg-[#0070f3] hover:bg-[#0761d1] text-white text-xs font-semibold rounded-lg transition-all text-center cursor-pointer"
+        class="open-auth-modal-trigger w-full py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-xs font-bold rounded-lg transition-all text-center cursor-pointer shadow-sm"
       >
         Sign In / Create Account
       </button>
@@ -254,10 +303,10 @@ const languages = [
     <!-- Modal Eyebrow & Title -->
     <div>
       <div class="flex items-center gap-2 mb-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#0070f3] animate-pulse"></span>
-        <span class="font-mono-caption text-xs text-[#0070f3] font-semibold tracking-wider">UNCOSHUB AI AUTH</span>
+        <span class="w-2 h-2 rounded-full bg-[#2563eb] animate-pulse"></span>
+        <span class="font-mono-caption text-xs text-[#1d4ed8] dark:text-[#60a5fa] font-semibold tracking-wider">NEWZWALE AUTH</span>
       </div>
-      <h3 id="modal-title" class="text-xl font-bold text-[#18181b] dark:text-white">Sign in to UncosHub</h3>
+      <h3 id="modal-title" class="text-xl font-bold text-[#18181b] dark:text-white">Sign in to NewzWale</h3>
       <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] mt-0.5">Persist your personalized feed & preferred language across devices.</p>
     </div>
 
@@ -308,25 +357,25 @@ const languages = [
       <!-- Name Field (Visible on Signup Only) -->
       <div id="field-group-name" class="hidden">
         <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">FULL NAME</label>
-        <input type="text" id="auth-name-input" placeholder="Yash Rathore" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+        <input type="text" id="auth-name-input" placeholder="Yash Rathore" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
       </div>
 
       <!-- Email Field -->
       <div>
         <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">EMAIL ADDRESS</label>
-        <input type="email" id="auth-email-input" required placeholder="reader@example.com" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+        <input type="email" id="auth-email-input" required placeholder="reader@example.com" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
       </div>
 
       <!-- Password Field with Show/Hide Toggle -->
       <div>
         <div class="flex items-center justify-between mb-1">
           <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa]">PASSWORD</label>
-          <button id="forgot-password-link" type="button" class="text-[11px] text-[#0070f3] hover:underline cursor-pointer">
+          <button id="forgot-password-link" type="button" class="text-[11px] text-[#1d4ed8] dark:text-[#60a5fa] hover:underline cursor-pointer">
             Forgot password?
           </button>
         </div>
         <div class="relative">
-          <input type="password" id="auth-password-input" required placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+          <input type="password" id="auth-password-input" required placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
           <button type="button" class="password-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer" data-target="auth-password-input">
             <svg class="eye-open-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
             <svg class="eye-closed-icon hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.82c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.837-1.748a3 3 0 11-4.243-4.243"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
@@ -338,7 +387,7 @@ const languages = [
       <div id="field-group-confirm" class="hidden">
         <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">CONFIRM PASSWORD</label>
         <div class="relative">
-          <input type="password" id="auth-confirm-input" placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+          <input type="password" id="auth-confirm-input" placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
           <button type="button" class="password-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer" data-target="auth-confirm-input">
             <svg class="eye-open-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
             <svg class="eye-closed-icon hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.82c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.837-1.748a3 3 0 11-4.243-4.243"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
@@ -347,7 +396,7 @@ const languages = [
       </div>
 
       <!-- Action Button -->
-      <button id="auth-submit-btn" type="submit" class="w-full py-3 bg-[#0070f3] hover:bg-[#0761d1] text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+      <button id="auth-submit-btn" type="submit" class="w-full py-3 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold rounded-xl text-xs shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
         <span id="auth-btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
         <span id="auth-btn-text">Sign In</span>
       </button>
@@ -424,7 +473,7 @@ const languages = [
       tabSignup?.classList.remove('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
       tabSignup?.classList.add('text-[#71717a]', 'dark:text-[#a1a1aa]');
 
-      if (modalTitle) modalTitle.innerText = 'Sign in to UncosHub';
+      if (modalTitle) modalTitle.innerText = 'Sign in to NewzWale';
       if (authBtnText) authBtnText.innerText = 'Sign In';
       fieldName?.classList.add('hidden');
       fieldConfirm?.classList.add('hidden');
@@ -530,8 +579,8 @@ const languages = [
         throw new Error(data.detail || 'Authentication failed');
       }
 
-      localStorage.setItem('uncoshub_user', JSON.stringify(data.user));
-      localStorage.setItem('uncoshub_access_token', data.access_token);
+      localStorage.setItem('newzwale_user', JSON.stringify(data.user));
+      localStorage.setItem('newzwale_access_token', data.access_token);
       
       closeModal();
       updateUserSessionState();
@@ -553,7 +602,7 @@ const languages = [
   }
 
   function updateUserSessionState() {
-    const savedUser = localStorage.getItem('uncoshub_user') || localStorage.getItem('headlinehub_user');
+    const savedUser = localStorage.getItem('newzwale_user');
     if (savedUser && guestAuthButtons && userProfileMenu && userDisplayName) {
       try {
         const userObj = JSON.parse(savedUser);
@@ -572,8 +621,8 @@ const languages = [
     const userName = urlParams.get('user_name');
 
     if (authToken && userName) {
-      localStorage.setItem('uncoshub_access_token', authToken);
-      localStorage.setItem('uncoshub_user', JSON.stringify({ name: userName }));
+      localStorage.setItem('newzwale_access_token', authToken);
+      localStorage.setItem('newzwale_user', JSON.stringify({ name: userName }));
       
       // Clean query params from URL
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -582,6 +631,8 @@ const languages = [
   }
 
   logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('newzwale_user');
+    localStorage.removeItem('newzwale_access_token');
     localStorage.removeItem('uncoshub_user');
     localStorage.removeItem('uncoshub_access_token');
     localStorage.removeItem('headlinehub_user');

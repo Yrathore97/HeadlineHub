@@ -1,4 +1,4 @@
--- UncosHub AI Database Schema (PostgreSQL 16+)
+-- NewzWale Database Schema (PostgreSQL 16+)
 -- Phase 9 Database Design & Phase 2B Fact-Check Database Schema
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

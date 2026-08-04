@@ -1,21 +1,21 @@
 ---
 ---
 
-<div id="masthead-info-strip" class="w-full bg-[#f4f4f5] dark:bg-[#0c0c0e] border-b border-[#e4e4e7] dark:border-[#27272a] py-1.5 px-4 text-xs font-mono transition-colors duration-200">
+<div id="masthead-info-strip" class="w-full bg-[#eff6ff] dark:bg-[#091329] border-b border-[#bfdbfe] dark:border-[#1e293b] py-1.5 px-4 text-xs font-mono transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
     
     <!-- Left: Weather & Location -->
-    <div id="weather-widget-container" class="flex items-center gap-2 text-[#52525b] dark:text-[#a1a1aa] shrink-0">
-      <span class="text-[#0070f3]">📍</span>
-      <span id="weather-location" class="font-semibold text-[#18181b] dark:text-[#f4f4f5]">New Delhi</span>
-      <span id="weather-temp" class="font-semibold text-[#0070f3]">31°C</span>
+    <div id="weather-widget-container" class="flex items-center gap-2 text-[#1e40af] dark:text-[#93c5fd] shrink-0">
+      <span class="text-[#2563eb] dark:text-[#60a5fa]">📍</span>
+      <span id="weather-location" class="font-semibold text-[#0f172a] dark:text-[#f8fafc]">New Delhi</span>
+      <span id="weather-temp" class="font-semibold text-[#1d4ed8] dark:text-[#60a5fa]">31°C</span>
       <span id="weather-condition">☀️ Sunny</span>
     </div>
 
     <!-- Center: Today's Date in Selected Language -->
-    <div class="flex items-center gap-1.5 text-[#52525b] dark:text-[#a1a1aa] shrink-0">
-      <span class="text-[#0070f3]">📅</span>
-      <span id="masthead-date-text" class="font-medium text-[#18181b] dark:text-[#f4f4f5]">
+    <div class="flex items-center gap-1.5 text-[#1e40af] dark:text-[#93c5fd] shrink-0">
+      <span class="text-[#2563eb] dark:text-[#60a5fa]">📅</span>
+      <span id="masthead-date-text" class="font-medium text-[#0f172a] dark:text-[#f8fafc]">
         Tue, Aug 4, 2026
       </span>
     </div>
@@ -128,13 +128,47 @@
     }
   }
 
+  async function fetchWeatherWithGeocoding(lat: number, lon: number, defaultName?: string) {
+    let resolvedCity = defaultName || '';
+    if (!resolvedCity || resolvedCity === 'Your Location' || resolvedCity === 'Local') {
+      try {
+        const geoRes = await fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`,
+          { signal: AbortSignal.timeout(3000) }
+        );
+        if (geoRes.ok) {
+          const geoData = await geoRes.json();
+          resolvedCity = geoData.city || geoData.locality || geoData.principalSubdivision || geoData.countryName || '';
+        }
+      } catch (e) {}
+    }
+    if (!resolvedCity) resolvedCity = 'New Delhi';
+
+    await fetchWeather(lat, lon, resolvedCity);
+  }
+
+  async function detectLocationByIP(): Promise<boolean> {
+    try {
+      const ipRes = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3500) });
+      if (ipRes.ok) {
+        const data = await ipRes.json();
+        if (data.latitude && data.longitude) {
+          const cityName = data.city || data.region || 'Local';
+          await fetchWeather(data.latitude, data.longitude, cityName);
+          return true;
+        }
+      }
+    } catch (e) {}
+    return false;
+  }
+
   function initWeather() {
     // Check localStorage cache
     const cached = localStorage.getItem(WEATHER_CACHE_KEY);
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        if (Date.now() - parsed.timestamp < WEATHER_TTL) {
+        if (parsed.location && parsed.location !== 'Your Location' && Date.now() - parsed.timestamp < WEATHER_TTL) {
           const weatherLoc = document.getElementById('weather-location');
           const weatherTemp = document.getElementById('weather-temp');
           const weatherCond = document.getElementById('weather-condition');
@@ -149,17 +183,20 @@
     // Try Browser Geolocation
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          fetchWeather(pos.coords.latitude, pos.coords.longitude, 'Your Location');
+        async (pos) => {
+          await fetchWeatherWithGeocoding(pos.coords.latitude, pos.coords.longitude);
         },
-        () => {
-          // Geolocation denied: IP fallback to Delhi coordinates
-          fetchWeather(28.6139, 77.2090, 'New Delhi');
+        async () => {
+          // Geolocation denied/failed -> try IP detection
+          const ok = await detectLocationByIP();
+          if (!ok) fetchWeather(28.6139, 77.2090, 'New Delhi');
         },
-        { timeout: 3000 }
+        { timeout: 4000 }
       );
     } else {
-      fetchWeather(28.6139, 77.2090, 'New Delhi');
+      detectLocationByIP().then(ok => {
+        if (!ok) fetchWeather(28.6139, 77.2090, 'New Delhi');
+      });
     }
   }
 

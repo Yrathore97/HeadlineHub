@@ -29,7 +29,7 @@ async def generate_speech(payload: TTSRequest):
         if article:
             text_to_speech = f"{article['headline']}. {article['summary']}"
         else:
-            text_to_speech = "UncosHub AI Verified News Update."
+            text_to_speech = "NewzWale Verified News Update."
 
     if not text_to_speech or not text_to_speech.strip():
         raise HTTPException(

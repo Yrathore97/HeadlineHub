@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql://headlineuser:headlinepassword@localhost:5432/headlinedb"
     
     # JWT Auth Secrets
-    JWT_SECRET: str = "super-secret-uncoshub-ai-key-change-this-in-production-2026"
+    JWT_SECRET: str = "super-secret-newzwale-key-change-this-in-production-2026"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30

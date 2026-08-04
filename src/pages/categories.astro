@@ -18,7 +18,7 @@ const categories = [
 ];
 ---
 
-<Layout title="News Categories Directory | UncosHub AI">
+<Layout title="News Categories Directory | NewzWale">
   <Navbar />
   <MastheadInfoStrip />
   
@@ -26,7 +26,7 @@ const categories = [
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
       
       <div class="mb-8">
-        <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">CATEGORIES DIRECTORY</span>
+        <span class="font-mono-caption text-[#1d4ed8] dark:text-[#60a5fa] text-xs font-semibold">CATEGORIES DIRECTORY</span>
         <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
           Explore News by Topic
         </h1>
@@ -37,14 +37,14 @@ const categories = [
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((cat) => (
-          <a href={`/news?category=${cat.id}`} class="p-6 bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl shadow-sm hover:border-[#0070f3] hover:shadow-md transition-all group">
+          <a href={`/news?category=${cat.id}`} class="p-6 bg-white dark:bg-[#0a0a0a] border border-[#bfdbfe] dark:border-[#1e293b] rounded-2xl shadow-sm hover:border-[#2563eb] hover:shadow-md transition-all group">
             <div class="flex items-center justify-between mb-3">
               <span class="text-3xl">{cat.icon}</span>
               <span class="px-2.5 py-1 bg-[#fafafa] dark:bg-[#18181b] border border-[#ebebeb] dark:border-[#27272a] text-[#52525b] dark:text-[#a1a1aa] font-mono text-[10px] rounded-full">
                 {cat.count}
               </span>
             </div>
-            <h2 class="text-xl font-bold text-[#171717] dark:text-white group-hover:text-[#0070f3] transition-colors mb-2">
+            <h2 class="text-xl font-bold text-[#171717] dark:text-white group-hover:text-[#ca8a04] dark:group-hover:text-[#facc15] transition-colors mb-2">
               {cat.name}
             </h2>
             <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] leading-relaxed">

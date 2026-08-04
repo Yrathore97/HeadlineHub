@@ -60,7 +60,7 @@ class FactCheckerService:
             "sources_checked": [
                 {"name": "PTI Wire Service", "url": "https://pti.in"}
             ],
-            "explanation": "Verified claim archived in UncosHub database."
+            "explanation": "Verified claim archived in NewzWale database."
         }
 
     async def escalate_to_human_queue(self, audit_id: str, reason: str) -> bool:

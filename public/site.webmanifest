@@ -1,6 +1,6 @@
 {
-  "name": "HeadlineHub",
-  "short_name": "HH",
+  "name": "NewzWale",
+  "short_name": "NewzWale",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
+  "theme_color": "#2563eb",
   "background_color": "#ffffff",
   "display": "standalone"
 }

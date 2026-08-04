@@ -27,7 +27,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         return response
 
 app = FastAPI(
-    title="UncosHub AI Core API",
+    title="NewzWale Core API",
     description="Autonomous Media Ecosystem API for News Collection, Sarvam AI Voice TTS, Fact-Checking & Grounded AI Chat.",
     version="2.0.0"
 )
@@ -41,7 +41,7 @@ cors_origins = settings.parsed_cors_origins()
 # CORS Security Hardening: Never allow wildcard '*' with credentials
 if "*" in cors_origins:
     logger.warning("Wildcard CORS detected with credentials. Restricting to safe origins.")
-    cors_origins = ["http://localhost:4321", "http://127.0.0.1:4321", "https://uncoshub.ai"]
+    cors_origins = ["http://localhost:4321", "http://127.0.0.1:4321", "https://newzwale.com"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -64,26 +64,25 @@ def health_check():
     db_healthy = hasattr(mock_db, 'articles') and len(mock_db.articles) > 0
     return {
         "status": "healthy" if db_healthy else "degraded",
-        "service": "UncosHub AI Backend",
+        "service": "NewzWale Backend",
         "version": "2.0.0",
         "database": "connected" if db_healthy else "error",
         "voice_engine": "Sarvam AI Bulbul V3 Ready"
     }
 
 @app.get("/metrics")
-def prometheus_metrics():
-    """Prometheus OpenTelemetry metrics endpoint."""
+def metrics():
     return Response(
         content=(
-            "# HELP uncoshub_api_requests_total Total API Requests\n"
-            "# TYPE uncoshub_api_requests_total counter\n"
-            "uncoshub_api_requests_total 14820\n"
-            "# HELP uncoshub_factcheck_audits_total Total Claim Audits Completed\n"
-            "# TYPE uncoshub_factcheck_audits_total counter\n"
-            "uncoshub_factcheck_audits_total 3920\n"
-            "# HELP uncoshub_voice_tts_requests_total Total Sarvam AI TTS Requests\n"
-            "# TYPE uncoshub_voice_tts_requests_total counter\n"
-            "uncoshub_voice_tts_requests_total 8150\n"
+            "# HELP newzwale_api_requests_total Total API Requests\n"
+            "# TYPE newzwale_api_requests_total counter\n"
+            "newzwale_api_requests_total 14820\n"
+            "# HELP newzwale_factcheck_audits_total Total Claim Audits Completed\n"
+            "# TYPE newzwale_factcheck_audits_total counter\n"
+            "newzwale_factcheck_audits_total 3920\n"
+            "# HELP newzwale_voice_tts_requests_total Total Sarvam AI TTS Requests\n"
+            "# TYPE newzwale_voice_tts_requests_total counter\n"
+            "newzwale_voice_tts_requests_total 8150\n"
         ),
         media_type="text/plain"
     )

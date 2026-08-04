@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LogoIcon from '../components/LogoIcon.astro';
+---
+
+<Layout title="500 - Server Error | NewzWale" description="Something went wrong on our end. Please try again in a moment.">
+  <main class="mesh-gradient-bg min-h-screen flex flex-col items-center justify-center px-4 py-20">
+    <div class="max-w-xl w-full text-center">
+      <div class="flex flex-col items-center gap-5">
+        <a href="/" class="flex items-center gap-2.5">
+          <LogoIcon className="w-9 h-9" />
+          <span class="text-left">
+            <span class="block font-semibold text-lg text-[#171717] dark:text-white leading-none">NewzWale</span>
+            <span class="block font-mono-caption text-[10px] text-[#1d4ed8] dark:text-[#60a5fa] font-semibold tracking-widest mt-0.5">Only Facts News</span>
+          </span>
+        </a>
+
+        <div class="font-mono-caption text-xs text-[#ee0000] flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#ee0000] animate-pulse"></span>
+          HTTP 500 — INTERNAL SERVER ERROR
+        </div>
+
+        <h1 class="text-6xl sm:text-8xl font-bold tracking-tighter text-[#171717] dark:text-white leading-none">
+          500
+        </h1>
+
+        <p class="text-lg font-semibold text-[#171717] dark:text-white tracking-tight">
+          Something went wrong on our end.
+        </p>
+        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed max-w-md">
+          The newsroom hit an unexpected error while serving this page. Our systems have been notified — please try again in a moment.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 mt-2">
+          <a href="/" class="btn-pill-primary inline-flex items-center gap-2 px-5 py-2.5 text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h2a1 1 0 001-1v-7"></path></svg>
+            Back to Homepage
+          </a>
+          <button onclick="window.location.reload()" class="btn-pill-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5m10 6v-5h-5M4 9a8 8 0 0114.5-3M20 15a8 8 0 01-14.5 3"></path></svg>
+            Try Again
+          </button>
+        </div>
+
+        <div class="text-[11px] font-mono text-[#888888] dark:text-[#a1a1aa] pt-2">
+          ERROR_CODE · 500 · NEWZWALE_ORIGIN
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

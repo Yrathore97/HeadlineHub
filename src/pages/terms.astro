@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
+import Footer from '../components/Footer.astro';
+
+const sections = [
+  {
+    heading: 'Acceptance of Terms',
+    body: 'By accessing or using the NewzWale website and services, you agree to be bound by these Terms & Conditions and all applicable laws and regulations. If you do not agree with any part of these terms, you must discontinue use of the service immediately.'
+  },
+  {
+    heading: 'Use of Service',
+    body: 'NewzWale provides news aggregation, automated summarization, multilingual translation, and fact-checking services for personal, non-commercial use. You agree not to misuse the service, attempt unauthorized access, scrape content at scale, or use the platform for any unlawful purpose.'
+  },
+  {
+    heading: 'Editorial Independence & Accuracy',
+    body: 'Headlines, summaries, and fact-check verdicts are generated from official wire services (PTI, ANI, PIB), government releases, and IFCN-certified signatories. While we strive for accuracy, automated summarization may occasionally contain errors. Content is provided on an "as is" basis without warranties of any kind.'
+  },
+  {
+    heading: 'Intellectual Property',
+    body: 'The NewzWale name, logo, interface design, and original editorial content are the intellectual property of NewzWale. Wire service content remains the property of its respective rights holders and is reproduced under fair-use and licensing provisions with attribution.'
+  },
+  {
+    heading: 'User Accounts & Content',
+    body: 'You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account. By submitting claims, tips, or other content to us, you grant NewzWale a non-exclusive license to process, display, and distribute it for editorial and fact-checking purposes.'
+  },
+  {
+    heading: 'Third-Party Links & Content',
+    body: 'NewzWale may link to external websites or display content from third-party sources. We are not responsible for the availability, accuracy, or privacy practices of external sites. Accessing third-party content is done at your own discretion and risk.'
+  },
+  {
+    heading: 'Limitation of Liability',
+    body: 'To the maximum extent permitted by law, NewzWale, its operators, and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the service.'
+  },
+  {
+    heading: 'Governing Law & Contact',
+    body: 'These terms are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts of India. Questions regarding these terms may be directed to our editorial desk via the Contact page.'
+  }
+];
+
+const termsSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Terms & Conditions | NewzWale",
+  "url": Astro.site ? new URL('/terms', Astro.site).toString() : '/terms',
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "NewzWale",
+    "url": "https://newzwale.com"
+  }
+};
+---
+
+<Layout title="Terms & Conditions | NewzWale">
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(termsSchema)} />
+
+  <Navbar />
+  <MastheadInfoStrip />
+
+  <main class="flex-1 py-12 bg-[#fafafa] dark:bg-[#000000]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="mb-10">
+        <span class="font-mono-caption text-[#1d4ed8] dark:text-[#60a5fa] text-xs font-semibold">LEGAL & TERMS</span>
+        <h1 class="text-3xl sm:text-5xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+          Terms & Conditions
+        </h1>
+        <p class="text-base text-[#71717a] dark:text-[#a1a1aa] mt-3 leading-relaxed">
+          Last updated: August 2026. These Terms & Conditions govern your use of the NewzWale platform and its associated services. Please read them carefully before using our service.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        {sections.map((section, index) => (
+          <div class="p-6 bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#dbeafe] dark:bg-[#172554] text-[#1d4ed8] dark:text-[#60a5fa] text-[11px] font-mono font-bold flex items-center justify-center">
+                {index + 1}
+              </span>
+              <h2 class="text-base font-bold text-[#171717] dark:text-white">{section.heading}</h2>
+            </div>
+            <p class="pl-9 text-xs sm:text-sm text-[#4d4d4d] dark:text-[#a1a1aa] leading-relaxed">
+              {section.body}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

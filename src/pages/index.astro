@@ -4,15 +4,20 @@ import Navbar from '../components/Navbar.astro';
 import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import HeroMesh from '../components/HeroMesh.astro';
 import NewsFeed from '../components/NewsFeed.astro';
+import SeoContentSection from '../components/SeoContentSection.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="UncosHub AI | Autonomous Multilingual Media & AI Fact-Check Engine">
+<Layout 
+  title="Latest News Today, Breaking India News & AI Fact Check Portal | NewzWale"
+  description="NewzWale is your 24/7 destination for latest news, breaking news today, tech news, hindi news (news in hindi), and india news with real-time fact check explorer verification."
+>
   <Navbar />
   <MastheadInfoStrip />
   <main class="flex-1">
     <HeroMesh />
     <NewsFeed />
+    <SeoContentSection />
   </main>
   <Footer />
 </Layout>

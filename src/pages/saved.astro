@@ -5,7 +5,7 @@ import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Saved Articles & Offline Library | UncosHub AI">
+<Layout title="Saved Articles & Offline Library | NewzWale">
   <Navbar />
   <MastheadInfoStrip />
   
@@ -14,7 +14,7 @@ import Footer from '../components/Footer.astro';
       
       <div class="flex items-center justify-between mb-8 pb-4 border-b border-[#ebebeb] dark:border-[#262626]">
         <div>
-          <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">PERSONAL BOOKMARKS</span>
+          <span class="font-mono-caption text-[#1d4ed8] dark:text-[#60a5fa] text-xs font-semibold">PERSONAL BOOKMARKS</span>
           <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
             Saved Articles & Claims
           </h1>
@@ -35,14 +35,14 @@ import Footer from '../components/Footer.astro';
 
       <!-- Empty State -->
       <div id="saved-empty-state" class="hidden py-16 text-center bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl">
-        <div class="w-12 h-12 rounded-full bg-[#0070f3]/10 text-[#0070f3] flex items-center justify-center mx-auto mb-3 text-xl">
+        <div class="w-12 h-12 rounded-full bg-[#dbeafe]/80 dark:bg-[#172554] text-[#1e40af] dark:text-[#93c5fd] flex items-center justify-center mx-auto mb-3 text-xl border border-[#2563eb]/30">
           🔖
         </div>
         <h3 class="text-lg font-semibold text-[#171717] dark:text-white mb-1">No Saved Articles Yet</h3>
         <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] max-w-sm mx-auto mb-4">
           Click the bookmark icon on any news headline or fact-check verdict to save it here for later reading.
         </p>
-        <a href="/news" class="inline-block px-4 py-2 bg-[#0070f3] text-white font-semibold text-xs rounded-lg hover:bg-[#0761d1] transition-colors">
+        <a href="/news" class="inline-block px-4 py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-xs rounded-lg transition-colors">
           Browse Live News Feed
         </a>
       </div>
@@ -57,7 +57,7 @@ import Footer from '../components/Footer.astro';
   function loadSavedArticles() {
     const container = document.getElementById('saved-articles-container');
     const emptyState = document.getElementById('saved-empty-state');
-    const saved = JSON.parse(localStorage.getItem('uncoshub_saved_articles') || '[]');
+    const saved = JSON.parse(localStorage.getItem('newzwale_saved_articles') || localStorage.getItem('printnewz_saved_articles') || '[]');
 
     if (!saved || saved.length === 0) {
       container?.classList.add('hidden');
@@ -71,7 +71,7 @@ import Footer from '../components/Footer.astro';
       container.innerHTML = saved.map((art: any) => `
         <div class="bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl p-5 shadow-sm space-y-3 relative group">
           <div class="flex items-center justify-between">
-            <span class="px-2.5 py-0.5 bg-[#0070f3]/10 text-[#0070f3] font-mono text-[10px] font-semibold rounded">
+            <span class="px-2.5 py-0.5 bg-[#dbeafe]/80 dark:bg-[#172554] text-[#1e40af] dark:text-[#93c5fd] font-mono text-[10px] font-semibold rounded border border-[#2563eb]/30">
               ${art.category || 'GENERAL'}
             </span>
             <button onclick="removeSavedArticle('${art.id}')" class="text-xs text-[#a1a1aa] hover:text-[#ee0000] transition-colors cursor-pointer" title="Remove bookmark">
@@ -86,7 +86,7 @@ import Footer from '../components/Footer.astro';
           </p>
           <div class="pt-3 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-[11px] text-[#71717a] font-mono">
             <span>Source: ${art.source || 'PTI Wire'}</span>
-            <a href="/news" class="text-[#0070f3] hover:underline">Read full →</a>
+            <a href="/news" class="text-[#1d4ed8] dark:text-[#60a5fa] hover:underline font-semibold">Read full →</a>
           </div>
         </div>
       `).join('');
@@ -94,14 +94,15 @@ import Footer from '../components/Footer.astro';
   }
 
   (window as any).removeSavedArticle = (id: string) => {
-    let saved = JSON.parse(localStorage.getItem('uncoshub_saved_articles') || '[]');
+    let saved = JSON.parse(localStorage.getItem('newzwale_saved_articles') || localStorage.getItem('printnewz_saved_articles') || '[]');
     saved = saved.filter((item: any) => item.id !== id);
-    localStorage.setItem('uncoshub_saved_articles', JSON.stringify(saved));
+    localStorage.setItem('newzwale_saved_articles', JSON.stringify(saved));
     loadSavedArticles();
   };
 
   document.getElementById('clear-all-saved-btn')?.addEventListener('click', () => {
-    localStorage.removeItem('uncoshub_saved_articles');
+    localStorage.removeItem('newzwale_saved_articles');
+    localStorage.removeItem('printnewz_saved_articles');
     loadSavedArticles();
   });
 
