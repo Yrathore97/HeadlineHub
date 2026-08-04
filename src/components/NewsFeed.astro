@@ -1,367 +1,137 @@
 ---
-interface Article {
-  id: string;
-  headline: string;
-  shortNews: string;
-  category: string;
-  region: string;
-  state?: string;
-  district?: string;
-  language: string;
-  imageUrl: string;
-  source: string;
-  publishedAt: string;
-  verdict: 'verified' | 'likely_true' | 'unverified';
+import type { Article } from '../lib/news/types';
+
+interface Props {
+  category?: string;
 }
 
-const mockArticles: Article[] = [
-  {
-    id: 'art-001',
-    headline: 'RBI Keeps Repo Rate Steady at 6.5%, Projects 7.2% GDP Growth',
-    shortNews: 'The RBI Monetary Policy Committee unanimously maintained the benchmark repo rate at 6.5%, citing strong macroeconomic fundamentals and stable inflation forecasts.',
-    category: 'Business & Economy',
-    region: 'India',
-    state: 'Maharashtra',
-    district: 'Mumbai',
-    language: 'English',
-    imageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80',
-    source: 'RBI Gazette / PTI',
-    publishedAt: '12m ago',
-    verdict: 'verified'
-  },
-  {
-    id: 'art-002',
-    headline: 'ISRO Assembles INSAT-3DS Satellite for Sriharikota Launch',
-    shortNews: 'Indian Space Research Organisation has completed final payload integration for INSAT-3DS, expanding weather forecasting and disaster tracking capabilities.',
-    category: 'Startups & Tech',
-    region: 'India',
-    state: 'Andhra Pradesh',
-    district: 'Tirupati',
-    language: 'English',
-    imageUrl: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=600&q=80',
-    source: 'ISRO Official',
-    publishedAt: '28m ago',
-    verdict: 'verified'
-  },
-  {
-    id: 'art-003',
-    headline: 'Karnataka Cabinet Approves ₹1,500 Cr AI Tech Hub in Bengaluru',
-    shortNews: 'Karnataka announces a flagship GPU compute credit program and specialized AI innovation parks across Bengaluru to incubate deep-tech startups.',
-    category: 'Hyperlocal',
-    region: 'State',
-    state: 'Karnataka',
-    district: 'Bengaluru Urban',
-    language: 'English',
-    imageUrl: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80',
-    source: 'Karnataka Govt',
-    publishedAt: '45m ago',
-    verdict: 'verified'
-  },
-  {
-    id: 'art-004',
-    headline: 'India Leads T20 Series Against Australia After Dominant Victory',
-    shortNews: 'A stellar top-order batting display led India to a comfortable win with 4 overs remaining in the second T20 match at M. Chinnaswamy Stadium.',
-    category: 'Sports',
-    region: 'India',
-    state: 'Karnataka',
-    district: 'Bengaluru',
-    language: 'English',
-    imageUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=600&q=80',
-    source: 'BCCI / ANI',
-    publishedAt: '1h ago',
-    verdict: 'verified'
-  },
-  {
-    id: 'art-005',
-    headline: 'Semiconductor Summit 2026 Inaugrated in New Delhi',
-    shortNews: 'Global technology executives gather in New Delhi to finalize multi-billion dollar fabrication facility investments under India Semiconductor Mission.',
-    category: 'National',
-    region: 'India',
-    state: 'Delhi',
-    district: 'New Delhi',
-    language: 'English',
-    imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80',
-    source: 'MeitY Press Release',
-    publishedAt: '2h ago',
-    verdict: 'verified'
-  },
-  {
-    id: 'art-006',
-    headline: 'Tamil Nadu Renewable Grid Crosses 20GW Clean Energy Benchmark',
-    shortNews: 'With new wind-solar hybrid projects operational, Tamil Nadu now fulfills over 45% of peak industrial power demand from clean energy.',
-    category: 'Hyperlocal',
-    region: 'State',
-    state: 'Tamil Nadu',
-    district: 'Coimbatore',
-    language: 'English',
-    imageUrl: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=600&q=80',
-    source: 'TANGEDCO',
-    publishedAt: '3h ago',
-    verdict: 'verified'
-  }
-];
+const { category = 'top' } = Astro.props;
+
+const MAX_CARDS = 24;
+
+let articles: Article[] = [];
+try {
+  const res = await fetch(new URL(`/api/news?category=${encodeURIComponent(category)}`, Astro.url));
+  if (res.ok) articles = (await res.json()).articles ?? [];
+} catch {
+  /* leave empty; the template renders an empty state */
+}
+
+// Newest first so a single source cannot monopolise the top of the feed.
+const time = (value: string): number => {
+  const t = Date.parse(value);
+  return Number.isNaN(t) ? 0 : t;
+};
+articles = [...articles].sort((a, b) => time(b.publishedAt) - time(a.publishedAt)).slice(0, MAX_CARDS);
+
+function formatPublished(value: string): string {
+  const t = Date.parse(value);
+  if (Number.isNaN(t)) return '';
+  const mins = Math.round((Date.now() - t) / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return new Date(t).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+}
 ---
 
 <section id="news-feed" class="w-full py-12 bg-[#fafafa] dark:bg-[#050505] transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
-       <!-- Section Header & Active Language Stream Banner -->
+    <!-- Section Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-[#ebebeb] dark:border-[#262626] pb-4">
       <div>
         <div class="flex items-center gap-2 mb-1">
           <span class="w-2 h-2 rounded-full bg-[#2563eb] animate-pulse"></span>
-          <span id="feed-type-badge" class="font-mono-caption text-[#888888]">SARVAM AI VERIFIED WIRE STREAM</span>
+          <span id="feed-type-badge" class="font-mono-caption text-[#888888]">LIVE HEADLINE STREAM</span>
         </div>
         <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-[-0.96px]">
           Major Headlines
         </h2>
       </div>
 
-      <div class="flex items-center gap-2">
-        <span class="px-3 py-1 bg-white dark:bg-[#141414] border border-[#bfdbfe] dark:border-[#1e293b] rounded-full text-xs font-semibold text-[#1d4ed8] dark:text-[#60a5fa] flex items-center gap-1.5 shadow-sm">
-          <span>Active Voice & Lang:</span>
-          <span id="active-lang-badge" class="font-mono uppercase text-[#171717] dark:text-white">EN</span>
-        </span>
-      </div>
+      {articles.length > 0 && (
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-white dark:bg-[#141414] border border-[#bfdbfe] dark:border-[#1e293b] rounded-full text-xs font-semibold text-[#1d4ed8] dark:text-[#60a5fa] flex items-center gap-1.5 shadow-sm">
+            <span>Headlines from publisher feeds</span>
+          </span>
+        </div>
+      )}
     </div>
 
     <!-- Live News Cards Grid -->
-    <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {mockArticles.map((article) => (
-        <article data-article-id={article.id} class="article-card bg-white dark:bg-[#0a0a0a] border border-[#bfdbfe] dark:border-[#1e293b] rounded-xl overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-[#2563eb] dark:hover:border-[#3b82f6] transition-all flex flex-col group">
-          
-          <div class="relative h-44 w-full overflow-hidden bg-[#f5f5f5] dark:bg-[#1f1f1f]">
-            <img 
-              src={article.imageUrl} 
-              alt={article.headline} 
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              loading="lazy"
-            />
-            <div class="absolute top-3 left-3 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#171717] dark:text-white border border-[#bfdbfe] dark:border-[#1e293b] flex items-center gap-1.5 shadow-sm">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb]"></span>
-              {article.category}
-            </div>
+    {articles.length === 0 ? (
+      <p class="text-sm opacity-70 text-[#4d4d4d] dark:text-[#a1a1aa]">
+        Headlines are temporarily unavailable. Please check back shortly.
+      </p>
+    ) : (
+      <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {articles.map((article) => (
+          <article data-article-id={article.id} class="article-card bg-white dark:bg-[#0a0a0a] border border-[#bfdbfe] dark:border-[#1e293b] rounded-xl overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-[#2563eb] dark:hover:border-[#3b82f6] transition-all flex flex-col group">
 
-            <!-- Language Badge on Card -->
-            <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-[#60a5fa] text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase border border-[#2563eb]/30">
-              <span class="card-lang-tag">EN</span>
-            </div>
-          </div>
+            {article.imageUrl && (
+              <div class="relative h-44 w-full overflow-hidden bg-[#f5f5f5] dark:bg-[#1f1f1f]">
+                <img
+                  src={article.imageUrl}
+                  alt={article.title}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+                <div class="absolute top-3 left-3 bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize text-[#171717] dark:text-white border border-[#bfdbfe] dark:border-[#1e293b] flex items-center gap-1.5 shadow-sm">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb]"></span>
+                  {article.category}
+                </div>
+              </div>
+            )}
 
-          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
-            <div>
-              <div class="text-[11px] font-mono text-[#888888] mb-1.5">
-                {article.source} {article.state ? `• ${article.state}` : ''}
+            <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                {!article.imageUrl && (
+                  <div class="inline-flex items-center gap-1.5 mb-2 bg-white dark:bg-[#0a0a0a] px-2.5 py-0.5 rounded-full text-[11px] font-semibold capitalize text-[#171717] dark:text-white border border-[#bfdbfe] dark:border-[#1e293b] shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#2563eb]"></span>
+                    {article.category}
+                  </div>
+                )}
+
+                <div class="text-[11px] font-mono text-[#888888] mb-1.5">
+                  {article.source}
+                </div>
+
+                <h3 class="article-headline text-base font-semibold text-[#171717] dark:text-white leading-snug tracking-[-0.3px] mb-2 group-hover:text-[#1d4ed8] dark:group-hover:text-[#60a5fa] transition-colors">
+                  <a
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] rounded-sm"
+                  >
+                    {article.title}
+                  </a>
+                </h3>
+
+                {article.summary && (
+                  <p class="article-short-news text-xs text-[#4d4d4d] dark:text-[#a1a1aa] leading-relaxed line-clamp-3">
+                    {article.summary}
+                  </p>
+                )}
               </div>
 
-              <h3 class="article-headline text-base font-semibold text-[#171717] dark:text-white leading-snug tracking-[-0.3px] mb-2 group-hover:text-[#1d4ed8] dark:group-hover:text-[#60a5fa] transition-colors">
-                {article.headline}
-              </h3>
+              <div class="pt-3 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-xs">
+                <span class="font-mono text-[#888888]">{formatPublished(article.publishedAt)}</span>
 
-              <p class="article-short-news text-xs text-[#4d4d4d] dark:text-[#a1a1aa] leading-relaxed line-clamp-3">
-                {article.shortNews}
-              </p>
-            </div>
-
-            <div class="pt-3 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-xs">
-              <div class="flex items-center gap-1 text-[#1e40af] dark:text-[#93c5fd] font-medium bg-[#dbeafe]/80 dark:bg-[#172554] px-2 py-0.5 rounded border border-[#93c5fd]/50 dark:border-[#1d4ed8]/50">
-                <svg class="w-3 h-3 text-[#1d4ed8] dark:text-[#60a5fa]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                AI Verified
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-3 py-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] text-xs font-semibold rounded-md shadow-sm transition-all flex items-center gap-1.5"
+                >
+                  <span>Read at source</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </a>
               </div>
-
-              <!-- Sarvam AI TTS Audio Listen Button -->
-              <button 
-                type="button"
-                class="listen-btn px-3 py-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] text-xs font-semibold rounded-md shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
-                data-article-id={article.id}
-              >
-                <svg class="w-3.5 h-3.5 text-[#2563eb] dark:text-[#60a5fa]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
-                <span class="listen-btn-text">Listen</span>
-              </button>
             </div>
-
-          </div>
-        </article>
-      ))}
-    </div>
-
+          </article>
+        ))}
+      </div>
+    )}
   </div>
 </section>
-
-<script>
-  let currentAudio: HTMLAudioElement | null = null;
-  let activeBtn: HTMLButtonElement | null = null;
-  let currentLangCode = localStorage.getItem('userLanguage') || 'en';
-
-  function updateLangBadges(code: string) {
-    currentLangCode = code;
-    const langBadge = document.getElementById('active-lang-badge');
-    if (langBadge) langBadge.innerText = code.toUpperCase();
-
-    document.querySelectorAll('.card-lang-tag').forEach(tag => {
-      (tag as HTMLElement).innerText = code.toUpperCase();
-    });
-  }
-
-  // Sarvam AI Audio TTS Stream Handler with Resilient Web Speech Fallback
-  async function handleAudioPlayback(btn: HTMLButtonElement, articleId: string) {
-    const btnText = btn.querySelector('.listen-btn-text') as HTMLElement;
-
-    // Toggle Pause/Resume if clicking active track
-    if (activeBtn === btn) {
-      if (currentAudio) {
-        if (!currentAudio.paused) {
-          currentAudio.pause();
-          if (btnText) btnText.innerText = 'Resume';
-          return;
-        } else {
-          currentAudio.play().then(() => {
-            if (btnText) btnText.innerText = 'Pause';
-          }).catch(() => {
-            fallbackWebSpeech(btn);
-          });
-          return;
-        }
-      } else if (window.speechSynthesis && window.speechSynthesis.speaking) {
-        if (window.speechSynthesis.paused) {
-          window.speechSynthesis.resume();
-          if (btnText) btnText.innerText = 'Pause';
-        } else {
-          window.speechSynthesis.pause();
-          if (btnText) btnText.innerText = 'Resume';
-        }
-        return;
-      }
-    }
-
-    // Reset previous audio
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio = null;
-    }
-    if (window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-
-    if (activeBtn && activeBtn !== btn) {
-      const oldText = activeBtn.querySelector('.listen-btn-text') as HTMLElement;
-      if (oldText) oldText.innerText = 'Listen';
-    }
-
-    activeBtn = btn;
-    if (btnText) btnText.innerText = 'Loading...';
-
-    const card = btn.closest('.article-card');
-    const headline = card?.querySelector('.article-headline')?.textContent || '';
-    const summary = card?.querySelector('.article-short-news')?.textContent || '';
-    const textToSynthesize = `${headline}. ${summary}`;
-
-    try {
-      // Try local dev server proxy or direct backend port 8000
-      let res: Response | null = null;
-      try {
-        res = await fetch('/api/v1/tts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            article_id: articleId,
-            text: textToSynthesize,
-            language: currentLangCode
-          })
-        });
-      } catch (e) {
-        // Direct backend port fallback
-        res = await fetch('http://127.0.0.1:8000/api/v1/tts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            article_id: articleId,
-            text: textToSynthesize,
-            language: currentLangCode
-          })
-        });
-      }
-
-      if (!res || !res.ok) throw new Error('TTS API request failed');
-      const data = await res.json();
-
-      currentAudio = new Audio(data.audio_url);
-      
-      currentAudio.onended = () => {
-        if (btnText) btnText.innerText = 'Listen';
-        activeBtn = null;
-        currentAudio = null;
-      };
-
-      currentAudio.onerror = () => {
-        fallbackWebSpeech(btn);
-      };
-
-      await currentAudio.play();
-      if (btnText) btnText.innerText = 'Pause';
-
-    } catch (err) {
-      // Fallback to client-side Web Speech Synthesis
-      fallbackWebSpeech(btn);
-    }
-  }
-
-  function fallbackWebSpeech(btn: HTMLButtonElement) {
-    const btnText = btn.querySelector('.listen-btn-text') as HTMLElement;
-    const card = btn.closest('.article-card');
-    const headline = card?.querySelector('.article-headline')?.textContent || '';
-    const summary = card?.querySelector('.article-short-news')?.textContent || '';
-    const text = `${headline}. ${summary}`;
-
-    if (!('speechSynthesis' in window)) {
-      if (btnText) btnText.innerText = 'Listen';
-      activeBtn = null;
-      alert('Audio playback is not supported on this browser.');
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    
-    // Map lang codes
-    const langMap: Record<string, string> = {
-      'hi': 'hi-IN', 'bn': 'bn-IN', 'ta': 'ta-IN', 'te': 'te-IN',
-      'kn': 'kn-IN', 'mr': 'mr-IN', 'gu': 'gu-IN', 'ml': 'ml-IN', 'en': 'en-IN'
-    };
-    utterance.lang = langMap[currentLangCode] || 'en-IN';
-
-    utterance.onstart = () => {
-      if (btnText) btnText.innerText = 'Pause';
-    };
-
-    utterance.onend = () => {
-      if (btnText) btnText.innerText = 'Listen';
-      activeBtn = null;
-    };
-
-    utterance.onerror = () => {
-      if (btnText) btnText.innerText = 'Listen';
-      activeBtn = null;
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }
-
-  // Attach button listeners
-  document.querySelectorAll('.listen-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const targetBtn = e.currentTarget as HTMLButtonElement;
-      const artId = targetBtn.getAttribute('data-article-id') || 'art-001';
-      handleAudioPlayback(targetBtn, artId);
-    });
-  });
-
-  // Listen for language change events
-  window.addEventListener('language-changed', (e: any) => {
-    const { langCode } = e.detail;
-    updateLangBadges(langCode);
-  });
-
-  window.addEventListener('DOMContentLoaded', () => {
-    updateLangBadges(currentLangCode);
-  });
-</script>
