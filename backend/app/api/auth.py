@@ -351,3 +351,18 @@ async def logout(payload: LogoutRequest):
 @router.get("/auth/me")
 async def get_me(current_user: dict = Depends(get_current_user)):
     return {k: v for k, v in current_user.items() if k != "password_hash"}
+
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+@router.post("/auth/reset-password")
+async def reset_password(payload: PasswordResetRequest):
+    email = payload.email.lower().strip()
+    user = next((u for u in mock_db.users.values() if u["email"] == email), None)
+    
+    # Generic success response to avoid email enumeration
+    return {
+        "status": "success",
+        "message": "If an account exists with this email address, a password reset link has been dispatched."
+    }

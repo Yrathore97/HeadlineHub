@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Saved Articles & Offline Library | UncosHub AI">
+  <Navbar />
+  <MastheadInfoStrip />
+  
+  <main class="flex-1 py-8 bg-[#fafafa] dark:bg-[#000000]">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+      
+      <div class="flex items-center justify-between mb-8 pb-4 border-b border-[#ebebeb] dark:border-[#262626]">
+        <div>
+          <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">PERSONAL BOOKMARKS</span>
+          <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+            Saved Articles & Claims
+          </h1>
+          <p class="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-1">
+            Access your saved reading list for offline reading across devices.
+          </p>
+        </div>
+
+        <button id="clear-all-saved-btn" type="button" class="px-3.5 py-1.5 bg-[#fafafa] dark:bg-[#18181b] border border-[#ebebeb] dark:border-[#27272a] text-[#ee0000] rounded-lg text-xs font-semibold hover:bg-[#fee2e2] dark:hover:bg-[#450a0a] transition-all cursor-pointer">
+          Clear All Saved
+        </button>
+      </div>
+
+      <!-- Saved Articles Grid Container -->
+      <div id="saved-articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically via client-side script -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="saved-empty-state" class="hidden py-16 text-center bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl">
+        <div class="w-12 h-12 rounded-full bg-[#0070f3]/10 text-[#0070f3] flex items-center justify-center mx-auto mb-3 text-xl">
+          🔖
+        </div>
+        <h3 class="text-lg font-semibold text-[#171717] dark:text-white mb-1">No Saved Articles Yet</h3>
+        <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] max-w-sm mx-auto mb-4">
+          Click the bookmark icon on any news headline or fact-check verdict to save it here for later reading.
+        </p>
+        <a href="/news" class="inline-block px-4 py-2 bg-[#0070f3] text-white font-semibold text-xs rounded-lg hover:bg-[#0761d1] transition-colors">
+          Browse Live News Feed
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  function loadSavedArticles() {
+    const container = document.getElementById('saved-articles-container');
+    const emptyState = document.getElementById('saved-empty-state');
+    const saved = JSON.parse(localStorage.getItem('uncoshub_saved_articles') || '[]');
+
+    if (!saved || saved.length === 0) {
+      container?.classList.add('hidden');
+      emptyState?.classList.remove('hidden');
+      return;
+    }
+
+    emptyState?.classList.add('hidden');
+    if (container) {
+      container.classList.remove('hidden');
+      container.innerHTML = saved.map((art: any) => `
+        <div class="bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl p-5 shadow-sm space-y-3 relative group">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 bg-[#0070f3]/10 text-[#0070f3] font-mono text-[10px] font-semibold rounded">
+              ${art.category || 'GENERAL'}
+            </span>
+            <button onclick="removeSavedArticle('${art.id}')" class="text-xs text-[#a1a1aa] hover:text-[#ee0000] transition-colors cursor-pointer" title="Remove bookmark">
+              ✕ Remove
+            </button>
+          </div>
+          <h3 class="font-bold text-base text-[#171717] dark:text-white leading-snug">
+            ${art.headline}
+          </h3>
+          <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] line-clamp-3 leading-relaxed">
+            ${art.summary}
+          </p>
+          <div class="pt-3 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-[11px] text-[#71717a] font-mono">
+            <span>Source: ${art.source || 'PTI Wire'}</span>
+            <a href="/news" class="text-[#0070f3] hover:underline">Read full →</a>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  (window as any).removeSavedArticle = (id: string) => {
+    let saved = JSON.parse(localStorage.getItem('uncoshub_saved_articles') || '[]');
+    saved = saved.filter((item: any) => item.id !== id);
+    localStorage.setItem('uncoshub_saved_articles', JSON.stringify(saved));
+    loadSavedArticles();
+  };
+
+  document.getElementById('clear-all-saved-btn')?.addEventListener('click', () => {
+    localStorage.removeItem('uncoshub_saved_articles');
+    loadSavedArticles();
+  });
+
+  window.addEventListener('DOMContentLoaded', loadSavedArticles);
+</script>

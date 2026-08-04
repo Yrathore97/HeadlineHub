@@ -2,8 +2,12 @@
 import LogoIcon from './LogoIcon.astro';
 
 const currentPath = Astro.url.pathname;
-const isHeadlinesActive = currentPath === '/' || currentPath === '';
+const isHomeActive = currentPath === '/' || currentPath === '';
+const isNewsActive = currentPath.startsWith('/news');
 const isVerifyActive = currentPath.startsWith('/verify');
+const isTrendingActive = currentPath.startsWith('/trending');
+const isCategoriesActive = currentPath.startsWith('/categories');
+const isSavedActive = currentPath.startsWith('/saved');
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -41,30 +45,78 @@ const languages = [
     </div>
 
     <!-- Desktop Navigation Links -->
-    <nav class="hidden md:flex items-center gap-2" aria-label="Main Navigation">
+    <nav class="hidden lg:flex items-center gap-1.5" aria-label="Main Navigation">
       <a 
         href="/" 
-        aria-current={isHeadlinesActive ? "page" : undefined}
-        class={`px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ${
-          isHeadlinesActive 
+        aria-current={isHomeActive ? "page" : undefined}
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+          isHomeActive 
             ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
             : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
         }`}
       >
-        Live Headlines
+        Home
       </a>
       
       <a 
+        href="/news" 
+        aria-current={isNewsActive ? "page" : undefined}
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+          isNewsActive 
+            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+        }`}
+      >
+        News
+      </a>
+
+      <a 
         href="/verify" 
         aria-current={isVerifyActive ? "page" : undefined}
-        class={`px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-200 flex items-center gap-1.5 ${
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 ${
           isVerifyActive 
             ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
             : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
         }`}
       >
-        <svg class={`w-4 h-4 ${isVerifyActive ? 'text-white' : 'text-[#0070f3]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        Fact Check Engine
+        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-white' : 'text-[#0070f3]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Fact Check
+      </a>
+
+      <a 
+        href="/trending" 
+        aria-current={isTrendingActive ? "page" : undefined}
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+          isTrendingActive 
+            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+        }`}
+      >
+        Trending
+      </a>
+
+      <a 
+        href="/categories" 
+        aria-current={isCategoriesActive ? "page" : undefined}
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+          isCategoriesActive 
+            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+        }`}
+      >
+        Categories
+      </a>
+
+      <a 
+        href="/saved" 
+        aria-current={isSavedActive ? "page" : undefined}
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+          isSavedActive 
+            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+        }`}
+      >
+        Saved
       </a>
     </nav>
 
@@ -143,33 +195,40 @@ const languages = [
   </div>
 
   <!-- Mobile Drawer Menu -->
-  <div id="mobile-menu-drawer" class="hidden md:hidden border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-4 space-y-3 shadow-lg">
-    <a 
-      href="/" 
-      aria-current={isHeadlinesActive ? "page" : undefined}
-      class={`block px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
-        isHeadlinesActive 
-          ? 'bg-[#0070f3] text-white font-semibold' 
-          : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'
-      }`}
-    >
-      Live Headlines
+  <div id="mobile-menu-drawer" class="hidden lg:hidden border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-4 space-y-2 shadow-lg text-xs font-semibold">
+    <a href="/" class={`block px-3.5 py-2 rounded-lg ${isHomeActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      Home
     </a>
-    
-    <a 
-      href="/verify" 
-      aria-current={isVerifyActive ? "page" : undefined}
-      class={`block px-3.5 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
-        isVerifyActive 
-          ? 'bg-[#0070f3] text-white font-semibold' 
-          : 'text-[#0070f3] hover:bg-[#fafafa] dark:hover:bg-[#141414]'
-      }`}
-    >
+    <a href="/news" class={`block px-3.5 py-2 rounded-lg ${isNewsActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      News Feed
+    </a>
+    <a href="/verify" class={`block px-3.5 py-2 rounded-lg flex items-center gap-2 ${isVerifyActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#0070f3] hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       Fact Check Engine
     </a>
-    
-    <div class="pt-2 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between sm:hidden">
+    <a href="/trending" class={`block px-3.5 py-2 rounded-lg ${isTrendingActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      Trending Topics
+    </a>
+    <a href="/categories" class={`block px-3.5 py-2 rounded-lg ${isCategoriesActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      News Categories
+    </a>
+    <a href="/saved" class={`block px-3.5 py-2 rounded-lg ${isSavedActive ? 'bg-[#0070f3] text-white font-semibold' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      Saved Bookmarks
+    </a>
+    <a href="/profile" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
+      Subscriber Profile
+    </a>
+    <a href="/settings" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
+      System Settings
+    </a>
+    <a href="/about" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
+      About Us
+    </a>
+    <a href="/contact" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
+      Contact Editorial
+    </a>
+
+    <div class="pt-2 border-t border-[#ebebeb] dark:border-[#262626] sm:hidden">
       <button 
         type="button" 
         class="open-auth-modal-trigger w-full py-2 bg-[#0070f3] hover:bg-[#0761d1] text-white text-xs font-semibold rounded-lg transition-all text-center cursor-pointer"

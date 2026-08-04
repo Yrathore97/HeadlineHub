@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
+import Footer from '../components/Footer.astro';
+
+const trendingTopics = [
+  { id: 1, title: 'Union Budget 2026 Tax Exemptions & Economic Forecasts', category: 'Finance', volume: '142.5K searches', momentum: '+340%', status: 'VERIFIED SOURCE' },
+  { id: 2, title: 'Semiconductor Fabrication Plant Inauguration in Gujarat', category: 'Technology', volume: '98.2K searches', momentum: '+210%', status: 'VERIFIED SOURCE' },
+  { id: 3, title: 'ISRO Chandrayaan-4 Sample Return Mission Milestone', category: 'Science', volume: '84.1K searches', momentum: '+180%', status: 'VERIFIED SOURCE' },
+  { id: 4, title: 'Viral Social Media Claim regarding Railway Pass Rules', category: 'Public Transit', volume: '62.0K searches', momentum: '+450%', status: 'MISLEADING CLAIM' },
+  { id: 5, title: 'ICC Champions Trophy Squad Selection Announcement', category: 'Sports', volume: '115.8K searches', momentum: '+120%', status: 'VERIFIED SOURCE' },
+];
+---
+
+<Layout title="Trending Topics & Viral News Tracker | UncosHub AI">
+  <Navbar />
+  <MastheadInfoStrip />
+  
+  <main class="flex-1 py-8 bg-[#fafafa] dark:bg-[#000000]">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+      
+      <div class="mb-8">
+        <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">VIRAL MOMENTUM RADAR</span>
+        <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+          Trending Topics & Claim Velocity
+        </h1>
+        <p class="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-1">
+          Real-time tracking of breaking headlines, search momentum, and viral claims undergoing verification.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {trendingTopics.map((topic, index) => (
+          <div class="p-5 bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm hover:border-[#0070f3] transition-all">
+            <div class="flex items-start gap-4">
+              <span class="w-8 h-8 rounded-full bg-[#0070f3]/10 text-[#0070f3] flex items-center justify-center font-bold text-sm shrink-0">
+                #{index + 1}
+              </span>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="px-2 py-0.5 bg-[#fafafa] dark:bg-[#18181b] text-[#52525b] dark:text-[#a1a1aa] font-mono text-[10px] rounded border border-[#ebebeb] dark:border-[#27272a]">
+                    {topic.category}
+                  </span>
+                  <span class={`px-2 py-0.5 rounded text-[10px] font-semibold ${topic.status === 'VERIFIED SOURCE' ? 'bg-[#e6f4ea] dark:bg-[#137333]/20 text-[#137333] dark:text-[#81c995]' : 'bg-[#fce8e6] dark:bg-[#c5221f]/20 text-[#c5221f] dark:text-[#f28b82]'}`}>
+                    {topic.status}
+                  </span>
+                </div>
+                <h3 class="font-semibold text-base text-[#171717] dark:text-white">
+                  {topic.title}
+                </h3>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-6 text-xs text-[#71717a] dark:text-[#a1a1aa] shrink-0 font-mono">
+              <div>
+                <span class="block text-[10px] text-[#a1a1aa]">SEARCH VOLUME</span>
+                <span class="font-semibold text-[#171717] dark:text-white">{topic.volume}</span>
+              </div>
+              <div>
+                <span class="block text-[10px] text-[#a1a1aa]">VELOCITY</span>
+                <span class="font-semibold text-[#0070f3]">{topic.momentum}</span>
+              </div>
+              <a href="/verify" class="px-3 py-1.5 bg-[#171717] dark:bg-white text-white dark:text-[#171717] font-sans font-semibold rounded-lg hover:bg-[#333333] transition-colors">
+                Verify
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

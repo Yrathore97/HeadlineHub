@@ -1,0 +1,81 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Subscriber Profile & Reading Preferences | UncosHub AI">
+  <Navbar />
+  <MastheadInfoStrip />
+  
+  <main class="flex-1 py-8 bg-[#fafafa] dark:bg-[#000000]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      
+      <div class="mb-8">
+        <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">SUBSCRIBER DASHBOARD</span>
+        <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+          Profile & Preferences
+        </h1>
+        <p class="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-1">
+          Manage your account details, language stream defaults, and topic subscriptions.
+        </p>
+      </div>
+
+      <!-- Profile Information Card -->
+      <div class="bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl p-6 sm:p-8 shadow-sm space-y-6 mb-6">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-full bg-[#0070f3] text-white flex items-center justify-center font-bold text-2xl shadow-sm">
+            <span id="profile-avatar-initial">U</span>
+          </div>
+          <div>
+            <h2 id="profile-user-name" class="text-xl font-bold text-[#171717] dark:text-white">
+              UncosHub Subscriber
+            </h2>
+            <p id="profile-user-email" class="text-xs text-[#71717a] dark:text-[#a1a1aa] font-mono mt-0.5">
+              user@uncoshub.ai
+            </p>
+            <span class="inline-block mt-2 px-2.5 py-0.5 bg-[#e0f2fe] dark:bg-[#075985] text-[#0284c7] dark:text-[#38bdf8] text-[10px] font-semibold font-mono rounded">
+              VERIFIED ACCOUNT
+            </span>
+          </div>
+        </div>
+
+        <div class="pt-6 border-t border-[#ebebeb] dark:border-[#262626] grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+          <div class="p-4 bg-[#fafafa] dark:bg-[#141414] rounded-xl border border-[#ebebeb] dark:border-[#262626]">
+            <span class="block text-2xl font-bold text-[#171717] dark:text-white">10+</span>
+            <span class="text-[11px] text-[#71717a] font-mono">LANGUAGES AVAILABLE</span>
+          </div>
+          <div class="p-4 bg-[#fafafa] dark:bg-[#141414] rounded-xl border border-[#ebebeb] dark:border-[#262626]">
+            <span class="block text-2xl font-bold text-[#0070f3]">Sarvam V3</span>
+            <span class="text-[11px] text-[#71717a] font-mono">VOICE ENGINE ACTIVE</span>
+          </div>
+          <div class="p-4 bg-[#fafafa] dark:bg-[#141414] rounded-xl border border-[#ebebeb] dark:border-[#262626]">
+            <span class="block text-2xl font-bold text-[#29bc9b]">Active</span>
+            <span class="text-[11px] text-[#71717a] font-mono">PUBLIC CLAIM VERIFIER</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedUser = localStorage.getItem('uncoshub_user') || localStorage.getItem('headlinehub_user');
+    if (savedUser) {
+      try {
+        const u = JSON.parse(savedUser);
+        const nameEl = document.getElementById('profile-user-name');
+        const emailEl = document.getElementById('profile-user-email');
+        const avatarEl = document.getElementById('profile-avatar-initial');
+        if (nameEl && u.name) nameEl.innerText = u.name;
+        if (emailEl && u.email) emailEl.innerText = u.email;
+        if (avatarEl && u.name) avatarEl.innerText = u.name.charAt(0).toUpperCase();
+      } catch (e) {}
+    }
+  });
+</script>

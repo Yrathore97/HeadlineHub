@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
+import NewsFeed from '../components/NewsFeed.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Live Multilingual News Feed & Wire | UncosHub AI">
+  <Navbar />
+  <MastheadInfoStrip />
+  
+  <main class="flex-1 py-8 bg-[#fafafa] dark:bg-[#000000]">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 mb-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#ebebeb] dark:border-[#262626]">
+        <div>
+          <span class="font-mono-caption text-[#0070f3] text-xs font-semibold">24/7 AUTONOMOUS MEDIA WIRE</span>
+          <h1 class="text-2xl sm:text-4xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+            Real-Time Verified News Feed
+          </h1>
+          <p class="text-xs sm:text-sm text-[#71717a] dark:text-[#a1a1aa] mt-1">
+            Continuous AI collection from PTI, ANI, PIB, and international wire services across 10 Indian languages.
+          </p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-xs text-[#71717a] dark:text-[#a1a1aa] font-mono">Stream:</span>
+          <span class="px-3 py-1.5 bg-[#0070f3] text-white rounded-lg text-xs font-semibold">
+            Live Automated Aggregation
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main News Feed Component -->
+    <NewsFeed />
+  </main>
+
+  <Footer />
+</Layout>
