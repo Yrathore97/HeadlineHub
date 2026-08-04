@@ -1,26 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import HeroMesh from '../components/HeroMesh.astro';
-import IndianLanguageHub from '../components/IndianLanguageHub.astro';
 import NewsFeed from '../components/NewsFeed.astro';
-import FactCheckWidget from '../components/FactCheckWidget.astro';
-import MultilingualAudioPlayer from '../components/MultilingualAudioPlayer.astro';
-import SocialStudio from '../components/SocialStudio.astro';
-import AdminDesk from '../components/AdminDesk.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="HeadlineHub AI | Autonomous Multilingual Media & AI Fact-Check Engine">
+<Layout title="UncosHub AI | Autonomous Multilingual Media & AI Fact-Check Engine">
   <Navbar />
+  <MastheadInfoStrip />
   <main class="flex-1">
     <HeroMesh />
-    <IndianLanguageHub />
     <NewsFeed />
-    <FactCheckWidget />
-    <MultilingualAudioPlayer />
-    <SocialStudio />
-    <AdminDesk />
   </main>
   <Footer />
 </Layout>

@@ -2,16 +2,16 @@
 import LogoIcon from './LogoIcon.astro';
 ---
 
-<footer class="w-full bg-white dark:bg-[#000000] border-t border-[#ebebeb] dark:border-[#262626] py-12 text-xs text-[#4d4d4d] dark:text-[#a1a1a1] transition-colors duration-200">
+<footer class="w-full bg-white dark:bg-[#000000] border-t border-[#ebebeb] dark:border-[#262626] py-8 sm:py-12 text-xs text-[#4d4d4d] dark:text-[#a1a1a1] transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-8 sm:mb-10">
       
       <!-- Brand & Mission -->
-      <div class="space-y-3">
+      <div class="space-y-3 sm:col-span-2 md:col-span-1">
         <div class="flex items-center gap-2.5">
           <LogoIcon className="w-7 h-7 text-[#171717] dark:text-white" />
           <div class="flex flex-col">
-            <span class="font-semibold text-sm text-[#171717] dark:text-white leading-none">HeadlineHub <span class="text-[#0070f3]">AI</span></span>
+            <span class="font-semibold text-sm text-[#171717] dark:text-white leading-none">UncosHub <span class="text-[#0070f3]">AI</span></span>
             <span class="font-mono-caption text-[9px] text-[#0070f3] dark:text-[#50e3c2] font-semibold tracking-widest leading-none mt-0.5">Only Facts</span>
           </div>
         </div>
@@ -25,7 +25,7 @@ import LogoIcon from './LogoIcon.astro';
 
       <!-- Column 1: Coverage & Feed -->
       <div>
-        <h4 class="font-mono-caption text-[#171717] dark:text-white mb-3 font-semibold">COVERAGE REGIONS</h4>
+        <h4 class="font-mono-caption text-[#171717] dark:text-white mb-2.5 sm:mb-3 font-semibold">COVERAGE REGIONS</h4>
         <ul class="space-y-2 text-xs">
           <li><a href="/" class="hover:text-[#171717] dark:hover:text-white transition-colors">National News India</a></li>
           <li><a href="/" class="hover:text-[#171717] dark:hover:text-white transition-colors">Karnataka & South Asia</a></li>
@@ -37,10 +37,10 @@ import LogoIcon from './LogoIcon.astro';
 
       <!-- Column 2: AI Verification & Trust -->
       <div>
-        <h4 class="font-mono-caption text-[#171717] dark:text-white mb-3 font-semibold">FACT CHECK & TRUST</h4>
+        <h4 class="font-mono-caption text-[#171717] dark:text-white mb-2.5 sm:mb-3 font-semibold">FACT CHECK & TRUST</h4>
         <ul class="space-y-2 text-xs">
           <li><a href="/verify" class="hover:text-[#171717] dark:hover:text-white transition-colors">Submit Claim to Fact Checker</a></li>
-          <li><a href="/verify#methodology" class="hover:text-[#171717] dark:hover:text-white transition-colors">Public Verification Methodology</a></li>
+          <li><a href="/verify" class="hover:text-[#171717] dark:hover:text-white transition-colors">Public Verification Methodology</a></li>
           <li><a href="/verify" class="hover:text-[#171717] dark:hover:text-white transition-colors">Sources Checked Matrix (PTI, ANI, PIB)</a></li>
           <li><a href="/admin" class="hover:text-[#171717] dark:hover:text-white transition-colors">Human Moderation Desk</a></li>
         </ul>
@@ -48,7 +48,7 @@ import LogoIcon from './LogoIcon.astro';
 
       <!-- Column 3: Legal Compliance & RSS -->
       <div>
-        <h4 class="font-mono-caption text-[#171717] dark:text-white mb-3 font-semibold">LEGAL & DEVELOPERS</h4>
+        <h4 class="font-mono-caption text-[#171717] dark:text-white mb-2.5 sm:mb-3 font-semibold">LEGAL & DEVELOPERS</h4>
         <ul class="space-y-2 text-xs">
           <li><a href="#" class="hover:text-[#171717] dark:hover:text-white transition-colors">Legal Compliance Statement</a></li>
           <li><a href="#" class="hover:text-[#171717] dark:hover:text-white transition-colors">RSS & API Integration</a></li>
@@ -60,9 +60,9 @@ import LogoIcon from './LogoIcon.astro';
     </div>
 
     <!-- Bottom Compliance Strip -->
-    <div class="pt-6 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#888888]">
+    <div class="pt-6 border-t border-[#ebebeb] dark:border-[#262626] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#888888] text-center sm:text-left">
       <div>
-        © 2026 HeadlineHub AI. All rights reserved. Headlines, summaries, and source attributions only.
+        © 2026 UncosHub AI. All rights reserved. Headlines, summaries, and source attributions only.
       </div>
       <div class="flex items-center gap-4">
         <span class="flex items-center gap-1">

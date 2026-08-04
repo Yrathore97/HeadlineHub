@@ -1,6 +1,10 @@
 ---
 import LogoIcon from './LogoIcon.astro';
 
+const currentPath = Astro.url.pathname;
+const isHeadlinesActive = currentPath === '/' || currentPath === '';
+const isVerifyActive = currentPath.startsWith('/verify');
+
 const languages = [
   { code: 'en', name: 'English' },
   { code: 'hi', name: 'हिंदी (Hindi)' },
@@ -15,136 +19,527 @@ const languages = [
   { code: 'or', name: 'ଓଡ଼ିଆ (Odia)' },
   { code: 'as', name: 'অসমীয়া (Assamese)' },
   { code: 'ur', name: 'اردو (Urdu)' },
-  { code: 'bho', name: 'भोजपुरी (Bhojpuri)' },
-  { code: 'ks', name: 'कॉशुर (Kashmiri)' },
-  { code: 'doi', name: 'डोगरी (Dogri)' },
-  { code: 'kok', name: 'कोंकणी (Konkani)' },
-  { code: 'mai', name: 'मैथिली (Maithili)' },
-  { code: 'mni', name: 'ꯃꯤꯇꯩꯂꯣᓐ (Manipuri)' },
-  { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ (Santali)' },
-  { code: 'ne', name: 'नेपाली (Nepali)' },
-];
-
-const states = [
-  'All Regions', 'Karnataka', 'Tamil Nadu', 'Kerala', 'Telangana', 
-  'Andhra Pradesh', 'Maharashtra', 'Gujarat', 'Delhi', 'Rajasthan', 
-  'Uttar Pradesh', 'Bihar', 'West Bengal', 'Punjab', 'Odisha', 'Assam', 'Jammu & Kashmir'
 ];
 ---
 
-<header class="sticky top-0 z-50 w-full bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-md border-b border-[#ebebeb] dark:border-[#262626] h-[64px] transition-colors duration-200">
-  <div class="max-w-[1400px] mx-auto h-full px-4 sm:px-6 flex items-center justify-between">
-    <!-- Brand & Live Indicator -->
-    <div class="flex items-center gap-3">
-      <a href="/" class="flex items-center gap-2.5 group">
-        <!-- New Newspaper-Microphone Logo Icon -->
+<header class="sticky top-0 z-50 w-full bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#ebebeb] dark:border-[#262626] h-[64px] transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto h-full px-3 sm:px-6 flex items-center justify-between">
+    
+    <!-- Brand Logo & Live Indicator -->
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      <a href="/" class="flex items-center gap-2 group">
         <div class="relative flex items-center justify-center group-hover:scale-105 transition-transform">
-          <LogoIcon className="w-8 h-8 text-[#171717] dark:text-white" />
-          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#0070f3] rounded-full animate-ping"></span>
-          <span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#0070f3] rounded-full"></span>
+          <LogoIcon className="w-7 h-7 sm:w-8 sm:h-8 text-[#171717] dark:text-white" />
+          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#0070f3] rounded-full animate-ping"></span>
+          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#0070f3] rounded-full"></span>
         </div>
         <div class="flex flex-col">
-          <span class="font-semibold text-base tracking-tight leading-tight text-[#171717] dark:text-white">HeadlineHub <span class="text-[#0070f3]">AI</span></span>
-          <span class="font-mono-caption text-[10px] text-[#0070f3] dark:text-[#50e3c2] font-semibold tracking-widest leading-none">Only Facts</span>
+          <span class="font-semibold text-sm sm:text-base tracking-tight leading-tight text-[#171717] dark:text-white">UncosHub <span class="text-[#0070f3]">AI</span></span>
+          <span class="font-mono-caption text-[9px] sm:text-[10px] text-[#0070f3] dark:text-[#50e3c2] font-semibold tracking-widest leading-none">Only Facts</span>
         </div>
       </a>
-
-      <span class="hidden md:inline-block h-4 w-[1px] bg-[#ebebeb] dark:bg-[#262626] mx-1"></span>
-
-      <!-- Live Pipeline Health Chip -->
-      <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-full text-xs text-[#4d4d4d] dark:text-[#a1a1a1]">
-        <span class="w-1.5 h-1.5 bg-[#50e3c2] rounded-full animate-pulse"></span>
-        <span class="font-mono text-[11px]">24/7 Live Fact Scraper</span>
-      </div>
     </div>
 
-    <!-- Navigation Links -->
-    <nav class="hidden md:flex items-center gap-1">
-      <a href="/" class="px-3 py-1.5 text-sm text-[#171717] dark:text-white font-medium hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors">
-        Live News
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden md:flex items-center gap-2" aria-label="Main Navigation">
+      <a 
+        href="/" 
+        aria-current={isHeadlinesActive ? "page" : undefined}
+        class={`px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-200 ${
+          isHeadlinesActive 
+            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+        }`}
+      >
+        Live Headlines
       </a>
-      <a href="#language-hub" class="px-3 py-1.5 text-sm text-[#0070f3] dark:text-[#50e3c2] font-semibold hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors flex items-center gap-1">
-        <span>🇮🇳 Bharat Languages</span>
-      </a>
-      <a href="/verify" class="px-3 py-1.5 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] font-medium hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-[#0070f3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        Fact Check
-      </a>
-      <a href="#podcasts" class="px-3 py-1.5 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] font-medium hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors">
-        Audio Briefings
-      </a>
-      <a href="/admin" class="px-3 py-1.5 text-sm text-[#4d4d4d] dark:text-[#a1a1a1] font-medium hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-full transition-colors flex items-center gap-1">
-        <svg class="w-3.5 h-3.5 text-[#888888]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-        Ops Desk
+      
+      <a 
+        href="/verify" 
+        aria-current={isVerifyActive ? "page" : undefined}
+        class={`px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-200 flex items-center gap-1.5 ${
+          isVerifyActive 
+            ? 'bg-[#0070f3] text-white shadow-sm font-semibold' 
+            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f]'
+        }`}
+      >
+        <svg class={`w-4 h-4 ${isVerifyActive ? 'text-white' : 'text-[#0070f3]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Fact Check Engine
       </a>
     </nav>
 
     <!-- Controls & Action Pills -->
-    <div class="flex items-center gap-2">
-      <!-- Dark / Light Mode Toggle Pill Button -->
+    <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+      
+      <!-- Theme Toggle Button -->
       <button 
-        id="theme-toggle-btn" 
         type="button"
         aria-label="Toggle Theme"
-        class="px-3 py-1.5 h-[28px] flex items-center gap-1.5 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] border border-[#171717] dark:border-white rounded-[6px] text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+        class="theme-toggle-trigger px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#262626] text-white dark:text-[#171717] border border-[#171717] dark:border-white rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer shrink-0"
       >
-        <!-- Sun Icon (Active in Dark Mode) -->
-        <svg id="theme-sun-icon" class="hidden dark:block w-3.5 h-3.5 text-[#171717]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="hidden dark:block w-3.5 h-3.5 text-[#171717]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
-        <!-- Moon Icon (Active in Light Mode) -->
-        <svg id="theme-moon-icon" class="block dark:hidden w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="block dark:hidden w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
         </svg>
-        <span id="theme-btn-text" class="text-[11px] uppercase tracking-wide">
+        <span class="text-[10px] sm:text-[11px] uppercase tracking-wide hidden xs:inline">
           <span class="block dark:hidden">Dark</span>
           <span class="hidden dark:block">Light</span>
         </span>
       </button>
 
-      <!-- Language Selector -->
+      <!-- Global Language Selector -->
       <div class="relative group">
-        <select id="language-select" class="appearance-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-medium px-2.5 py-1.5 pr-7 border border-[#ebebeb] dark:border-[#262626] rounded-md cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#171717]">
+        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-[#0070f3]/40 dark:border-[#0070f3]/50 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#0070f3] h-[32px] truncate">
           {languages.map(lang => (
             <option value={lang.code}>{lang.name}</option>
           ))}
         </select>
-        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#888888]">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#0070f3]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
 
-      <!-- State / Region Picker -->
-      <div class="relative hidden sm:block">
-        <select id="state-select" class="appearance-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-medium px-2.5 py-1.5 pr-7 border border-[#ebebeb] dark:border-[#262626] rounded-md cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#171717]">
-          {states.map(state => (
-            <option value={state.toLowerCase().replace(/\s+/g, '-')}>{state}</option>
-          ))}
-        </select>
-        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#888888]">
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+      <!-- User Auth Section -->
+      <div id="auth-nav-container" class="hidden sm:flex items-center gap-2">
+        <div id="guest-auth-buttons" class="flex items-center gap-2">
+          <button 
+            type="button" 
+            class="open-auth-modal-trigger inline-flex items-center justify-center px-3.5 h-[32px] bg-[#0070f3] hover:bg-[#0761d1] text-white text-xs font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer whitespace-nowrap shrink-0 gap-1.5 border border-[#0070f3]"
+          >
+            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+            <span>Sign In</span>
+          </button>
+        </div>
+
+        <div id="user-profile-menu" class="hidden items-center gap-2">
+          <div class="flex items-center gap-2 px-3 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-full text-xs shadow-sm">
+            <div id="user-avatar" class="w-5 h-5 rounded-full bg-gradient-to-r from-[#007cf0] to-[#7928ca] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+              U
+            </div>
+            <span id="user-display-name" class="font-semibold text-[#171717] dark:text-white max-w-[100px] truncate">User</span>
+          </div>
+          <button 
+            id="logout-btn" 
+            type="button" 
+            class="text-xs font-semibold text-[#ee0000] hover:bg-[#f7d4d6]/40 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
-      <!-- Action Button -->
-      <a href="/verify" class="hidden xs:inline-flex items-center justify-center px-3 h-[28px] bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] text-xs font-medium rounded-[6px] transition-colors shadow-sm">
-        Verify Claim
-      </a>
+      <!-- Mobile Hamburger Button -->
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        aria-label="Toggle Navigation Menu"
+        class="md:hidden p-1.5 text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-lg transition-colors cursor-pointer"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu-drawer" class="hidden md:hidden border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-4 space-y-3 shadow-lg">
+    <a 
+      href="/" 
+      aria-current={isHeadlinesActive ? "page" : undefined}
+      class={`block px-3.5 py-2 text-sm font-medium rounded-lg transition-colors ${
+        isHeadlinesActive 
+          ? 'bg-[#0070f3] text-white font-semibold' 
+          : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'
+      }`}
+    >
+      Live Headlines
+    </a>
+    
+    <a 
+      href="/verify" 
+      aria-current={isVerifyActive ? "page" : undefined}
+      class={`block px-3.5 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+        isVerifyActive 
+          ? 'bg-[#0070f3] text-white font-semibold' 
+          : 'text-[#0070f3] hover:bg-[#fafafa] dark:hover:bg-[#141414]'
+      }`}
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      Fact Check Engine
+    </a>
+    
+    <div class="pt-2 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between sm:hidden">
+      <button 
+        type="button" 
+        class="open-auth-modal-trigger w-full py-2 bg-[#0070f3] hover:bg-[#0761d1] text-white text-xs font-semibold rounded-lg transition-all text-center cursor-pointer"
+      >
+        Sign In / Create Account
+      </button>
     </div>
   </div>
 </header>
 
+<!-- Professional Login / Signup Auth Modal -->
+<div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
+  <!-- Backdrop Click Dismiss Target -->
+  <div id="auth-modal-backdrop" class="absolute inset-0"></div>
+
+  <div class="w-full max-w-md bg-white dark:bg-[#0d0d0f] border border-[#e4e4e7] dark:border-[#27272a] rounded-2xl p-6 sm:p-7 shadow-stacked-lg relative z-10 space-y-5">
+    
+    <!-- Close Button (×) -->
+    <button id="close-auth-modal-btn" type="button" aria-label="Close modal" class="absolute top-4 right-4 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer transition-colors">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+    <!-- Modal Eyebrow & Title -->
+    <div>
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="w-2 h-2 rounded-full bg-[#0070f3] animate-pulse"></span>
+        <span class="font-mono-caption text-xs text-[#0070f3] font-semibold tracking-wider">UNCOSHUB AI AUTH</span>
+      </div>
+      <h3 id="modal-title" class="text-xl font-bold text-[#18181b] dark:text-white">Sign in to UncosHub</h3>
+      <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] mt-0.5">Persist your personalized feed & preferred language across devices.</p>
+    </div>
+
+    <!-- Auth Mode Toggle Tabs (Sign In / Create Account) -->
+    <div class="grid grid-cols-2 p-1 bg-[#f4f4f5] dark:bg-[#18181b] rounded-xl text-xs font-semibold">
+      <button id="tab-mode-login" type="button" class="py-2 rounded-lg bg-white dark:bg-[#27272a] text-[#18181b] dark:text-white shadow-sm transition-all cursor-pointer">
+        Sign In
+      </button>
+      <button id="tab-mode-signup" type="button" class="py-2 rounded-lg text-[#71717a] dark:text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white transition-all cursor-pointer">
+        Create Account
+      </button>
+    </div>
+
+    <!-- Google OAuth "Continue with Google" Official Branded Button -->
+    <div>
+      <a 
+        id="google-oauth-btn" 
+        href="/api/v1/auth/google/login"
+        class="w-full h-[42px] bg-white hover:bg-[#f8f9fa] text-[#3c4043] font-semibold text-xs rounded-xl border border-[#dadce0] flex items-center justify-center gap-3 shadow-sm hover:shadow transition-all cursor-pointer no-underline"
+      >
+        <!-- Official Google Multicolor G Logo SVG -->
+        <svg class="w-4 h-4" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Continue with Google</span>
+      </a>
+    </div>
+
+    <!-- Divider: "or continue with email" -->
+    <div class="relative flex items-center justify-center my-2">
+      <div class="w-full border-t border-[#e4e4e7] dark:border-[#27272a]"></div>
+      <span class="absolute bg-white dark:bg-[#0d0d0f] px-3 text-[11px] font-mono text-[#a1a1aa] uppercase tracking-wider">
+        or continue with email
+      </span>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="auth-error-banner" class="hidden p-3 bg-[#fef2f2] dark:bg-[#450a0a] text-[#ef4444] dark:text-[#fca5a5] text-xs font-medium rounded-xl border border-[#fecaca] dark:border-[#7f1d1d] animate-fade-in">
+      Invalid email or password. Please try again.
+    </div>
+
+    <!-- Auth Form (Dynamic Sign In / Create Account) -->
+    <form id="auth-form" class="space-y-3.5">
+      
+      <!-- Name Field (Visible on Signup Only) -->
+      <div id="field-group-name" class="hidden">
+        <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">FULL NAME</label>
+        <input type="text" id="auth-name-input" placeholder="Yash Rathore" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+      </div>
+
+      <!-- Email Field -->
+      <div>
+        <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">EMAIL ADDRESS</label>
+        <input type="email" id="auth-email-input" required placeholder="reader@example.com" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+      </div>
+
+      <!-- Password Field with Show/Hide Toggle -->
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa]">PASSWORD</label>
+          <button id="forgot-password-link" type="button" class="text-[11px] text-[#0070f3] hover:underline cursor-pointer">
+            Forgot password?
+          </button>
+        </div>
+        <div class="relative">
+          <input type="password" id="auth-password-input" required placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+          <button type="button" class="password-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer" data-target="auth-password-input">
+            <svg class="eye-open-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            <svg class="eye-closed-icon hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.82c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.837-1.748a3 3 0 11-4.243-4.243"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field (Visible on Signup Only) -->
+      <div id="field-group-confirm" class="hidden">
+        <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">CONFIRM PASSWORD</label>
+        <div class="relative">
+          <input type="password" id="auth-confirm-input" placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]" />
+          <button type="button" class="password-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer" data-target="auth-confirm-input">
+            <svg class="eye-open-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            <svg class="eye-closed-icon hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.82c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.837-1.748a3 3 0 11-4.243-4.243"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button id="auth-submit-btn" type="submit" class="w-full py-3 bg-[#0070f3] hover:bg-[#0761d1] text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+        <span id="auth-btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        <span id="auth-btn-text">Sign In</span>
+      </button>
+    </form>
+  </div>
+</div>
+
 <script>
-  const themeToggleBtn = document.getElementById('theme-toggle-btn');
-  themeToggleBtn?.addEventListener('click', () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  let currentAuthMode = 'login'; // 'login' | 'signup'
+
+  // Theme Toggle across all triggers
+  document.querySelectorAll('.theme-toggle-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
   });
 
+  // Mobile Drawer Toggle
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileDrawer = document.getElementById('mobile-menu-drawer');
+  mobileBtn?.addEventListener('click', () => {
+    mobileDrawer?.classList.toggle('hidden');
+  });
+
+  // Auth Modal Controls
+  const authModal = document.getElementById('auth-modal');
+  const authBackdrop = document.getElementById('auth-modal-backdrop');
+  const closeAuthModalBtn = document.getElementById('close-auth-modal-btn');
+
+  function openModal(mode = 'login') {
+    switchMode(mode);
+    mobileDrawer?.classList.add('hidden');
+    authModal?.classList.remove('hidden');
+    authModal?.classList.add('flex');
+  }
+
+  function closeModal() {
+    authModal?.classList.add('hidden');
+    authModal?.classList.remove('flex');
+  }
+
+  document.querySelectorAll('.open-auth-modal-trigger').forEach(btn => {
+    btn.addEventListener('click', () => openModal('login'));
+  });
+
+  closeAuthModalBtn?.addEventListener('click', closeModal);
+  authBackdrop?.addEventListener('click', closeModal);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && authModal && !authModal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  // Mode Switching (Sign In vs Create Account)
+  const tabLogin = document.getElementById('tab-mode-login');
+  const tabSignup = document.getElementById('tab-mode-signup');
+  const modalTitle = document.getElementById('modal-title');
+  const fieldName = document.getElementById('field-group-name');
+  const fieldConfirm = document.getElementById('field-group-confirm');
+  const authBtnText = document.getElementById('auth-btn-text');
+  const forgotLink = document.getElementById('forgot-password-link');
+  const authErrorBanner = document.getElementById('auth-error-banner');
+
+  function switchMode(mode: string) {
+    currentAuthMode = mode;
+    authErrorBanner?.classList.add('hidden');
+
+    if (mode === 'login') {
+      tabLogin?.classList.add('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
+      tabLogin?.classList.remove('text-[#71717a]', 'dark:text-[#a1a1aa]');
+
+      tabSignup?.classList.remove('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
+      tabSignup?.classList.add('text-[#71717a]', 'dark:text-[#a1a1aa]');
+
+      if (modalTitle) modalTitle.innerText = 'Sign in to UncosHub';
+      if (authBtnText) authBtnText.innerText = 'Sign In';
+      fieldName?.classList.add('hidden');
+      fieldConfirm?.classList.add('hidden');
+      forgotLink?.classList.remove('hidden');
+    } else {
+      tabSignup?.classList.add('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
+      tabSignup?.classList.remove('text-[#71717a]', 'dark:text-[#a1a1aa]');
+
+      tabLogin?.classList.remove('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
+      tabLogin?.classList.add('text-[#71717a]', 'dark:text-[#a1a1aa]');
+
+      if (modalTitle) modalTitle.innerText = 'Create your account';
+      if (authBtnText) authBtnText.innerText = 'Create Account';
+      fieldName?.classList.remove('hidden');
+      fieldConfirm?.classList.remove('hidden');
+      forgotLink?.classList.add('hidden');
+    }
+  }
+
+  tabLogin?.addEventListener('click', () => switchMode('login'));
+  tabSignup?.addEventListener('click', () => switchMode('signup'));
+
+  // Password Visibility Toggle
+  document.querySelectorAll('.password-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = (btn as HTMLElement).getAttribute('data-target');
+      const input = document.getElementById(targetId || '') as HTMLInputElement | null;
+      if (!input) return;
+
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+
+      const openIcon = btn.querySelector('.eye-open-icon');
+      const closedIcon = btn.querySelector('.eye-closed-icon');
+
+      if (isPassword) {
+        openIcon?.classList.add('hidden');
+        closedIcon?.classList.remove('hidden');
+      } else {
+        openIcon?.classList.remove('hidden');
+        closedIcon?.classList.add('hidden');
+      }
+    });
+  });
+
+  // Forgot Password Action
+  forgotLink?.addEventListener('click', () => {
+    if (authErrorBanner) {
+      authErrorBanner.className = 'p-3 bg-[#e0f2fe] dark:bg-[#075985] text-[#0284c7] dark:text-[#38bdf8] text-xs font-medium rounded-xl border border-[#bae6fd] dark:border-[#0369a1] animate-fade-in';
+      authErrorBanner.innerText = 'Password recovery link has been sent to your email address.';
+      authErrorBanner.classList.remove('hidden');
+    }
+  });
+
+  // Auth Form Submission (Login & Signup)
+  const authForm = document.getElementById('auth-form') as HTMLFormElement;
+  const authBtnSpinner = document.getElementById('auth-btn-spinner');
+
+  const guestAuthButtons = document.getElementById('guest-auth-buttons');
+  const userProfileMenu = document.getElementById('user-profile-menu');
+  const userDisplayName = document.getElementById('user-display-name');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  authForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    authErrorBanner?.classList.add('hidden');
+
+    const email = (document.getElementById('auth-email-input') as HTMLInputElement | null)?.value || '';
+    const password = (document.getElementById('auth-password-input') as HTMLInputElement | null)?.value || '';
+    const name = (document.getElementById('auth-name-input') as HTMLInputElement | null)?.value || '';
+    const confirm = (document.getElementById('auth-confirm-input') as HTMLInputElement | null)?.value || '';
+
+    // Frontend Validations
+    if (currentAuthMode === 'signup') {
+      if (password.length < 8) {
+        showAuthError('Password must be at least 8 characters long.');
+        return;
+      }
+      if (password !== confirm) {
+        showAuthError('Passwords do not match. Please verify your password.');
+        return;
+      }
+    }
+
+    authBtnSpinner?.classList.remove('hidden');
+    if (authBtnText) authBtnText.innerText = currentAuthMode === 'login' ? 'Signing in...' : 'Creating account...';
+
+    const endpoint = currentAuthMode === 'login' ? '/api/v1/auth/login' : '/api/v1/auth/signup';
+    const payload = currentAuthMode === 'login' 
+      ? { email, password }
+      : { name, email, password };
+
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.detail || 'Authentication failed');
+      }
+
+      localStorage.setItem('uncoshub_user', JSON.stringify(data.user));
+      localStorage.setItem('uncoshub_access_token', data.access_token);
+      
+      closeModal();
+      updateUserSessionState();
+
+    } catch (err: any) {
+      showAuthError(err.message || 'Authentication request failed.');
+    } finally {
+      authBtnSpinner?.classList.add('hidden');
+      if (authBtnText) authBtnText.innerText = currentAuthMode === 'login' ? 'Sign In' : 'Create Account';
+    }
+  });
+
+  function showAuthError(msg: string) {
+    if (authErrorBanner) {
+      authErrorBanner.className = 'p-3 bg-[#fef2f2] dark:bg-[#450a0a] text-[#ef4444] dark:text-[#fca5a5] text-xs font-medium rounded-xl border border-[#fecaca] dark:border-[#7f1d1d] animate-fade-in';
+      authErrorBanner.innerText = msg;
+      authErrorBanner.classList.remove('hidden');
+    }
+  }
+
+  function updateUserSessionState() {
+    const savedUser = localStorage.getItem('uncoshub_user') || localStorage.getItem('headlinehub_user');
+    if (savedUser && guestAuthButtons && userProfileMenu && userDisplayName) {
+      try {
+        const userObj = JSON.parse(savedUser);
+        userDisplayName.innerText = userObj.name || 'Subscriber';
+        guestAuthButtons.classList.add('hidden');
+        userProfileMenu.classList.remove('hidden');
+        userProfileMenu.classList.add('flex');
+      } catch (e) {}
+    }
+  }
+
+  // Handle URL auth token from Google OAuth Redirect Callback
+  function handleOAuthCallbackUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authToken = urlParams.get('auth_token');
+    const userName = urlParams.get('user_name');
+
+    if (authToken && userName) {
+      localStorage.setItem('uncoshub_access_token', authToken);
+      localStorage.setItem('uncoshub_user', JSON.stringify({ name: userName }));
+      
+      // Clean query params from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      updateUserSessionState();
+    }
+  }
+
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('uncoshub_user');
+    localStorage.removeItem('uncoshub_access_token');
+    localStorage.removeItem('headlinehub_user');
+    localStorage.removeItem('headlinehub_access_token');
+    if (guestAuthButtons && userProfileMenu) {
+      userProfileMenu.classList.add('hidden');
+      userProfileMenu.classList.remove('flex');
+      guestAuthButtons.classList.remove('hidden');
+    }
+  });
+
+  // Language Selector Sync
   const langSelect = document.getElementById('language-select') as HTMLSelectElement;
   langSelect?.addEventListener('change', (e) => {
     const code = (e.target as HTMLSelectElement).value;
-    const name = langSelect.options[langSelect.selectedIndex].text;
+    const selectedOption = langSelect.options[langSelect.selectedIndex];
+    const name = selectedOption ? selectedOption.text : code;
     
     localStorage.setItem('userLanguage', code);
     localStorage.setItem('userLanguageName', name);
@@ -154,10 +549,13 @@ const states = [
     }));
   });
 
-  window.addEventListener('language-changed', (e: any) => {
-    const { langCode } = e.detail;
-    if (langSelect && langCode) {
-      langSelect.value = langCode;
+  // Restore state on DOM load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('userLanguage');
+    if (savedLang && langSelect) {
+      langSelect.value = savedLang;
     }
+    handleOAuthCallbackUrl();
+    updateUserSessionState();
   });
 </script>

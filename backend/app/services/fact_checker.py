@@ -1,5 +1,5 @@
 import uuid
-import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any
 
 class FactCheckerService:
@@ -49,7 +49,7 @@ class FactCheckerService:
             "sources_checked": sources,
             "explanation": explanation,
             "reviewed_by_human": False,
-            "created_at": datetime.datetime.utcnow().isoformat()
+            "created_at": datetime.now(timezone.utc).isoformat()
         }
 
     async def get_verdict_by_id(self, audit_id: str) -> Dict[str, Any]:
@@ -60,7 +60,7 @@ class FactCheckerService:
             "sources_checked": [
                 {"name": "PTI Wire Service", "url": "https://pti.in"}
             ],
-            "explanation": "Verified claim archived in HeadlineHub database."
+            "explanation": "Verified claim archived in UncosHub database."
         }
 
     async def escalate_to_human_queue(self, audit_id: str, reason: str) -> bool:

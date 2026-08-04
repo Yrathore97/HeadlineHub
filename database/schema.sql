@@ -1,4 +1,4 @@
--- HeadlineHub AI Database Schema (PostgreSQL 16+)
+-- UncosHub AI Database Schema (PostgreSQL 16+)
 -- Phase 9 Database Design & Phase 2B Fact-Check Database Schema
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -9,13 +9,17 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(50),
-    password_hash VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255), -- Nullable for OAuth-only users
+    google_id VARCHAR(255) UNIQUE, -- Google sub ID
     role VARCHAR(50) DEFAULT 'reader' CHECK (role IN ('reader', 'editor', 'moderator', 'admin')),
     location VARCHAR(255) DEFAULT 'India',
     preferences JSONB DEFAULT '{"language": "en", "categories": ["national", "tech"]}'::jsonb,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_google_id ON users(google_id);
 
 -- 2. ARTICLES TABLE
 CREATE TABLE IF NOT EXISTS articles (
@@ -58,7 +62,31 @@ CREATE TABLE IF NOT EXISTS fact_checks (
 CREATE INDEX idx_fact_checks_verdict ON fact_checks(verdict);
 CREATE INDEX idx_fact_checks_human_review ON fact_checks(reviewed_by_human) WHERE reviewed_by_human = FALSE;
 
--- 4. MEDIA TABLE
+-- 4. GROUNDED FACT CHECK MESSAGES TABLE
+CREATE TABLE IF NOT EXISTS fact_check_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    fact_check_id VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
+    content TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_fact_check_messages_session ON fact_check_messages(fact_check_id);
+
+-- 5. VOICE CACHE TABLE (SARVAM AI TTS AUDIO CACHE)
+CREATE TABLE IF NOT EXISTS voice_cache (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    article_id VARCHAR(255) NOT NULL,
+    language VARCHAR(50) NOT NULL,
+    audio_url TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP WITH TIME ZONE,
+    CONSTRAINT unique_article_language_voice UNIQUE (article_id, language)
+);
+
+CREATE INDEX idx_voice_cache_lookup ON voice_cache(article_id, language);
+
+-- 6. MEDIA TABLE
 CREATE TABLE IF NOT EXISTS media (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     article_id UUID REFERENCES articles(id) ON DELETE CASCADE,
@@ -68,7 +96,7 @@ CREATE TABLE IF NOT EXISTS media (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. CRAWLER LOGS TABLE
+-- 7. CRAWLER LOGS TABLE
 CREATE TABLE IF NOT EXISTS crawler_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     source_name VARCHAR(255) NOT NULL,
@@ -79,7 +107,7 @@ CREATE TABLE IF NOT EXISTS crawler_logs (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. NOTIFICATIONS TABLE
+-- 8. NOTIFICATIONS TABLE
 CREATE TABLE IF NOT EXISTS notifications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(255) NOT NULL,
@@ -88,3 +116,29 @@ CREATE TABLE IF NOT EXISTS notifications (
     status VARCHAR(50) DEFAULT 'pending',
     sent_at TIMESTAMP WITH TIME ZONE
 );
+
+-- 9. REFRESH TOKENS TABLE
+CREATE TABLE IF NOT EXISTS refresh_tokens (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(255) NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    revoked BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_refresh_tokens_user ON refresh_tokens(user_id);
+CREATE INDEX idx_refresh_tokens_hash ON refresh_tokens(token_hash);
+
+-- 10. TRANSLATIONS TABLE (CACHED ARTICLE TRANSLATIONS)
+CREATE TABLE IF NOT EXISTS translations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    article_id UUID REFERENCES articles(id) ON DELETE CASCADE,
+    language VARCHAR(50) NOT NULL,
+    headline TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_article_language UNIQUE (article_id, language)
+);
+
+CREATE INDEX idx_translations_lookup ON translations(article_id, language);

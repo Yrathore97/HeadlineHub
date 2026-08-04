@@ -8,10 +8,10 @@
       <div class="flex flex-col items-center text-center mb-8">
         <span class="font-mono-caption text-[#0070f3] mb-2 font-medium">LIVE INTERNET SCRAPER • FACT CHECK ENGINE</span>
         <h2 class="text-2xl sm:text-4xl font-semibold text-[#171717] dark:text-white tracking-[-1.28px] mb-3">
-          Instant News Verification
+          Instant News Verification & Grounded AI Chat
         </h2>
         <p class="text-sm sm:text-base text-[#4d4d4d] dark:text-[#a1a1a1] max-w-xl">
-          Paste any headline, WhatsApp message, or claim. HeadlineHub AI instantly scrapes live wire feeds and government portals to give you a clear <strong>TRUE</strong> or <strong>FALSE</strong> short answer.
+          Paste any headline, claim, or forwarded message. HeadlineHub AI cross-references verified wire feeds to issue a verdict and lets you ask grounded follow-up questions.
         </p>
       </div>
 
@@ -20,15 +20,11 @@
         
         <!-- Input Tabs -->
         <div class="flex items-center gap-2 border-b border-[#ebebeb] dark:border-[#262626] pb-3 mb-4 overflow-x-auto">
-          <button id="tab-text" class="tab-btn active px-3 py-1.5 text-xs font-medium text-[#171717] dark:text-white bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-md shadow-sm">
+          <button id="tab-text" class="tab-btn active px-3 py-1.5 text-xs font-semibold text-[#171717] dark:text-white bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-md shadow-sm">
             Text / Claim
           </button>
           <button id="tab-url" class="tab-btn px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white rounded-md">
             URL / Article Link
-          </button>
-          <button id="tab-forward" class="tab-btn px-3 py-1.5 text-xs font-medium text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white rounded-md flex items-center gap-1">
-            <svg class="w-3.5 h-3.5 text-[#29bc9b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            WhatsApp Forward
           </button>
         </div>
 
@@ -42,25 +38,25 @@
           ></textarea>
         </div>
 
-        <!-- Pre-set Demo Prompts for Instant Testing -->
+        <!-- Pre-set Quick Demos -->
         <div class="flex items-center gap-2 mb-5 overflow-x-auto pb-1 text-xs">
-          <span class="text-[#888888] font-mono-caption text-[10px] shrink-0">Try Quick Demos:</span>
-          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-colors shrink-0">
+          <span class="text-[#888888] font-mono-caption text-[10px] shrink-0">Try Demos:</span>
+          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] transition-colors shrink-0">
             "RBI Repo Rate FY27"
           </button>
-          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-colors shrink-0">
+          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] transition-colors shrink-0">
             "Viral WhatsApp 2000 Note Bank Holiday"
           </button>
-          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white transition-colors shrink-0">
+          <button class="demo-prompt-btn px-2.5 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] rounded text-[#4d4d4d] dark:text-[#a1a1a1] transition-colors shrink-0">
             "ISRO INSAT-3DS Satellite Launch"
           </button>
         </div>
 
-        <!-- Verification Action -->
+        <!-- Verification Action Button -->
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2 text-xs text-[#888888]">
             <svg class="w-3.5 h-3.5 text-[#0070f3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            Live Web Scraper cross-references PTI, ANI, PIB & Wire Agencies
+            Live Scraper cross-references PTI, ANI, PIB & Gazette Records
           </div>
 
           <button 
@@ -72,24 +68,20 @@
           </button>
         </div>
 
-        <!-- Item 4: Output Result Panel with Prominent TRUE/FALSE Short Answer -->
-        <div id="verdict-card" class="hidden mt-6 pt-6 border-t border-[#ebebeb] dark:border-[#262626] animate-fade-in">
+        <!-- Output Verdict Card -->
+        <div id="verdict-card" class="hidden mt-6 pt-6 border-t border-[#ebebeb] dark:border-[#262626] animate-fade-in space-y-6">
           
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 p-4 rounded-lg bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626]">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-lg bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626]">
             <div class="flex items-center gap-3">
-              <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider shadow-sm">
+              <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
                 <!-- Injected via JS -->
               </span>
-              <div class="text-xs text-[#888888]">Confidence: <span id="verdict-confidence" class="font-mono text-[#171717] dark:text-white font-semibold">96%</span> • ID: <span id="verdict-id" class="font-mono text-[#171717] dark:text-white">FC-2026-8841</span></div>
+              <div class="text-xs text-[#888888]">Confidence: <span id="verdict-confidence" class="font-mono text-[#171717] dark:text-white font-semibold">96%</span> • Audit ID: <span id="verdict-id" class="font-mono text-[#0070f3]">FC-2026-8841</span></div>
             </div>
-
-            <button id="escalate-btn" class="px-3 py-1.5 bg-[#fafafa] dark:bg-[#1a1a1a] hover:bg-[#f5f5f5] text-[#ee0000] border border-[#f7d4d6] dark:border-[#521b1e] rounded text-xs font-medium transition-colors flex items-center gap-1">
-              Escalate to Moderator
-            </button>
           </div>
 
-          <!-- Short Answer Callout Box -->
-          <div class="mb-4">
+          <!-- Short Verdict Explanation -->
+          <div>
             <h4 class="text-xs font-mono-caption text-[#888888] mb-1">SHORT VERDICT & FACT SUMMARY</h4>
             <div id="verdict-short-answer" class="text-sm font-medium text-[#171717] dark:text-white bg-white dark:bg-[#141414] p-4 rounded-lg border border-[#ebebeb] dark:border-[#262626] leading-relaxed shadow-sm">
               <!-- Injected via JS -->
@@ -104,6 +96,41 @@
             </div>
           </div>
 
+          <!-- Grounded AI Claim Chat Panel -->
+          <div id="grounded-chat-container" class="pt-6 border-t border-[#ebebeb] dark:border-[#262626] space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#50e3c2] animate-pulse"></span>
+                <h4 class="text-xs font-mono-caption text-[#0070f3]">GROUNDED AI CLAIM CHAT</h4>
+              </div>
+              <span class="text-[11px] text-[#888888] font-mono">Scoped strictly to audit sources</span>
+            </div>
+
+            <!-- Chat History Messages Container -->
+            <div id="chat-messages-box" class="space-y-3 max-h-72 overflow-y-auto p-4 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-xl text-xs">
+              <div class="text-[#888888] text-center font-mono text-[11px] py-2">
+                Ask follow-up questions about this specific claim and its cited evidence...
+              </div>
+            </div>
+
+            <!-- Chat Input Box -->
+            <form id="chat-form" class="flex items-center gap-2">
+              <input 
+                type="text" 
+                id="chat-input" 
+                placeholder="Why is this claim false? What do official sources say?"
+                class="flex-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-lg px-3 py-2 text-xs text-[#171717] dark:text-white placeholder-[#888888] focus:outline-none focus:ring-1 focus:ring-[#0070f3]"
+              />
+              <button 
+                type="submit" 
+                id="send-chat-btn"
+                class="px-4 py-2 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] rounded-lg text-xs font-semibold shadow-sm transition-all shrink-0 cursor-pointer"
+              >
+                Ask Grounded AI
+              </button>
+            </form>
+          </div>
+
         </div>
 
       </div>
@@ -113,7 +140,7 @@
 </section>
 
 <script>
-  const submitBtn = document.getElementById('verify-submit-btn');
+  const submitBtn = document.getElementById('verify-submit-btn') as HTMLButtonElement;
   const claimInput = document.getElementById('claim-text') as HTMLTextAreaElement;
   const verdictCard = document.getElementById('verdict-card');
   const verdictBadge = document.getElementById('verdict-badge');
@@ -122,9 +149,14 @@
   const verdictShortAnswer = document.getElementById('verdict-short-answer');
   const sourcesList = document.getElementById('sources-list');
   const btnSpinner = document.getElementById('btn-spinner');
-  const escalateBtn = document.getElementById('escalate-btn');
 
-  // Pre-set Demo Buttons
+  const chatForm = document.getElementById('chat-form') as HTMLFormElement;
+  const chatInput = document.getElementById('chat-input') as HTMLInputElement;
+  const chatMessagesBox = document.getElementById('chat-messages-box');
+
+  let activeAuditId = '';
+
+  // Quick Demo Buttons
   document.querySelectorAll('.demo-prompt-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const prompt = (e.target as HTMLElement).innerText.replace(/"/g, '');
@@ -138,17 +170,7 @@
     });
   });
 
-  // Check URL query param on page load (if user clicked "Verify Fact" from Live News)
-  const urlParams = new URLSearchParams(window.location.search);
-  const initialQuery = urlParams.get('query');
-  if (initialQuery && claimInput) {
-    claimInput.value = initialQuery;
-    setTimeout(() => {
-      submitBtn?.click();
-    }, 300);
-  }
-
-  // Handle Real-Time Live Scraper Verification Call
+  // Verify Claim Handler
   submitBtn?.addEventListener('click', async () => {
     const text = claimInput.value.trim();
     if (!text) {
@@ -160,10 +182,10 @@
     submitBtn.setAttribute('disabled', 'true');
 
     try {
-      const res = await fetch('/api/verify', {
+      const res = await fetch('/api/v1/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ claim: text })
+        body: JSON.stringify({ content: text })
       });
 
       const data = await res.json();
@@ -171,29 +193,35 @@
       submitBtn.removeAttribute('disabled');
       verdictCard?.classList.remove('hidden');
 
-      if (data.verdict === 'FALSE') {
-        verdictBadge!.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#f7d4d6] dark:bg-[#521b1e] text-[#ee0000] dark:text-[#ff6b6b] border border-[#ee0000]/20';
-        verdictBadge!.innerHTML = '❌ VERDICT: FALSE';
-      } else {
-        verdictBadge!.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#aaffec] dark:bg-[#064e3b] text-[#29bc9b] dark:text-[#34d399] border border-[#29bc9b]/20';
-        verdictBadge!.innerHTML = '✅ VERDICT: TRUE';
+      activeAuditId = data.id || 'FC-2026-9981';
+
+      if (verdictBadge) {
+        if (data.verdict === 'false') {
+          verdictBadge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#f7d4d6] dark:bg-[#521b1e] text-[#ee0000] dark:text-[#ff6b6b] border border-[#ee0000]/20';
+          verdictBadge.innerHTML = '❌ VERDICT: FALSE';
+        } else {
+          verdictBadge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#aaffec] dark:bg-[#064e3b] text-[#29bc9b] dark:text-[#34d399] border border-[#29bc9b]/20';
+          verdictBadge.innerHTML = '✅ VERDICT: VERIFIED / TRUE';
+        }
       }
 
-      verdictConfidence!.innerText = `${Math.round(data.confidence_score * 100)}%`;
-      verdictId!.innerText = data.id || 'FC-2026-9981';
-      verdictShortAnswer!.innerText = data.short_answer;
+      if (verdictConfidence) verdictConfidence.innerText = `${Math.round((data.confidence_score || 0.95) * 100)}%`;
+      if (verdictId) verdictId.innerText = activeAuditId;
+      if (verdictShortAnswer) verdictShortAnswer.innerText = data.explanation || data.short_answer || '';
 
-      if (data.sources_checked && data.sources_checked.length > 0) {
-        sourcesList!.innerHTML = data.sources_checked.map((src: any) => `
-          <a href="${src.url}" target="_blank" class="p-3 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#0070f3] rounded flex items-center justify-between text-xs text-[#171717] dark:text-white transition-colors">
-            <span class="font-medium truncate max-w-[240px]">${src.name}</span>
-            <span class="text-[#0070f3] text-[11px] font-mono shrink-0">Scraped Link ↗</span>
-          </a>
-        `).join('');
-      } else {
-        sourcesList!.innerHTML = `<div class="text-xs text-[#888888]">Scraped from verified wire sources (PTI / ANI / PIB).</div>`;
+      if (sourcesList) {
+        if (data.sources_checked && data.sources_checked.length > 0) {
+          sourcesList.innerHTML = data.sources_checked.map((src: any) => `
+            <a href="${src.url}" target="_blank" class="p-3 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] hover:border-[#0070f3] rounded flex items-center justify-between text-xs text-[#171717] dark:text-white transition-colors">
+              <span class="font-medium truncate max-w-[240px]">${src.name}</span>
+              <span class="text-[#0070f3] text-[11px] font-mono shrink-0">Official Source ↗</span>
+            </a>
+          `).join('');
+        }
       }
 
+      // Fetch chat history for session
+      loadChatHistory(activeAuditId);
       verdictCard?.scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
@@ -203,7 +231,75 @@
     }
   });
 
-  escalateBtn?.addEventListener('click', () => {
-    alert('Claim escalated to HeadlineHub Human Moderator Review Queue.');
+  // Load Session Chat History
+  async function loadChatHistory(auditId: string) {
+    if (!auditId || !chatMessagesBox) return;
+    try {
+      const res = await fetch(`/api/v1/factcheck/${auditId}/chat`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.messages && data.messages.length > 0) {
+        renderChatMessages(data.messages);
+      }
+    } catch (e) {}
+  }
+
+  function renderChatMessages(msgs: any[]) {
+    if (!chatMessagesBox) return;
+    chatMessagesBox.innerHTML = msgs.map(m => `
+      <div class="flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}">
+        <div class="max-w-[85%] p-3 rounded-lg text-xs ${m.role === 'user' ? 'bg-[#0070f3] text-white' : 'bg-[#fafafa] dark:bg-[#1f1f1f] text-[#171717] dark:text-white border border-[#ebebeb] dark:border-[#262626]'} shadow-sm">
+          <div class="font-mono text-[10px] opacity-75 mb-0.5">${m.role === 'user' ? 'YOU' : 'GROUNDED AI ASSISTANT'}</div>
+          <div>${m.content}</div>
+        </div>
+      </div>
+    `).join('');
+    chatMessagesBox.scrollTop = chatMessagesBox.scrollHeight;
+  }
+
+  // Send Grounded Chat Message
+  chatForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = chatInput.value.trim();
+    if (!msg || !activeAuditId) return;
+
+    chatInput.value = '';
+
+    // Append user message immediately
+    const userBubble = document.createElement('div');
+    userBubble.className = 'flex flex-col items-end';
+    userBubble.innerHTML = `
+      <div class="max-w-[85%] p-3 rounded-lg text-xs bg-[#0070f3] text-white shadow-sm">
+        <div class="font-mono text-[10px] opacity-75 mb-0.5">YOU</div>
+        <div>${msg}</div>
+      </div>
+    `;
+    chatMessagesBox?.appendChild(userBubble);
+    chatMessagesBox!.scrollTop = chatMessagesBox!.scrollHeight;
+
+    try {
+      const res = await fetch(`/api/v1/factcheck/${activeAuditId}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      });
+
+      if (!res.ok) throw new Error('Chat failed');
+      const data = await res.json();
+
+      const aiBubble = document.createElement('div');
+      aiBubble.className = 'flex flex-col items-start';
+      aiBubble.innerHTML = `
+        <div class="max-w-[85%] p-3 rounded-lg text-xs bg-[#fafafa] dark:bg-[#1f1f1f] text-[#171717] dark:text-white border border-[#ebebeb] dark:border-[#262626] shadow-sm">
+          <div class="font-mono text-[10px] opacity-75 mb-0.5 text-[#0070f3]">GROUNDED AI ASSISTANT</div>
+          <div>${data.reply}</div>
+        </div>
+      `;
+      chatMessagesBox?.appendChild(aiBubble);
+      chatMessagesBox!.scrollTop = chatMessagesBox!.scrollHeight;
+
+    } catch (err) {
+      alert('Unable to process chat question right now.');
+    }
   });
 </script>

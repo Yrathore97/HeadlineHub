@@ -11,17 +11,26 @@ const queueClaims = [
     <!-- Section Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
-        <span class="font-mono-caption text-[#0070f3]">PHASE 8 • ADMIN & CONTROL PANEL</span>
+        <span class="font-mono-caption text-[#0070f3]">OPERATIONS & CONTROL PANEL</span>
         <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-[-0.96px]">
           Operations Desk & Moderation Queue
         </h2>
       </div>
 
       <div class="flex items-center gap-2">
+        <button id="refresh-crawler-btn" type="button" class="px-3 py-1 bg-[#0070f3] hover:bg-[#0761d1] text-white rounded text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <span id="crawler-btn-text">Sync Crawler</span>
+        </button>
         <span class="px-3 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white rounded font-mono text-xs">
           Role: Super Admin
         </span>
       </div>
+    </div>
+
+    <!-- Operational Notification Banner -->
+    <div id="admin-toast-banner" class="hidden mb-6 p-3 bg-[#e0f2fe] dark:bg-[#075985] text-[#0284c7] dark:text-[#38bdf8] text-xs font-medium rounded-xl border border-[#bae6fd] dark:border-[#0369a1] animate-fade-in">
+      Action status updated successfully.
     </div>
 
     <!-- Analytics & Health Dashboard Grid -->
@@ -29,16 +38,16 @@ const queueClaims = [
       
       <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
         <div class="text-xs font-mono-caption text-[#888888] mb-1">CRAWLER STATUS</div>
-        <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">142 Sources</div>
-        <div class="text-xs text-[#29bc9b] mt-1 flex items-center gap-1 font-medium">
+        <div id="stat-sources" class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">142 Sources</div>
+        <div class="text-xs text-[#29bc9b] dark:text-[#34d399] mt-1 flex items-center gap-1 font-medium">
           <span class="w-1.5 h-1.5 rounded-full bg-[#29bc9b]"></span>
-          1,480 articles scraped/hr
+          <span id="stat-rate">1,480 articles scraped/hr</span>
         </div>
       </div>
 
       <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
         <div class="text-xs font-mono-caption text-[#888888] mb-1">FACT-CHECK QUEUE</div>
-        <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">2 Pending</div>
+        <div id="stat-queue-count" class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">2 Pending</div>
         <div class="text-xs text-[#ab570a] dark:text-[#f5a623] mt-1 flex items-center gap-1 font-medium">
           <span class="w-1.5 h-1.5 rounded-full bg-[#f5a623]"></span>
           High-Stakes Election Claim
@@ -56,7 +65,7 @@ const queueClaims = [
       <div class="bg-[#fafafa] dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl p-4 shadow-stacked-sm">
         <div class="text-xs font-mono-caption text-[#888888] mb-1">DAILY READERSHIP</div>
         <div class="text-2xl font-bold text-[#171717] dark:text-white tracking-tight">1.2M Views</div>
-        <div class="text-xs text-[#29bc9b] mt-1 flex items-center gap-1 font-medium">
+        <div class="text-xs text-[#29bc9b] dark:text-[#34d399] mt-1 flex items-center gap-1 font-medium">
           +18.4% from yesterday
         </div>
       </div>
@@ -86,7 +95,7 @@ const queueClaims = [
           </thead>
           <tbody class="divide-y divide-[#ebebeb] dark:divide-[#262626] bg-white dark:bg-[#141414]">
             {queueClaims.map((item) => (
-              <tr class="hover:bg-[#fafafa] dark:hover:bg-[#1a1a1a] transition-colors">
+              <tr data-row-id={item.id} class="hover:bg-[#fafafa] dark:hover:bg-[#1a1a1a] transition-colors">
                 <td class="px-4 py-3 font-mono font-medium text-[#0070f3]">{item.id}</td>
                 <td class="px-4 py-3 max-w-xs font-medium text-[#171717] dark:text-white">{item.claim}</td>
                 <td class="px-4 py-3 text-[#4d4d4d] dark:text-[#a1a1a1]">{item.category}</td>
@@ -96,10 +105,10 @@ const queueClaims = [
                   </span>
                 </td>
                 <td class="px-4 py-3 text-right space-x-2">
-                  <button onclick={`alert('Claim ${item.id} Approved & Verdict Published!')`} class="px-2.5 py-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] rounded text-[11px] font-medium transition-colors">
+                  <button data-action="approve" data-id={item.id} type="button" class="action-approve-btn px-2.5 py-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] rounded text-[11px] font-medium transition-colors cursor-pointer">
                     Approve Verdict
                   </button>
-                  <button onclick={`alert('Claim ${item.id} Rejected!')`} class="px-2.5 py-1 bg-[#fafafa] dark:bg-[#1a1a1a] hover:bg-[#ebebeb] dark:hover:bg-[#262626] border border-[#ebebeb] dark:border-[#262626] text-[#ee0000] rounded text-[11px] font-medium transition-colors">
+                  <button data-action="reject" data-id={item.id} type="button" class="action-reject-btn px-2.5 py-1 bg-[#fafafa] dark:bg-[#1a1a1a] hover:bg-[#ebebeb] dark:hover:bg-[#262626] border border-[#ebebeb] dark:border-[#262626] text-[#ee0000] rounded text-[11px] font-medium transition-colors cursor-pointer">
                     Reject Claim
                   </button>
                 </td>
@@ -112,3 +121,64 @@ const queueClaims = [
 
   </div>
 </section>
+
+<script>
+  const toastBanner = document.getElementById('admin-toast-banner');
+  const refreshBtn = document.getElementById('refresh-crawler-btn');
+  const crawlerText = document.getElementById('crawler-btn-text');
+  const statRate = document.getElementById('stat-rate');
+  let pendingCount = 2;
+
+  function showToast(msg: string) {
+    if (toastBanner) {
+      toastBanner.innerText = msg;
+      toastBanner.classList.remove('hidden');
+      setTimeout(() => {
+        toastBanner.classList.add('hidden');
+      }, 4000);
+    }
+  }
+
+  // Refresh Crawler Sync
+  refreshBtn?.addEventListener('click', () => {
+    if (crawlerText) crawlerText.innerText = 'Syncing...';
+    setTimeout(() => {
+      if (crawlerText) crawlerText.innerText = 'Sync Crawler';
+      if (statRate) statRate.innerText = `${1500 + Math.floor(Math.random() * 50)} articles scraped/hr`;
+      showToast('Crawler nodes synchronized with tier-1 wire services.');
+    }, 600);
+  });
+
+  // Action Buttons Handler
+  document.querySelectorAll('.action-approve-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = (e.currentTarget as HTMLElement).getAttribute('data-id');
+      const row = (e.currentTarget as HTMLElement).closest('tr');
+      if (row) {
+        row.style.opacity = '0.4';
+        (btn as HTMLButtonElement).disabled = true;
+        (btn as HTMLButtonElement).innerText = 'Approved';
+      }
+      pendingCount = Math.max(0, pendingCount - 1);
+      const queueStat = document.getElementById('stat-queue-count');
+      if (queueStat) queueStat.innerText = `${pendingCount} Pending`;
+      showToast(`Audit ID ${id} approved & published to live feed.`);
+    });
+  });
+
+  document.querySelectorAll('.action-reject-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = (e.currentTarget as HTMLElement).getAttribute('data-id');
+      const row = (e.currentTarget as HTMLElement).closest('tr');
+      if (row) {
+        row.style.opacity = '0.4';
+        (btn as HTMLButtonElement).disabled = true;
+        (btn as HTMLButtonElement).innerText = 'Rejected';
+      }
+      pendingCount = Math.max(0, pendingCount - 1);
+      const queueStat = document.getElementById('stat-queue-count');
+      if (queueStat) queueStat.innerText = `${pendingCount} Pending`;
+      showToast(`Audit ID ${id} rejected & moved to archives.`);
+    });
+  });
+</script>

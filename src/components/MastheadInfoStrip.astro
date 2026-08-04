@@ -1,0 +1,178 @@
+---
+---
+
+<div id="masthead-info-strip" class="w-full bg-[#f4f4f5] dark:bg-[#0c0c0e] border-b border-[#e4e4e7] dark:border-[#27272a] py-1.5 px-4 text-xs font-mono transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
+    
+    <!-- Left: Weather & Location -->
+    <div id="weather-widget-container" class="flex items-center gap-2 text-[#52525b] dark:text-[#a1a1aa] shrink-0">
+      <span class="text-[#0070f3]">📍</span>
+      <span id="weather-location" class="font-semibold text-[#18181b] dark:text-[#f4f4f5]">New Delhi</span>
+      <span id="weather-temp" class="font-semibold text-[#0070f3]">31°C</span>
+      <span id="weather-condition">☀️ Sunny</span>
+    </div>
+
+    <!-- Center: Today's Date in Selected Language -->
+    <div class="flex items-center gap-1.5 text-[#52525b] dark:text-[#a1a1aa] shrink-0">
+      <span class="text-[#0070f3]">📅</span>
+      <span id="masthead-date-text" class="font-medium text-[#18181b] dark:text-[#f4f4f5]">
+        Tue, Aug 4, 2026
+      </span>
+    </div>
+
+    <!-- Right: Front-Page Financial Market Index Snippets -->
+    <div class="flex items-center gap-3 text-[11px] shrink-0">
+      <div class="flex items-center gap-1 text-[#18181b] dark:text-[#f4f4f5]">
+        <span class="text-[#71717a] uppercase font-bold">Sensex</span>
+        <span class="text-[#10b981] font-semibold">81,450 ▲ (+0.35%)</span>
+      </div>
+      <span class="text-[#d4d4d8] dark:text-[#27272a]">•</span>
+      <div class="flex items-center gap-1 text-[#18181b] dark:text-[#f4f4f5]">
+        <span class="text-[#71717a] uppercase font-bold">Nifty</span>
+        <span class="text-[#10b981] font-semibold">24,820 ▲ (+0.40%)</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const WEATHER_CACHE_KEY = 'headlinehub_weather_cache';
+  const WEATHER_TTL = 15 * 60 * 1000; // 15 minutes TTL
+
+  // Locale mapper for dates
+  const LANG_LOCALE_MAP: Record<string, string> = {
+    'en': 'en-IN',
+    'hi': 'hi-IN',
+    'bn': 'bn-IN',
+    'mr': 'mr-IN',
+    'te': 'te-IN',
+    'ta': 'ta-IN',
+    'gu': 'gu-IN',
+    'kn': 'kn-IN',
+    'ml': 'ml-IN',
+    'pa': 'pa-IN',
+    'or': 'or-IN',
+    'as': 'as-IN',
+    'ur': 'ur-IN'
+  };
+
+  function updateMastheadDate(langCode: string = 'en') {
+    const dateTextEl = document.getElementById('masthead-date-text');
+    if (!dateTextEl) return;
+
+    try {
+      const locale = LANG_LOCALE_MAP[langCode] || 'en-IN';
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      };
+      dateTextEl.innerText = now.toLocaleDateString(locale, options);
+    } catch (e) {
+      dateTextEl.innerText = new Date().toDateString();
+    }
+  }
+
+  // WMO Weather code interpreter
+  function getWMOWeatherDescription(code: number): { text: string; icon: string } {
+    if (code === 0) return { text: 'Clear', icon: '☀️' };
+    if (code === 1 || code === 2) return { text: 'Partly Cloudy', icon: '⛅' };
+    if (code === 3) return { text: 'Overcast', icon: '☁️' };
+    if (code >= 45 && code <= 48) return { text: 'Foggy', icon: '🌫️' };
+    if (code >= 51 && code <= 67) return { text: 'Drizzle/Rain', icon: '🌧️' };
+    if (code >= 71 && code <= 77) return { text: 'Snow', icon: '❄️' };
+    if (code >= 80 && code <= 82) return { text: 'Showers', icon: '🌦️' };
+    if (code >= 95) return { text: 'Thunderstorm', icon: '🌩️' };
+    return { text: 'Fair', icon: '🌡️' };
+  }
+
+  async function fetchWeather(lat: number, lon: number, cityName?: string) {
+    const weatherLoc = document.getElementById('weather-location');
+    const weatherTemp = document.getElementById('weather-temp');
+    const weatherCond = document.getElementById('weather-condition');
+
+    try {
+      const weatherRes = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`,
+        { signal: AbortSignal.timeout(4000) }
+      );
+
+      if (!weatherRes.ok) throw new Error('Weather API error');
+      const weatherData = await weatherRes.json();
+      const current = weatherData.current_weather;
+
+      if (!current) throw new Error('No weather data');
+
+      const temp = Math.round(current.temperature);
+      const { text, icon } = getWMOWeatherDescription(current.weathercode);
+      const name = cityName || 'Local';
+
+      if (weatherLoc) weatherLoc.innerText = name;
+      if (weatherTemp) weatherTemp.innerText = `${temp}°C`;
+      if (weatherCond) weatherCond.innerText = `${icon} ${text}`;
+
+      // Cache weather in localStorage
+      localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({
+        timestamp: Date.now(),
+        location: name,
+        temp: `${temp}°C`,
+        condition: `${icon} ${text}`
+      }));
+
+    } catch (err) {
+      // Graceful degradation: retain fallback values without error
+      if (weatherLoc && !weatherLoc.innerText) weatherLoc.innerText = 'New Delhi';
+    }
+  }
+
+  function initWeather() {
+    // Check localStorage cache
+    const cached = localStorage.getItem(WEATHER_CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < WEATHER_TTL) {
+          const weatherLoc = document.getElementById('weather-location');
+          const weatherTemp = document.getElementById('weather-temp');
+          const weatherCond = document.getElementById('weather-condition');
+          if (weatherLoc) weatherLoc.innerText = parsed.location;
+          if (weatherTemp) weatherTemp.innerText = parsed.temp;
+          if (weatherCond) weatherCond.innerText = parsed.condition;
+          return;
+        }
+      } catch (e) {}
+    }
+
+    // Try Browser Geolocation
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          fetchWeather(pos.coords.latitude, pos.coords.longitude, 'Your Location');
+        },
+        () => {
+          // Geolocation denied: IP fallback to Delhi coordinates
+          fetchWeather(28.6139, 77.2090, 'New Delhi');
+        },
+        { timeout: 3000 }
+      );
+    } else {
+      fetchWeather(28.6139, 77.2090, 'New Delhi');
+    }
+  }
+
+  // Initialize on DOM load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('userLanguage') || 'en';
+    updateMastheadDate(savedLang);
+    initWeather();
+  });
+
+  // Listen to global language change events
+  window.addEventListener('language-changed', (e: any) => {
+    const { langCode } = e.detail;
+    updateMastheadDate(langCode);
+  });
+</script>

@@ -72,7 +72,7 @@ const audioTracks = [
                   <span class="font-medium">{track.title}</span>
                 </div>
                 <div class="flex items-center gap-3 font-mono text-[11px]">
-                  <span class="px-2 py-0.5 bg-[#444444] rounded text-white">{track.lang}</span>
+                  <span class="px-2 py-0.5 bg-[#404040] rounded text-white">{track.lang}</span>
                   <span>{track.duration}</span>
                 </div>
               </div>
@@ -98,7 +98,7 @@ const audioTracks = [
     if (isPlaying) {
       playIcon?.classList.add('hidden');
       pauseIcon?.classList.remove('hidden');
-      progressBar!.style.width = '65%';
+      if (progressBar) progressBar.style.width = '65%';
     } else {
       playIcon?.classList.remove('hidden');
       pauseIcon?.classList.add('hidden');

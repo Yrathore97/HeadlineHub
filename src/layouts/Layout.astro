@@ -8,12 +8,12 @@ interface Props {
 }
 
 const {
-  title = 'HeadlineHub AI | Autonomous Multilingual Media & AI Fact-Check Engine',
-  description = 'HeadlineHub AI is India & South Asia’s 24/7 autonomous news ecosystem powered by artificial intelligence. Discover breaking news, verified claims, hyperlocal updates, and multi-format media.',
-  image = 'https://headlinehub.ai/og-default.jpg'
+  title = 'UncosHub AI | Autonomous Multilingual Media & AI Fact-Check Engine',
+  description = 'UncosHub AI is India & South Asia’s 24/7 autonomous news ecosystem powered by artificial intelligence. Discover breaking news, verified claims, hyperlocal updates, and multi-format media.',
+  image = 'https://uncoshub.ai/og-default.jpg'
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://headlinehub.ai');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://uncoshub.ai');
 ---
 
 <!doctype html>
@@ -21,7 +21,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://headline
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="UncosHub" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Anti-FOUC Dark Mode Inline Initialization Script -->
@@ -57,16 +62,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://headline
     <meta property="twitter:image" content={image} />
 
     <!-- Schema Markup JSON-LD -->
-    <script type="application/ld+json" set:html={JSON.stringify({
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "NewsMediaOrganization",
-      "name": "HeadlineHub AI",
-      "url": "https://headlinehub.ai",
-      "logo": "https://headlinehub.ai/logo.png",
+      "name": "UncosHub AI",
+      "url": "https://uncoshub.ai",
+      "logo": "https://uncoshub.ai/logo.png",
       "sameAs": [
-        "https://twitter.com/HeadlineHubAI",
-        "https://instagram.com/headlinehub.ai",
-        "https://t.me/headlinehubai"
+        "https://twitter.com/UncosHubAI",
+        "https://instagram.com/uncoshub.ai",
+        "https://t.me/uncoshubai"
       ],
       "knowsLanguage": ["en", "hi", "kn", "mr", "bn", "ta", "te", "gu", "ml", "pa"]
     })} />

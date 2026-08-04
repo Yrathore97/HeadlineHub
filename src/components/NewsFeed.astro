@@ -14,11 +14,6 @@ interface Article {
   verdict: 'verified' | 'likely_true' | 'unverified';
 }
 
-const categories = [
-  'All News', 'National', 'Politics', 'Business & Economy', 
-  'Startups & Tech', 'Sports', 'Entertainment', 'International', 'Hyperlocal'
-];
-
 const mockArticles: Article[] = [
   {
     id: 'art-001',
@@ -107,68 +102,34 @@ const mockArticles: Article[] = [
 ];
 ---
 
-<section id="news-feed" class="w-full py-10 bg-[#fafafa] dark:bg-[#050505] transition-colors duration-200">
+<section id="news-feed" class="w-full py-12 bg-[#fafafa] dark:bg-[#050505] transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
     
-    <!-- Header & Streamlined Filter Controls -->
+    <!-- Section Header & Active Language Stream Banner -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-[#ebebeb] dark:border-[#262626] pb-4">
       <div>
         <div class="flex items-center gap-2 mb-1">
           <span class="w-2 h-2 rounded-full bg-[#0070f3] animate-pulse"></span>
-          <span class="font-mono-caption text-[#888888]">VERIFIED WIRE STREAM</span>
+          <span id="feed-type-badge" class="font-mono-caption text-[#888888]">SARVAM AI VERIFIED WIRE STREAM</span>
         </div>
         <h2 class="text-2xl sm:text-3xl font-semibold text-[#171717] dark:text-white tracking-[-0.96px]">
-          Live AI News
+          Major Headlines
         </h2>
       </div>
 
-      <!-- Item 1 Fix: Circled area redesign - Clean Search & Toggle Bar -->
-      <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-        <!-- Search Input -->
-        <div class="relative w-full sm:w-64">
-          <input 
-            type="text" 
-            id="feed-search-input" 
-            placeholder="Search news stories..." 
-            class="w-full bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] text-[#171717] dark:text-white placeholder-[#888888] rounded-lg pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#0070f3]"
-          />
-          <svg class="w-3.5 h-3.5 text-[#888888] absolute left-2.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-
-        <!-- Fixed Circled Button: Short News Toggle Pill -->
-        <button 
-          id="short-news-toggle-btn" 
-          type="button"
-          class="px-3.5 py-1.5 bg-[#0070f3] hover:bg-[#0761d1] text-white rounded-lg text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
-        >
-          <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          <span id="toggle-label">Short News Mode</span>
-        </button>
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-1 bg-white dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-full text-xs font-semibold text-[#0070f3] flex items-center gap-1.5 shadow-sm">
+          <span>Active Voice & Lang:</span>
+          <span id="active-lang-badge" class="font-mono uppercase text-[#171717] dark:text-white">EN</span>
+        </span>
       </div>
     </div>
 
-    <!-- Category Pill Selector -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
-      {categories.map((cat, idx) => (
-        <button 
-          class={`cat-pill px-3.5 py-1.5 text-xs font-medium rounded-full shrink-0 transition-all cursor-pointer ${
-            idx === 0 
-              ? 'bg-[#171717] dark:bg-white text-white dark:text-[#171717] shadow-sm' 
-              : 'bg-white dark:bg-[#141414] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] dark:hover:border-[#404040]'
-          }`}
-          data-category={cat}
-        >
-          {cat}
-        </button>
-      ))}
-    </div>
-
-    <!-- Item 3: Live News Cards (Headline + Short News Only) -->
+    <!-- Live News Cards Grid -->
     <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       {mockArticles.map((article) => (
         <article data-article-id={article.id} class="article-card bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-xl overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-[#0070f3] dark:hover:border-[#0070f3] transition-all flex flex-col group">
           
-          <!-- Image Cap with Category Badge -->
           <div class="relative h-44 w-full overflow-hidden bg-[#f5f5f5] dark:bg-[#1f1f1f]">
             <img 
               src={article.imageUrl} 
@@ -181,43 +142,42 @@ const mockArticles: Article[] = [
               {article.category}
             </div>
 
-            <div class="absolute bottom-2.5 right-2.5 bg-black/80 backdrop-blur-md text-white text-[10px] font-mono px-2 py-0.5 rounded">
-              {article.publishedAt}
+            <!-- Language Badge on Card -->
+            <div class="absolute top-3 right-3 bg-black/80 backdrop-blur-md text-[#50e3c2] text-[10px] font-mono font-bold px-2 py-0.5 rounded uppercase">
+              <span class="card-lang-tag">EN</span>
             </div>
           </div>
 
-          <!-- Article Body: Headline + Short News -->
           <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <div class="text-[11px] font-mono text-[#888888] mb-1.5">
                 {article.source} {article.state ? `• ${article.state}` : ''}
               </div>
 
-              <!-- Headline -->
               <h3 class="article-headline text-base font-semibold text-[#171717] dark:text-white leading-snug tracking-[-0.3px] mb-2 group-hover:text-[#0070f3] transition-colors">
                 {article.headline}
               </h3>
 
-              <!-- Short News Snippet -->
               <p class="article-short-news text-xs text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed line-clamp-3">
                 {article.shortNews}
               </p>
             </div>
 
-            <!-- Footer: Fact Check Status & Quick Action -->
-            <div class="pt-2.5 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-xs">
-              <div class="flex items-center gap-1 text-[#29bc9b] font-medium bg-[#aaffec]/50 dark:bg-[#064e3b]/50 px-2 py-0.5 rounded border border-[#29bc9b]/20">
+            <div class="pt-3 border-t border-[#ebebeb] dark:border-[#262626] flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1 text-[#29bc9b] dark:text-[#34d399] font-medium bg-[#aaffec]/50 dark:bg-[#064e3b]/50 px-2 py-0.5 rounded border border-[#29bc9b]/20">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 AI Verified
               </div>
 
-              <a 
-                href={`/verify?query=${encodeURIComponent(article.headline)}`}
-                class="text-[#0070f3] hover:underline font-semibold text-xs flex items-center gap-1"
+              <!-- Sarvam AI TTS Audio Listen Button -->
+              <button 
+                type="button"
+                class="listen-btn px-3 py-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#e5e5e5] text-white dark:text-[#171717] text-xs font-semibold rounded-md shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                data-article-id={article.id}
               >
-                Verify Fact
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-              </a>
+                <svg class="w-3.5 h-3.5 text-[#0070f3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                <span class="listen-btn-text">Listen</span>
+              </button>
             </div>
 
           </div>
@@ -229,54 +189,180 @@ const mockArticles: Article[] = [
 </section>
 
 <script>
-  // Category Pill Filter
-  const catPills = document.querySelectorAll('.cat-pill');
-  catPills.forEach(pill => {
-    pill.addEventListener('click', (e) => {
-      catPills.forEach(p => {
-        p.className = 'cat-pill px-3.5 py-1.5 text-xs font-medium rounded-full shrink-0 transition-all cursor-pointer bg-white dark:bg-[#141414] text-[#4d4d4d] dark:text-[#a1a1a1] border border-[#ebebeb] dark:border-[#262626] hover:border-[#a1a1a1] dark:hover:border-[#404040]';
-      });
-      const target = e.target as HTMLElement;
-      target.className = 'cat-pill px-3.5 py-1.5 text-xs font-medium rounded-full shrink-0 transition-all cursor-pointer bg-[#171717] dark:bg-white text-white dark:text-[#171717] shadow-sm';
+  let currentAudio: HTMLAudioElement | null = null;
+  let activeBtn: HTMLButtonElement | null = null;
+  let currentLangCode = localStorage.getItem('userLanguage') || 'en';
+
+  function updateLangBadges(code: string) {
+    currentLangCode = code;
+    const langBadge = document.getElementById('active-lang-badge');
+    if (langBadge) langBadge.innerText = code.toUpperCase();
+
+    document.querySelectorAll('.card-lang-tag').forEach(tag => {
+      (tag as HTMLElement).innerText = code.toUpperCase();
     });
-  });
+  }
 
-  // Short News Toggle Button Logic
-  const toggleBtn = document.getElementById('short-news-toggle-btn');
-  const toggleLabel = document.getElementById('toggle-label');
-  let isShortMode = true;
+  // Sarvam AI Audio TTS Stream Handler with Resilient Web Speech Fallback
+  async function handleAudioPlayback(btn: HTMLButtonElement, articleId: string) {
+    const btnText = btn.querySelector('.listen-btn-text') as HTMLElement;
 
-  toggleBtn?.addEventListener('click', () => {
-    isShortMode = !isShortMode;
-    if (toggleLabel) {
-      toggleLabel.innerText = isShortMode ? 'Short News Mode' : 'Expanded Mode';
+    // Toggle Pause/Resume if clicking active track
+    if (activeBtn === btn) {
+      if (currentAudio) {
+        if (!currentAudio.paused) {
+          currentAudio.pause();
+          if (btnText) btnText.innerText = 'Resume';
+          return;
+        } else {
+          currentAudio.play().then(() => {
+            if (btnText) btnText.innerText = 'Pause';
+          }).catch(() => {
+            fallbackWebSpeech(btn);
+          });
+          return;
+        }
+      } else if (window.speechSynthesis && window.speechSynthesis.speaking) {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+          if (btnText) btnText.innerText = 'Pause';
+        } else {
+          window.speechSynthesis.pause();
+          if (btnText) btnText.innerText = 'Resume';
+        }
+        return;
+      }
     }
-  });
 
-  // Listen for language change events from IndianLanguageHub & Navbar
-  window.addEventListener('language-changed', (e: any) => {
-    const { translations } = e.detail;
-    if (!translations) return;
+    // Reset previous audio
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
 
-    const idMap: Record<string, string> = {
-      'art-001': 'art001',
-      'art-002': 'art002',
-      'art-003': 'art003',
-      'art-004': 'art004',
-      'art-005': 'art005',
-      'art-006': 'art006',
+    if (activeBtn && activeBtn !== btn) {
+      const oldText = activeBtn.querySelector('.listen-btn-text') as HTMLElement;
+      if (oldText) oldText.innerText = 'Listen';
+    }
+
+    activeBtn = btn;
+    if (btnText) btnText.innerText = 'Loading...';
+
+    const card = btn.closest('.article-card');
+    const headline = card?.querySelector('.article-headline')?.textContent || '';
+    const summary = card?.querySelector('.article-short-news')?.textContent || '';
+    const textToSynthesize = `${headline}. ${summary}`;
+
+    try {
+      // Try local dev server proxy or direct backend port 8000
+      let res: Response | null = null;
+      try {
+        res = await fetch('/api/v1/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            article_id: articleId,
+            text: textToSynthesize,
+            language: currentLangCode
+          })
+        });
+      } catch (e) {
+        // Direct backend port fallback
+        res = await fetch('http://127.0.0.1:8000/api/v1/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            article_id: articleId,
+            text: textToSynthesize,
+            language: currentLangCode
+          })
+        });
+      }
+
+      if (!res || !res.ok) throw new Error('TTS API request failed');
+      const data = await res.json();
+
+      currentAudio = new Audio(data.audio_url);
+      
+      currentAudio.onended = () => {
+        if (btnText) btnText.innerText = 'Listen';
+        activeBtn = null;
+        currentAudio = null;
+      };
+
+      currentAudio.onerror = () => {
+        fallbackWebSpeech(btn);
+      };
+
+      await currentAudio.play();
+      if (btnText) btnText.innerText = 'Pause';
+
+    } catch (err) {
+      // Fallback to client-side Web Speech Synthesis
+      fallbackWebSpeech(btn);
+    }
+  }
+
+  function fallbackWebSpeech(btn: HTMLButtonElement) {
+    const btnText = btn.querySelector('.listen-btn-text') as HTMLElement;
+    const card = btn.closest('.article-card');
+    const headline = card?.querySelector('.article-headline')?.textContent || '';
+    const summary = card?.querySelector('.article-short-news')?.textContent || '';
+    const text = `${headline}. ${summary}`;
+
+    if (!('speechSynthesis' in window)) {
+      if (btnText) btnText.innerText = 'Listen';
+      activeBtn = null;
+      alert('Audio playback is not supported on this browser.');
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Map lang codes
+    const langMap: Record<string, string> = {
+      'hi': 'hi-IN', 'bn': 'bn-IN', 'ta': 'ta-IN', 'te': 'te-IN',
+      'kn': 'kn-IN', 'mr': 'mr-IN', 'gu': 'gu-IN', 'ml': 'ml-IN', 'en': 'en-IN'
+    };
+    utterance.lang = langMap[currentLangCode] || 'en-IN';
+
+    utterance.onstart = () => {
+      if (btnText) btnText.innerText = 'Pause';
     };
 
-    const articleCards = document.querySelectorAll<HTMLElement>('.article-card');
-    articleCards.forEach(card => {
-      const artId = card.getAttribute('data-article-id');
-      if (artId && idMap[artId] && translations[idMap[artId]]) {
-        const headlineEl = card.querySelector<HTMLElement>('.article-headline');
-        const shortNewsEl = card.querySelector<HTMLElement>('.article-short-news');
+    utterance.onend = () => {
+      if (btnText) btnText.innerText = 'Listen';
+      activeBtn = null;
+    };
 
-        if (headlineEl) headlineEl.innerText = translations[idMap[artId]].headline;
-        if (shortNewsEl) shortNewsEl.innerText = translations[idMap[artId]].short;
-      }
+    utterance.onerror = () => {
+      if (btnText) btnText.innerText = 'Listen';
+      activeBtn = null;
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Attach button listeners
+  document.querySelectorAll('.listen-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const targetBtn = e.currentTarget as HTMLButtonElement;
+      const artId = targetBtn.getAttribute('data-article-id') || 'art-001';
+      handleAudioPlayback(targetBtn, artId);
     });
+  });
+
+  // Listen for language change events
+  window.addEventListener('language-changed', (e: any) => {
+    const { langCode } = e.detail;
+    updateLangBadges(langCode);
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    updateLangBadges(currentLangCode);
   });
 </script>
