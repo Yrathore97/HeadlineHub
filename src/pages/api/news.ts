@@ -17,7 +17,11 @@ export const GET: APIRoute = async ({ url }) => {
       if (fresh.length > 0) return fresh;
       throw new Error('empty');
     } catch {
-      return await fetchRssFallback();
+      const fallback = await fetchRssFallback();
+      // Throw rather than return [] so cached() can serve its stale copy
+      // instead of caching an empty feed for the full TTL.
+      if (fallback.length === 0) throw new Error('no articles');
+      return fallback;
     }
   });
 
