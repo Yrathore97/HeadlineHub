@@ -11,7 +11,7 @@ async function quote(symbol: string) {
     headers: { 'user-agent': UA, accept: 'application/json' },
   });
   if (!res.ok) throw new Error(`yahoo ${res.status}`);
-  const meta = (await res.json())?.chart?.result?.[0]?.meta;
+  const meta = ((await res.json()) as any)?.chart?.result?.[0]?.meta;
   if (!meta?.regularMarketPrice) throw new Error('no price');
   const prev = meta.chartPreviousClose ?? meta.previousClose;
   return {
