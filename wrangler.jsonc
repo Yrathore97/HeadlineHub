@@ -5,9 +5,13 @@
 	"name": "newzwale",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"assets": {
-		"directory": "./dist",
+		"directory": "./dist/client",
 		"binding": "ASSETS"
 	},
+	"kv_namespaces": [
+		{ "binding": "NEWZ_CACHE", "id": "e05934d898ea4c90b96f0df3bade9191" }
+	],
+	"ai": { "binding": "AI" },
 	"observability": {
 		"enabled": true
 	}
