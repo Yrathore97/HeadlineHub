@@ -19,7 +19,7 @@ function tag(block: string, name: string): string {
 export function parseRss(xml: string, source: string): Article[] {
   const items = xml.match(/<item[\s\S]*?<\/item>/gi) ?? [];
   return items
-    .map((block) => {
+    .map((block): Article | null => {
       const title = tag(block, 'title');
       const url = tag(block, 'link');
       if (!title || !url) return null;
