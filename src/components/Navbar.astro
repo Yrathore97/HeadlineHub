@@ -2,17 +2,8 @@
 import LogoIcon from './LogoIcon.astro';
 
 const currentPath = Astro.url.pathname;
-const isHomeActive = currentPath === '/' || currentPath === '';
-const isNewsActive = currentPath.startsWith('/news');
+const isNewsActive = currentPath === '/' || currentPath === '';
 const isVerifyActive = currentPath.startsWith('/verify');
-const isTrendingActive = currentPath.startsWith('/trending');
-const isCategoriesActive = currentPath.startsWith('/categories');
-const isSavedActive = currentPath.startsWith('/saved');
-const isAboutActive = currentPath.startsWith('/about');
-const isContactActive = currentPath.startsWith('/contact');
-const isPrivacyActive = currentPath.startsWith('/privacy');
-const isTermsActive = currentPath.startsWith('/terms');
-const isFaqActive = currentPath.startsWith('/faq');
 
 const languages = [
   { code: 'en', name: 'English' },
@@ -33,7 +24,7 @@ const languages = [
 
 <header class="sticky top-0 z-50 w-full bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#ebebeb] dark:border-[#262626] h-[64px] transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto h-full px-3 sm:px-6 flex items-center justify-between">
-    
+
     <!-- Brand Logo & Live Indicator -->
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
       <a href="/" class="flex items-center gap-2 group">
@@ -51,120 +42,37 @@ const languages = [
 
     <!-- Desktop Navigation Links -->
     <nav class="hidden lg:flex items-center gap-1.5" aria-label="Main Navigation">
-      <a 
-        href="/" 
-        aria-current={isHomeActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-          isHomeActive 
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
-        }`}
-      >
-        Home
-      </a>
-      
-      <a 
-        href="/news" 
+      <a
+        href="/"
         aria-current={isNewsActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-          isNewsActive 
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+          isNewsActive
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold'
             : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         News
       </a>
 
-      <a 
-        href="/verify" 
+      <a
+        href="/verify"
         aria-current={isVerifyActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 ${
-          isVerifyActive 
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
+          isVerifyActive
+            ? 'bg-[#2563eb] text-white shadow-sm font-semibold'
             : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
         }`}
       >
         <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-white' : 'text-[#1d4ed8] dark:text-[#60a5fa]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         Fact Check
       </a>
-
-      <a 
-        href="/trending" 
-        aria-current={isTrendingActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-          isTrendingActive 
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
-        }`}
-      >
-        Trending
-      </a>
-
-      <a 
-        href="/categories" 
-        aria-current={isCategoriesActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-          isCategoriesActive 
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
-        }`}
-      >
-        Categories
-      </a>
-
-      <a 
-        href="/saved" 
-        aria-current={isSavedActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-          isSavedActive 
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
-        }`}
-      >
-        Saved
-      </a>
-
-      <div class="relative group">
-        <a 
-          href="/about"
-          aria-haspopup="true"
-          class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 inline-flex items-center gap-1 ${
-            isAboutActive || isContactActive || isPrivacyActive || isTermsActive
-              ? 'bg-[#2563eb] text-white shadow-sm font-semibold' 
-              : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
-          }`}
-        >
-          More
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-        </a>
-        <div class="absolute right-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-150 z-50">
-          <div class="w-52 bg-white dark:bg-[#0d0d0f] border border-[#ebebeb] dark:border-[#262626] rounded-xl shadow-stacked-lg overflow-hidden text-xs font-medium">
-            <a href="/faq" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isFaqActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
-              Fact Check FAQ
-            </a>
-            <a href="/about" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isAboutActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
-              About Us
-            </a>
-            <a href="/contact" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isContactActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
-              Contact Us
-            </a>
-            <div class="border-t border-[#ebebeb] dark:border-[#262626]"></div>
-            <a href="/privacy" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isPrivacyActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
-              Privacy Policy
-            </a>
-            <a href="/terms" class={`block px-4 py-2.5 hover:bg-[#eff6ff] dark:hover:bg-[#1e293b] transition-colors ${isTermsActive ? 'text-[#1d4ed8] dark:text-[#60a5fa] font-semibold' : 'text-[#171717] dark:text-white'}`}>
-              Terms & Conditions
-            </a>
-          </div>
-        </div>
-      </div>
     </nav>
 
-    <!-- Controls & Action Pills -->
+    <!-- Controls -->
     <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-      
+
       <!-- Theme Toggle Button -->
-      <button 
+      <button
         type="button"
         aria-label="Toggle Theme"
         class="theme-toggle-trigger px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#262626] text-white dark:text-[#171717] border border-[#171717] dark:border-white rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer shrink-0"
@@ -193,41 +101,14 @@ const languages = [
         </div>
       </div>
 
-      <!-- User Auth Section -->
-      <div id="auth-nav-container" class="hidden sm:flex items-center gap-2">
-        <div id="guest-auth-buttons" class="flex items-center gap-2">
-          <button 
-            type="button" 
-            class="open-auth-modal-trigger inline-flex items-center justify-center px-3.5 h-[32px] bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-xs font-bold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer whitespace-nowrap shrink-0 gap-1.5 border border-[#2563eb]"
-          >
-            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-            <span>Sign In</span>
-          </button>
-        </div>
-
-        <div id="user-profile-menu" class="hidden items-center gap-2">
-          <div class="flex items-center gap-2 px-3 py-1 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-full text-xs shadow-sm">
-            <div id="user-avatar" class="w-5 h-5 rounded-full bg-gradient-to-r from-[#2563eb] to-[#7928ca] text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
-              U
-            </div>
-            <span id="user-display-name" class="font-semibold text-[#171717] dark:text-white max-w-[100px] truncate">User</span>
-          </div>
-          <button 
-            id="logout-btn" 
-            type="button" 
-            class="text-xs font-semibold text-[#ee0000] hover:bg-[#f7d4d6]/40 px-2.5 py-1 rounded-md transition-colors cursor-pointer"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-
       <!-- Mobile Hamburger Button -->
       <button
         id="mobile-menu-btn"
         type="button"
         aria-label="Toggle Navigation Menu"
-        class="md:hidden p-1.5 text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-lg transition-colors cursor-pointer"
+        aria-expanded="false"
+        aria-controls="mobile-menu-drawer"
+        class="lg:hidden p-1.5 text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-lg transition-colors cursor-pointer"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
@@ -236,177 +117,17 @@ const languages = [
 
   <!-- Mobile Drawer Menu -->
   <div id="mobile-menu-drawer" class="hidden lg:hidden border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-4 space-y-2 shadow-lg text-xs font-semibold">
-    <a href="/" class={`block px-3.5 py-2 rounded-lg ${isHomeActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
-      Home
-    </a>
-    <a href="/news" class={`block px-3.5 py-2 rounded-lg ${isNewsActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
-      News Feed
+    <a href="/" class={`block px-3.5 py-2 rounded-lg ${isNewsActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+      News
     </a>
     <a href="/verify" class={`block px-3.5 py-2 rounded-lg flex items-center gap-2 ${isVerifyActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#1d4ed8] dark:text-[#60a5fa] hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-      Fact Check Engine
+      Fact Check
     </a>
-    <a href="/faq" class={`block px-3.5 py-2 rounded-lg ${isFaqActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
-      Fact Check FAQ
-    </a>
-    <a href="/trending" class={`block px-3.5 py-2 rounded-lg ${isTrendingActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
-      Trending Topics
-    </a>
-    <a href="/categories" class={`block px-3.5 py-2 rounded-lg ${isCategoriesActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
-      News Categories
-    </a>
-    <a href="/saved" class={`block px-3.5 py-2 rounded-lg ${isSavedActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
-      Saved Bookmarks
-    </a>
-    <a href="/profile" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
-      Subscriber Profile
-    </a>
-    <a href="/settings" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
-      System Settings
-    </a>
-    <a href="/about" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
-      About Us
-    </a>
-    <a href="/contact" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
-      Contact Editorial
-    </a>
-    <a href="/privacy" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
-      Privacy Policy
-    </a>
-    <a href="/terms" class="block px-3.5 py-2 rounded-lg text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]">
-      Terms & Conditions
-    </a>
-
-    <div class="pt-2 border-t border-[#ebebeb] dark:border-[#262626] sm:hidden">
-      <button 
-        type="button" 
-        class="open-auth-modal-trigger w-full py-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-xs font-bold rounded-lg transition-all text-center cursor-pointer shadow-sm"
-      >
-        Sign In / Create Account
-      </button>
-    </div>
   </div>
 </header>
 
-<!-- Professional Login / Signup Auth Modal -->
-<div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in">
-  <!-- Backdrop Click Dismiss Target -->
-  <div id="auth-modal-backdrop" class="absolute inset-0"></div>
-
-  <div class="w-full max-w-md bg-white dark:bg-[#0d0d0f] border border-[#e4e4e7] dark:border-[#27272a] rounded-2xl p-6 sm:p-7 shadow-stacked-lg relative z-10 space-y-5">
-    
-    <!-- Close Button (×) -->
-    <button id="close-auth-modal-btn" type="button" aria-label="Close modal" class="absolute top-4 right-4 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer transition-colors">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
-
-    <!-- Modal Eyebrow & Title -->
-    <div>
-      <div class="flex items-center gap-2 mb-1.5">
-        <span class="w-2 h-2 rounded-full bg-[#2563eb] animate-pulse"></span>
-        <span class="font-mono-caption text-xs text-[#1d4ed8] dark:text-[#60a5fa] font-semibold tracking-wider">NEWZWALE AUTH</span>
-      </div>
-      <h3 id="modal-title" class="text-xl font-bold text-[#18181b] dark:text-white">Sign in to NewzWale</h3>
-      <p class="text-xs text-[#71717a] dark:text-[#a1a1aa] mt-0.5">Persist your personalized feed & preferred language across devices.</p>
-    </div>
-
-    <!-- Auth Mode Toggle Tabs (Sign In / Create Account) -->
-    <div class="grid grid-cols-2 p-1 bg-[#f4f4f5] dark:bg-[#18181b] rounded-xl text-xs font-semibold">
-      <button id="tab-mode-login" type="button" class="py-2 rounded-lg bg-white dark:bg-[#27272a] text-[#18181b] dark:text-white shadow-sm transition-all cursor-pointer">
-        Sign In
-      </button>
-      <button id="tab-mode-signup" type="button" class="py-2 rounded-lg text-[#71717a] dark:text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white transition-all cursor-pointer">
-        Create Account
-      </button>
-    </div>
-
-    <!-- Google OAuth "Continue with Google" Official Branded Button -->
-    <div>
-      <a 
-        id="google-oauth-btn" 
-        href="/api/v1/auth/google/login"
-        class="w-full h-[42px] bg-white hover:bg-[#f8f9fa] text-[#3c4043] font-semibold text-xs rounded-xl border border-[#dadce0] flex items-center justify-center gap-3 shadow-sm hover:shadow transition-all cursor-pointer no-underline"
-      >
-        <!-- Official Google Multicolor G Logo SVG -->
-        <svg class="w-4 h-4" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-        </svg>
-        <span>Continue with Google</span>
-      </a>
-    </div>
-
-    <!-- Divider: "or continue with email" -->
-    <div class="relative flex items-center justify-center my-2">
-      <div class="w-full border-t border-[#e4e4e7] dark:border-[#27272a]"></div>
-      <span class="absolute bg-white dark:bg-[#0d0d0f] px-3 text-[11px] font-mono text-[#a1a1aa] uppercase tracking-wider">
-        or continue with email
-      </span>
-    </div>
-
-    <!-- Error Banner -->
-    <div id="auth-error-banner" class="hidden p-3 bg-[#fef2f2] dark:bg-[#450a0a] text-[#ef4444] dark:text-[#fca5a5] text-xs font-medium rounded-xl border border-[#fecaca] dark:border-[#7f1d1d] animate-fade-in">
-      Invalid email or password. Please try again.
-    </div>
-
-    <!-- Auth Form (Dynamic Sign In / Create Account) -->
-    <form id="auth-form" class="space-y-3.5">
-      
-      <!-- Name Field (Visible on Signup Only) -->
-      <div id="field-group-name" class="hidden">
-        <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">FULL NAME</label>
-        <input type="text" id="auth-name-input" placeholder="Yash Rathore" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
-      </div>
-
-      <!-- Email Field -->
-      <div>
-        <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">EMAIL ADDRESS</label>
-        <input type="email" id="auth-email-input" required placeholder="reader@example.com" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
-      </div>
-
-      <!-- Password Field with Show/Hide Toggle -->
-      <div>
-        <div class="flex items-center justify-between mb-1">
-          <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa]">PASSWORD</label>
-          <button id="forgot-password-link" type="button" class="text-[11px] text-[#1d4ed8] dark:text-[#60a5fa] hover:underline cursor-pointer">
-            Forgot password?
-          </button>
-        </div>
-        <div class="relative">
-          <input type="password" id="auth-password-input" required placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
-          <button type="button" class="password-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer" data-target="auth-password-input">
-            <svg class="eye-open-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-            <svg class="eye-closed-icon hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.82c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.837-1.748a3 3 0 11-4.243-4.243"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Confirm Password Field (Visible on Signup Only) -->
-      <div id="field-group-confirm" class="hidden">
-        <label class="block text-[11px] font-mono text-[#71717a] dark:text-[#a1a1aa] mb-1">CONFIRM PASSWORD</label>
-        <div class="relative">
-          <input type="password" id="auth-confirm-input" placeholder="••••••••" class="w-full bg-[#f4f4f5] dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] text-[#18181b] dark:text-white rounded-xl px-3.5 py-2.5 pr-10 text-xs focus:outline-none focus:ring-1 focus:ring-[#2563eb]" />
-          <button type="button" class="password-toggle-btn absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#18181b] dark:hover:text-white cursor-pointer" data-target="auth-confirm-input">
-            <svg class="eye-open-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-            <svg class="eye-closed-icon hidden w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a10.04 10.04 0 013.982-.82c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m-6.837-1.748a3 3 0 11-4.243-4.243"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Action Button -->
-      <button id="auth-submit-btn" type="submit" class="w-full py-3 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold rounded-xl text-xs shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
-        <span id="auth-btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-        <span id="auth-btn-text">Sign In</span>
-      </button>
-    </form>
-  </div>
-</div>
-
 <script>
-  let currentAuthMode = 'login'; // 'login' | 'signup'
-
   // Theme Toggle across all triggers
   document.querySelectorAll('.theme-toggle-trigger').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -419,229 +140,8 @@ const languages = [
   const mobileBtn = document.getElementById('mobile-menu-btn');
   const mobileDrawer = document.getElementById('mobile-menu-drawer');
   mobileBtn?.addEventListener('click', () => {
-    mobileDrawer?.classList.toggle('hidden');
-  });
-
-  // Auth Modal Controls
-  const authModal = document.getElementById('auth-modal');
-  const authBackdrop = document.getElementById('auth-modal-backdrop');
-  const closeAuthModalBtn = document.getElementById('close-auth-modal-btn');
-
-  function openModal(mode = 'login') {
-    switchMode(mode);
-    mobileDrawer?.classList.add('hidden');
-    authModal?.classList.remove('hidden');
-    authModal?.classList.add('flex');
-  }
-
-  function closeModal() {
-    authModal?.classList.add('hidden');
-    authModal?.classList.remove('flex');
-  }
-
-  document.querySelectorAll('.open-auth-modal-trigger').forEach(btn => {
-    btn.addEventListener('click', () => openModal('login'));
-  });
-
-  closeAuthModalBtn?.addEventListener('click', closeModal);
-  authBackdrop?.addEventListener('click', closeModal);
-
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && authModal && !authModal.classList.contains('hidden')) {
-      closeModal();
-    }
-  });
-
-  // Mode Switching (Sign In vs Create Account)
-  const tabLogin = document.getElementById('tab-mode-login');
-  const tabSignup = document.getElementById('tab-mode-signup');
-  const modalTitle = document.getElementById('modal-title');
-  const fieldName = document.getElementById('field-group-name');
-  const fieldConfirm = document.getElementById('field-group-confirm');
-  const authBtnText = document.getElementById('auth-btn-text');
-  const forgotLink = document.getElementById('forgot-password-link');
-  const authErrorBanner = document.getElementById('auth-error-banner');
-
-  function switchMode(mode: string) {
-    currentAuthMode = mode;
-    authErrorBanner?.classList.add('hidden');
-
-    if (mode === 'login') {
-      tabLogin?.classList.add('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
-      tabLogin?.classList.remove('text-[#71717a]', 'dark:text-[#a1a1aa]');
-
-      tabSignup?.classList.remove('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
-      tabSignup?.classList.add('text-[#71717a]', 'dark:text-[#a1a1aa]');
-
-      if (modalTitle) modalTitle.innerText = 'Sign in to NewzWale';
-      if (authBtnText) authBtnText.innerText = 'Sign In';
-      fieldName?.classList.add('hidden');
-      fieldConfirm?.classList.add('hidden');
-      forgotLink?.classList.remove('hidden');
-    } else {
-      tabSignup?.classList.add('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
-      tabSignup?.classList.remove('text-[#71717a]', 'dark:text-[#a1a1aa]');
-
-      tabLogin?.classList.remove('bg-white', 'dark:bg-[#27272a]', 'text-[#18181b]', 'dark:text-white', 'shadow-sm');
-      tabLogin?.classList.add('text-[#71717a]', 'dark:text-[#a1a1aa]');
-
-      if (modalTitle) modalTitle.innerText = 'Create your account';
-      if (authBtnText) authBtnText.innerText = 'Create Account';
-      fieldName?.classList.remove('hidden');
-      fieldConfirm?.classList.remove('hidden');
-      forgotLink?.classList.add('hidden');
-    }
-  }
-
-  tabLogin?.addEventListener('click', () => switchMode('login'));
-  tabSignup?.addEventListener('click', () => switchMode('signup'));
-
-  // Password Visibility Toggle
-  document.querySelectorAll('.password-toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = (btn as HTMLElement).getAttribute('data-target');
-      const input = document.getElementById(targetId || '') as HTMLInputElement | null;
-      if (!input) return;
-
-      const isPassword = input.type === 'password';
-      input.type = isPassword ? 'text' : 'password';
-
-      const openIcon = btn.querySelector('.eye-open-icon');
-      const closedIcon = btn.querySelector('.eye-closed-icon');
-
-      if (isPassword) {
-        openIcon?.classList.add('hidden');
-        closedIcon?.classList.remove('hidden');
-      } else {
-        openIcon?.classList.remove('hidden');
-        closedIcon?.classList.add('hidden');
-      }
-    });
-  });
-
-  // Forgot Password Action
-  forgotLink?.addEventListener('click', () => {
-    if (authErrorBanner) {
-      authErrorBanner.className = 'p-3 bg-[#e0f2fe] dark:bg-[#075985] text-[#0284c7] dark:text-[#38bdf8] text-xs font-medium rounded-xl border border-[#bae6fd] dark:border-[#0369a1] animate-fade-in';
-      authErrorBanner.innerText = 'Password recovery link has been sent to your email address.';
-      authErrorBanner.classList.remove('hidden');
-    }
-  });
-
-  // Auth Form Submission (Login & Signup)
-  const authForm = document.getElementById('auth-form') as HTMLFormElement;
-  const authBtnSpinner = document.getElementById('auth-btn-spinner');
-
-  const guestAuthButtons = document.getElementById('guest-auth-buttons');
-  const userProfileMenu = document.getElementById('user-profile-menu');
-  const userDisplayName = document.getElementById('user-display-name');
-  const logoutBtn = document.getElementById('logout-btn');
-
-  authForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    authErrorBanner?.classList.add('hidden');
-
-    const email = (document.getElementById('auth-email-input') as HTMLInputElement | null)?.value || '';
-    const password = (document.getElementById('auth-password-input') as HTMLInputElement | null)?.value || '';
-    const name = (document.getElementById('auth-name-input') as HTMLInputElement | null)?.value || '';
-    const confirm = (document.getElementById('auth-confirm-input') as HTMLInputElement | null)?.value || '';
-
-    // Frontend Validations
-    if (currentAuthMode === 'signup') {
-      if (password.length < 8) {
-        showAuthError('Password must be at least 8 characters long.');
-        return;
-      }
-      if (password !== confirm) {
-        showAuthError('Passwords do not match. Please verify your password.');
-        return;
-      }
-    }
-
-    authBtnSpinner?.classList.remove('hidden');
-    if (authBtnText) authBtnText.innerText = currentAuthMode === 'login' ? 'Signing in...' : 'Creating account...';
-
-    const endpoint = currentAuthMode === 'login' ? '/api/v1/auth/login' : '/api/v1/auth/signup';
-    const payload = currentAuthMode === 'login' 
-      ? { email, password }
-      : { name, email, password };
-
-    try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.detail || 'Authentication failed');
-      }
-
-      localStorage.setItem('newzwale_user', JSON.stringify(data.user));
-      localStorage.setItem('newzwale_access_token', data.access_token);
-      
-      closeModal();
-      updateUserSessionState();
-
-    } catch (err: any) {
-      showAuthError(err.message || 'Authentication request failed.');
-    } finally {
-      authBtnSpinner?.classList.add('hidden');
-      if (authBtnText) authBtnText.innerText = currentAuthMode === 'login' ? 'Sign In' : 'Create Account';
-    }
-  });
-
-  function showAuthError(msg: string) {
-    if (authErrorBanner) {
-      authErrorBanner.className = 'p-3 bg-[#fef2f2] dark:bg-[#450a0a] text-[#ef4444] dark:text-[#fca5a5] text-xs font-medium rounded-xl border border-[#fecaca] dark:border-[#7f1d1d] animate-fade-in';
-      authErrorBanner.innerText = msg;
-      authErrorBanner.classList.remove('hidden');
-    }
-  }
-
-  function updateUserSessionState() {
-    const savedUser = localStorage.getItem('newzwale_user');
-    if (savedUser && guestAuthButtons && userProfileMenu && userDisplayName) {
-      try {
-        const userObj = JSON.parse(savedUser);
-        userDisplayName.innerText = userObj.name || 'Subscriber';
-        guestAuthButtons.classList.add('hidden');
-        userProfileMenu.classList.remove('hidden');
-        userProfileMenu.classList.add('flex');
-      } catch (e) {}
-    }
-  }
-
-  // Handle URL auth token from Google OAuth Redirect Callback
-  function handleOAuthCallbackUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const authToken = urlParams.get('auth_token');
-    const userName = urlParams.get('user_name');
-
-    if (authToken && userName) {
-      localStorage.setItem('newzwale_access_token', authToken);
-      localStorage.setItem('newzwale_user', JSON.stringify({ name: userName }));
-      
-      // Clean query params from URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-      updateUserSessionState();
-    }
-  }
-
-  logoutBtn?.addEventListener('click', () => {
-    localStorage.removeItem('newzwale_user');
-    localStorage.removeItem('newzwale_access_token');
-    localStorage.removeItem('uncoshub_user');
-    localStorage.removeItem('uncoshub_access_token');
-    localStorage.removeItem('headlinehub_user');
-    localStorage.removeItem('headlinehub_access_token');
-    if (guestAuthButtons && userProfileMenu) {
-      userProfileMenu.classList.add('hidden');
-      userProfileMenu.classList.remove('flex');
-      guestAuthButtons.classList.remove('hidden');
-    }
+    const isOpen = mobileDrawer?.classList.toggle('hidden') === false;
+    mobileBtn.setAttribute('aria-expanded', String(isOpen));
   });
 
   // Language Selector Sync
@@ -650,7 +150,7 @@ const languages = [
     const code = (e.target as HTMLSelectElement).value;
     const selectedOption = langSelect.options[langSelect.selectedIndex];
     const name = selectedOption ? selectedOption.text : code;
-    
+
     localStorage.setItem('userLanguage', code);
     localStorage.setItem('userLanguageName', name);
 
@@ -665,7 +165,5 @@ const languages = [
     if (savedLang && langSelect) {
       langSelect.value = savedLang;
     }
-    handleOAuthCallbackUrl();
-    updateUserSessionState();
   });
 </script>
