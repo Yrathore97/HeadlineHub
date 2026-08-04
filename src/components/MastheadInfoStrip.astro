@@ -20,17 +20,9 @@
       </span>
     </div>
 
-    <!-- Right: Front-Page Financial Market Index Snippets -->
+    <!-- Right: Front-Page Financial Market Index Snippets (live; hidden unless real quotes load) -->
     <div class="flex items-center gap-3 text-[11px] shrink-0">
-      <div class="flex items-center gap-1 text-[#18181b] dark:text-[#f4f4f5]">
-        <span class="text-[#71717a] uppercase font-bold">Sensex</span>
-        <span class="text-[#10b981] font-semibold">81,450 ▲ (+0.35%)</span>
-      </div>
-      <span class="text-[#d4d4d8] dark:text-[#27272a]">•</span>
-      <div class="flex items-center gap-1 text-[#18181b] dark:text-[#f4f4f5]">
-        <span class="text-[#71717a] uppercase font-bold">Nifty</span>
-        <span class="text-[#10b981] font-semibold">24,820 ▲ (+0.40%)</span>
-      </div>
+      <span id="ticker" hidden class="font-semibold text-[#18181b] dark:text-[#f4f4f5] whitespace-nowrap"></span>
     </div>
 
   </div>
@@ -212,4 +204,24 @@
     const { langCode } = e.detail;
     updateMastheadDate(langCode);
   });
+
+  // Live market indices. The strip stays hidden unless real quotes arrive -
+  // never show invented numbers.
+  type Quote = { price: number; changePct: number | null };
+
+  fetch('/api/ticker')
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error('ticker unavailable'))))
+    .then((d: { sensex: Quote; nifty: Quote }) => {
+      const el = document.getElementById('ticker');
+      if (!el) return;
+      const fmt = (n: Quote, label: string) =>
+        `${label} ${n.price.toFixed(2)}${
+          n.changePct === null ? '' : ` (${n.changePct >= 0 ? '+' : ''}${n.changePct.toFixed(2)}%)`
+        }`;
+      el.textContent = `${fmt(d.sensex, 'SENSEX')} · ${fmt(d.nifty, 'NIFTY')}`;
+      el.hidden = false;
+    })
+    .catch(() => {
+      /* stays hidden - never show invented numbers */
+    });
 </script>
