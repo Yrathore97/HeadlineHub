@@ -13,8 +13,8 @@ export const GET: APIRoute = async ({ url }) => {
 
   const articles = await cached<Article[]>(env.NEWZ_CACHE, newsCacheKey(category), TTL, async () => {
     try {
-      const fresh = await fetchNewsData(apiKey, category);
-      if (fresh.length > 0) return fresh;
+      const fresh = await fetchNewsData(apiKey, { category });
+      if (fresh.articles.length > 0) return fresh.articles;
       throw new Error('empty');
     } catch {
       const fallback = await fetchRssFallback();
