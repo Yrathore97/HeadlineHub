@@ -15,8 +15,9 @@ export const DEFAULT_CATEGORY = 'top';
 export const CATEGORIES: Category[] = [
   { slug: 'top', label: 'Top', upstream: null },
   // The whole feed is already country=in, so an "India" tab needs its own
-  // upstream category or it just duplicates Top. Confirmed against the live
-  // API in Task 1; change or drop this if `politics` proved a poor fit.
+  // upstream category or it just duplicates Top. `politics` is a provisional
+  // mapping, NOT yet confirmed against the live API - remap or drop this tab
+  // once the verification spike has run.
   { slug: 'india', label: 'India', upstream: 'politics' },
   { slug: 'world', label: 'World', upstream: 'world' },
   { slug: 'business', label: 'Business', upstream: 'business' },
