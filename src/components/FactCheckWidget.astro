@@ -3,145 +3,118 @@
 <section id="fact-checker" class="w-full py-12 bg-canvas border-b border-hairline transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
     <div class="max-w-4xl mx-auto">
-      
+
       <!-- Section Header -->
       <div class="flex flex-col items-center text-center mb-8">
-        <span class="font-mono-caption text-primary-strong mb-2 font-semibold">LIVE INTERNET SCRAPER • FACT CHECK ENGINE</span>
+        <span class="font-mono-caption text-primary-strong mb-2 font-semibold">FACT CHECK ENGINE</span>
         <h2 class="text-2xl sm:text-4xl font-semibold text-ink tracking-[-1.28px] mb-3">
-          Instant News Verification & Grounded AI Chat
+          Instant News Verification
         </h2>
         <p class="text-sm sm:text-base text-body max-w-xl">
-          NewzWale cross-references verified wire feeds to issue a verdict and lets you ask grounded follow-up questions.
+          NewzWale checks claims against published fact-checkers first, then live web sources, and only issues a verdict when the evidence supports one.
         </p>
       </div>
 
       <!-- Verification Tool Panel -->
       <div class="bg-surface-soft border border-hairline rounded-lg p-4 sm:p-6 shadow-stacked-md">
-        
+
         <!-- Input Tabs -->
         <div class="flex items-center gap-2 border-b border-hairline pb-3 mb-4 overflow-x-auto text-xs font-medium">
-          <button id="tab-text" class="tab-btn active px-3 py-1.5 font-semibold text-ink bg-surface-elevated border border-hairline rounded-full shadow-stacked-sm">
+          <button data-tab="text" class="tab-btn active px-3 py-1.5 font-semibold text-ink bg-surface-elevated border border-hairline rounded-full shadow-stacked-sm">
             📝 Text / Claim
           </button>
-          <button id="tab-url" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
+          <button data-tab="url" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
             🔗 Article URL
           </button>
-          <button id="tab-image" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
+          <button data-tab="image" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
             🖼️ Image / Screenshot
-          </button>
-          <button id="tab-pdf" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
-            📄 PDF Upload
-          </button>
-          <button id="tab-voice" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
-            🎙️ Voice Input
           </button>
         </div>
 
         <!-- Input Area -->
         <div id="input-container" class="space-y-3 mb-4">
-          <textarea 
-            id="claim-text" 
-            rows="3" 
-            placeholder="Paste news headline or claim to verify (e.g. 'RBI keeps repo rate steady at 6.5%')"
-            class="w-full bg-surface-elevated border border-hairline rounded-md p-3 text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong resize-none"
-          ></textarea>
-        </div>
+          <div id="panel-text" class="tab-panel space-y-3">
+            <textarea
+              id="claim-text"
+              rows="3"
+              placeholder="Paste news headline or claim to verify (e.g. 'RBI keeps repo rate steady at 6.5%')"
+              class="w-full bg-surface-elevated border border-hairline rounded-md p-3 text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong resize-none"
+            ></textarea>
 
-        <!-- Pre-set Quick Demos -->
-        <div class="flex items-center gap-2 mb-5 overflow-x-auto pb-1 text-xs">
-          <span class="text-mute font-mono-caption text-[10px] shrink-0">Try Demos:</span>
-          <button class="demo-prompt-btn px-2.5 py-1 bg-surface-elevated border border-hairline hover:border-primary rounded-full text-body transition-colors shrink-0">
-            "RBI Repo Rate FY27"
-          </button>
-          <button class="demo-prompt-btn px-2.5 py-1 bg-surface-elevated border border-hairline hover:border-primary rounded-full text-body transition-colors shrink-0">
-            "Viral WhatsApp 2000 Note Bank Holiday"
-          </button>
-          <button class="demo-prompt-btn px-2.5 py-1 bg-surface-elevated border border-hairline hover:border-primary rounded-full text-body transition-colors shrink-0">
-            "ISRO INSAT-3DS Satellite Launch"
-          </button>
+            <!-- Pre-set Quick Demos -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+              <span class="text-mute font-mono-caption text-[10px] shrink-0">Try Demos:</span>
+              <button type="button" class="demo-prompt-btn px-2.5 py-1 bg-surface-elevated border border-hairline hover:border-primary rounded-full text-body transition-colors shrink-0">
+                "RBI Repo Rate FY27"
+              </button>
+              <button type="button" class="demo-prompt-btn px-2.5 py-1 bg-surface-elevated border border-hairline hover:border-primary rounded-full text-body transition-colors shrink-0">
+                "Viral WhatsApp 2000 Note Bank Holiday"
+              </button>
+              <button type="button" class="demo-prompt-btn px-2.5 py-1 bg-surface-elevated border border-hairline hover:border-primary rounded-full text-body transition-colors shrink-0">
+                "ISRO INSAT-3DS Satellite Launch"
+              </button>
+            </div>
+          </div>
+
+          <div id="panel-url" class="tab-panel" hidden>
+            <input
+              id="claim-url"
+              type="url"
+              placeholder="https://example.com/article-to-check"
+              class="w-full bg-surface-elevated border border-hairline rounded-md p-3 text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong"
+            />
+          </div>
+
+          <div id="panel-image" class="tab-panel" hidden>
+            <p class="text-sm text-mute p-4 bg-surface-elevated border border-dashed border-hairline rounded-md text-center">
+              Image / screenshot checking is coming soon.
+            </p>
+          </div>
         </div>
 
         <!-- Verification Action Button -->
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2 text-xs text-mute">
             <svg class="w-3.5 h-3.5 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-            Live Scraper cross-references PTI, ANI, PIB & Gazette Records
+            Checks published fact-checkers, then live web sources
           </div>
 
-          <button 
-            id="verify-submit-btn" 
-            class="px-5 py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-md shadow-stacked-sm transition-all flex items-center gap-2 cursor-pointer"
+          <button
+            id="verify-submit-btn"
+            class="px-5 py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-md shadow-stacked-sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span id="btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
-            <span>Scrape & Verify Now</span>
+            <span>Check Claim</span>
           </button>
         </div>
 
+        <!-- Error state -->
+        <p id="verify-error" class="hidden mt-4 text-xs text-error bg-error/10 border border-error/30 rounded-md p-3"></p>
+
         <!-- Output Verdict Card -->
         <div id="verdict-card" class="hidden mt-6 pt-6 border-t border-hairline animate-fade-in space-y-6">
-          
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-md bg-surface-elevated border border-hairline">
-            <div class="flex items-center gap-3">
-              <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm">
-                <!-- Injected via JS -->
-              </span>
-              <div class="text-xs text-mute">Confidence: <span id="verdict-confidence" class="font-mono text-ink font-semibold">96%</span> • Audit ID: <span id="verdict-id" class="font-mono text-primary-strong font-semibold">FC-2026-8841</span></div>
-            </div>
-            <button id="download-report-btn" type="button" class="px-3 py-1.5 bg-surface-card border border-hairline text-ink rounded-md text-xs font-semibold hover:border-primary transition-all flex items-center gap-1.5 cursor-pointer">
-              <svg class="w-3.5 h-3.5 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-              <span>Download Report</span>
-            </button>
+
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 rounded-md bg-surface-elevated border border-hairline">
+            <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm">
+              <!-- Injected via JS -->
+            </span>
+            <div id="verdict-basis-note" class="text-xs text-mute"></div>
           </div>
 
           <!-- Short Verdict Explanation -->
           <div>
-            <h4 class="text-xs font-mono-caption text-mute mb-1">SHORT VERDICT & FACT SUMMARY</h4>
+            <h4 class="text-xs font-mono-caption text-mute mb-1">EXPLANATION</h4>
             <div id="verdict-short-answer" class="text-sm font-medium text-ink bg-surface-elevated p-4 rounded-md border border-hairline leading-relaxed shadow-stacked-sm">
               <!-- Injected via JS -->
             </div>
           </div>
 
-          <!-- Scraped Internet Sources -->
+          <!-- Sources -->
           <div>
-            <h4 class="text-xs font-mono-caption text-mute mb-2">LIVE SOURCES SCRAPED & CITED</h4>
+            <h4 class="text-xs font-mono-caption text-mute mb-2">SOURCES CHECKED</h4>
             <div id="sources-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <!-- Injected via JS -->
             </div>
-          </div>
-
-          <!-- Grounded AI Claim Chat Panel -->
-          <div id="grounded-chat-container" class="pt-6 border-t border-hairline space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                <h4 class="text-xs font-mono-caption text-primary-strong font-semibold">GROUNDED AI CLAIM CHAT</h4>
-              </div>
-              <span class="text-[11px] text-mute font-mono">Scoped strictly to audit sources</span>
-            </div>
-
-            <!-- Chat History Messages Container -->
-            <div id="chat-messages-box" class="space-y-3 max-h-72 overflow-y-auto p-4 bg-surface-elevated border border-hairline rounded-md text-xs">
-              <div class="text-mute text-center font-mono text-[11px] py-2">
-                Ask follow-up questions about this specific claim and its cited evidence...
-              </div>
-            </div>
-
-            <!-- Chat Input Box -->
-            <form id="chat-form" class="flex items-center gap-2">
-              <input 
-                type="text" 
-                id="chat-input" 
-                placeholder="Why is this claim false? What do official sources say?"
-                class="flex-1 bg-surface-elevated border border-hairline rounded-md px-3 py-2 text-xs text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong"
-              />
-              <button 
-                type="submit" 
-                id="send-chat-btn"
-                class="px-4 py-2 bg-ink hover:bg-charcoal text-canvas rounded-md text-xs font-semibold shadow-stacked-sm transition-all shrink-0 cursor-pointer"
-              >
-                Ask Grounded AI
-              </button>
-            </form>
           </div>
 
         </div>
@@ -153,192 +126,142 @@
 </section>
 
 <script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+  const panels = document.querySelectorAll<HTMLElement>('.tab-panel');
   const submitBtn = document.getElementById('verify-submit-btn') as HTMLButtonElement;
-  const claimInput = document.getElementById('claim-text') as HTMLTextAreaElement;
+  const claimText = document.getElementById('claim-text') as HTMLTextAreaElement;
+  const claimUrl = document.getElementById('claim-url') as HTMLInputElement;
   const verdictCard = document.getElementById('verdict-card');
   const verdictBadge = document.getElementById('verdict-badge');
-  const verdictConfidence = document.getElementById('verdict-confidence');
-  const verdictId = document.getElementById('verdict-id');
+  const verdictBasisNote = document.getElementById('verdict-basis-note');
   const verdictShortAnswer = document.getElementById('verdict-short-answer');
   const sourcesList = document.getElementById('sources-list');
   const btnSpinner = document.getElementById('btn-spinner');
+  const errorBox = document.getElementById('verify-error');
 
-  const chatForm = document.getElementById('chat-form') as HTMLFormElement;
-  const chatInput = document.getElementById('chat-input') as HTMLInputElement;
-  const chatMessagesBox = document.getElementById('chat-messages-box');
+  let activeTab: 'text' | 'url' | 'image' = 'text';
 
-  let activeAuditId = '';
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab') as 'text' | 'url' | 'image';
+      activeTab = tab;
+      buttons.forEach((b) => b.classList.toggle('active', b === btn));
+      panels.forEach((p) => { p.hidden = p.id !== `panel-${tab}`; });
+      submitBtn.disabled = tab === 'image';
+    });
+  });
 
-  // Quick Demo Buttons
   document.querySelectorAll('.demo-prompt-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const prompt = (e.target as HTMLElement).innerText.replace(/"/g, '');
       if (prompt.includes('RBI Repo Rate')) {
-        claimInput.value = "RBI keeps repo rate unchanged at 6.5% for FY27 projecting 7.2% GDP growth.";
+        claimText.value = "RBI keeps repo rate unchanged at 6.5% for FY27 projecting 7.2% GDP growth.";
       } else if (prompt.includes('WhatsApp')) {
-        claimInput.value = "Emergency bank holiday declared across India starting tomorrow for 3 days due to currency audit.";
+        claimText.value = "Emergency bank holiday declared across India starting tomorrow for 3 days due to currency audit.";
       } else {
-        claimInput.value = "ISRO successfully launches INSAT-3DS weather satellite from Sriharikota.";
+        claimText.value = "ISRO successfully launches INSAT-3DS weather satellite from Sriharikota.";
       }
     });
   });
 
-  // Verification Handler
+  const VERDICTS: Record<string, { label: string; badgeClass: string; icon: string }> = {
+    verified: { label: 'Verified', badgeClass: 'bg-success/15 text-success border border-success/40', icon: '✓' },
+    misleading: { label: 'Misleading', badgeClass: 'bg-warning/15 text-warning border border-warning/40', icon: '⚠' },
+    false: { label: 'False', badgeClass: 'bg-error/15 text-error border border-error/40', icon: '✕' },
+    insufficient_evidence: { label: 'Not enough evidence to judge', badgeClass: 'bg-surface-card text-mute border border-hairline', icon: '?' },
+  };
+
+  function renderSources(evidence: { title: string; url: string; publisher: string }[]) {
+    if (!sourcesList) return;
+    sourcesList.innerHTML = '';
+    if (evidence.length === 0) {
+      const p = document.createElement('p');
+      p.className = 'text-xs text-mute col-span-2';
+      p.textContent = 'No sources to show.';
+      sourcesList.appendChild(p);
+      return;
+    }
+    for (const e of evidence) {
+      const a = document.createElement('a');
+      a.href = e.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = 'p-3 bg-surface-elevated border border-hairline rounded-md hover:border-primary transition-all flex items-center justify-between gap-2 group';
+
+      const title = document.createElement('span');
+      title.className = 'font-medium text-ink group-hover:text-primary-strong';
+      title.textContent = e.title;
+
+      const publisher = document.createElement('span');
+      publisher.className = 'font-mono text-[10px] text-mute shrink-0';
+      publisher.textContent = `${e.publisher} ↗`;
+
+      a.appendChild(title);
+      a.appendChild(publisher);
+      sourcesList.appendChild(a);
+    }
+  }
+
   submitBtn?.addEventListener('click', async () => {
-    const claim = claimInput.value.trim();
-    if (!claim) return;
+    const body =
+      activeTab === 'url' ? { url: claimUrl.value.trim() } : { claim: claimText.value.trim() };
+    if (('url' in body && !body.url) || ('claim' in body && !body.claim)) return;
 
     btnSpinner?.classList.remove('hidden');
     submitBtn.disabled = true;
+    errorBox?.classList.add('hidden');
+    verdictCard?.classList.add('hidden');
 
     try {
-      const res = await fetch('/api/v1/verify/claim', {
+      const res = await fetch('/api/factcheck', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ claim_text: claim })
+        body: JSON.stringify(body),
       });
+      const data = (await res.json()) as {
+        verdict?: string;
+        explanation?: string;
+        basis?: string;
+        evidence?: { title: string; url: string; publisher: string }[];
+        error?: string;
+      };
 
-      if (!res.ok) throw new Error('Verification request failed');
-      const data = await res.json();
+      if (!res.ok) {
+        if (errorBox) {
+          errorBox.textContent = data.error || 'Could not check that claim.';
+          errorBox.classList.remove('hidden');
+        }
+        return;
+      }
 
-      activeAuditId = data.audit_id || 'FC-2026-8841';
-
+      const style = VERDICTS[data.verdict ?? ''] ?? VERDICTS.insufficient_evidence;
       if (verdictBadge) {
-        if (data.verdict === 'verified') {
-          verdictBadge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm bg-success/15 text-success border border-success/40';
-          verdictBadge.innerText = '✓ VERIFIED TRUE';
-        } else if (data.verdict === 'debunked' || data.verdict === 'fake') {
-          verdictBadge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm bg-error/15 text-error border border-error/40';
-          verdictBadge.innerText = '✕ DEBUNKED / FALSE';
+        verdictBadge.className = `inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm ${style.badgeClass}`;
+        verdictBadge.textContent = `${style.icon} ${style.label}`;
+      }
+
+      if (verdictBasisNote) {
+        if (data.basis === 'certified') {
+          verdictBasisNote.textContent = `Reviewed by ${data.evidence?.[0]?.publisher ?? 'a published fact-checker'}.`;
+        } else if (data.basis === 'ai_assessment') {
+          verdictBasisNote.textContent = 'AI assessment based on the sources below — not a certified fact-check.';
         } else {
-          verdictBadge.className = 'inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm bg-warning/15 text-warning border border-warning/40';
-          verdictBadge.innerText = '⚠️ MISLEADING / PARTIAL';
+          verdictBasisNote.textContent = '';
         }
       }
 
-      if (verdictConfidence) verdictConfidence.innerText = `${Math.round((data.confidence_score || 0.95) * 100)}%`;
-      if (verdictId) verdictId.innerText = activeAuditId;
-      if (verdictShortAnswer) verdictShortAnswer.innerText = data.explanation || 'Claim cross-referenced with PTI, ANI wire feeds.';
-
-      if (sourcesList && data.sources_checked) {
-        sourcesList.innerHTML = data.sources_checked.map((s: any) => `
-          <a href="${s.url || '#'}" target="_blank" class="p-3 bg-surface-elevated border border-hairline rounded-md hover:border-primary transition-all flex items-center justify-between group">
-            <span class="font-medium text-ink group-hover:text-primary-strong">${s.name || 'Wire Dispatch'}</span>
-            <span class="font-mono text-[10px] text-mute">View Primary Source ↗</span>
-          </a>
-        `).join('');
-      }
+      if (verdictShortAnswer) verdictShortAnswer.textContent = data.explanation || '';
+      renderSources(data.evidence ?? []);
 
       verdictCard?.classList.remove('hidden');
-
-    } catch (err) {
-      alert('Verification service unavailable right now. Using offline fallback audit mode.');
+    } catch {
+      if (errorBox) {
+        errorBox.textContent = 'Verification service unavailable right now.';
+        errorBox.classList.remove('hidden');
+      }
     } finally {
       btnSpinner?.classList.add('hidden');
       submitBtn.disabled = false;
     }
-  });
-
-  // Load Session Chat History
-  async function loadChatHistory(auditId: string) {
-    if (!auditId || !chatMessagesBox) return;
-    try {
-      const res = await fetch(`/api/v1/factcheck/${auditId}/chat`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.messages && data.messages.length > 0) {
-        renderChatMessages(data.messages);
-      }
-    } catch (e) {}
-  }
-
-  function renderChatMessages(msgs: any[]) {
-    if (!chatMessagesBox) return;
-    chatMessagesBox.innerHTML = msgs.map(m => `
-      <div class="flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}">
-        <div class="max-w-[85%] p-3 rounded-md text-xs ${m.role === 'user' ? 'bg-primary-strong text-on-primary font-semibold' : 'bg-surface-soft text-ink border border-hairline'} shadow-stacked-sm">
-          <div class="font-mono text-[10px] opacity-75 mb-0.5">${m.role === 'user' ? 'YOU' : 'GROUNDED AI ASSISTANT'}</div>
-          <div>${m.content}</div>
-        </div>
-      </div>
-    `).join('');
-    chatMessagesBox.scrollTop = chatMessagesBox.scrollHeight;
-  }
-
-  // Send Grounded Chat Message
-  chatForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const msg = chatInput.value.trim();
-    if (!msg || !activeAuditId) return;
-
-    chatInput.value = '';
-
-    // Append user message immediately
-    const userBubble = document.createElement('div');
-    userBubble.className = 'flex flex-col items-end';
-    userBubble.innerHTML = `
-      <div class="max-w-[85%] p-3 rounded-md text-xs bg-primary-strong text-on-primary font-semibold shadow-stacked-sm">
-        <div class="font-mono text-[10px] opacity-75 mb-0.5">YOU</div>
-        <div>${msg}</div>
-      </div>
-    `;
-    chatMessagesBox?.appendChild(userBubble);
-    chatMessagesBox!.scrollTop = chatMessagesBox!.scrollHeight;
-
-    try {
-      const res = await fetch(`/api/v1/factcheck/${activeAuditId}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg })
-      });
-
-      if (!res.ok) throw new Error('Chat failed');
-      const data = await res.json();
-
-      const aiBubble = document.createElement('div');
-      aiBubble.className = 'flex flex-col items-start';
-      aiBubble.innerHTML = `
-        <div class="max-w-[85%] p-3 rounded-md text-xs bg-surface-soft text-ink border border-hairline shadow-stacked-sm">
-          <div class="font-mono text-[10px] opacity-75 mb-0.5 text-primary-strong font-semibold">GROUNDED AI ASSISTANT</div>
-          <div>${data.reply}</div>
-        </div>
-      `;
-      chatMessagesBox?.appendChild(aiBubble);
-      chatMessagesBox!.scrollTop = chatMessagesBox!.scrollHeight;
-
-    } catch (err) {
-      alert('Unable to process chat question right now.');
-    }
-  });
-
-  // Download Verdict Report Handler
-  document.getElementById('download-report-btn')?.addEventListener('click', () => {
-    const verdictText = document.getElementById('verdict-short-answer')?.innerText || '';
-    const auditId = document.getElementById('verdict-id')?.innerText || 'FC-AUDIT';
-    const confidence = document.getElementById('verdict-confidence')?.innerText || '95%';
-    
-    const reportContent = `=====================================================
-NEWZWALE — FACT-CHECK AUDIT REPORT
-=====================================================
-Audit ID: ${auditId}
-Timestamp: ${new Date().toISOString()}
-Confidence Score: ${confidence}
-
-VERDICT SUMMARY:
-${verdictText}
-
-SOURCES CITED & SCRAPED:
-- Press Trust of India (PTI Wire): https://pti.in
-- PIB Official Gazette: https://pib.gov.in
-- RBI Official Releases: https://rbi.org.in
-
-This report was generated by NewzWale Verification Engine.
-=====================================================`;
-
-    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `NewzWale_FactCheck_Report_${auditId}.txt`;
-    link.click();
   });
 </script>

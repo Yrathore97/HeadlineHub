@@ -25,7 +25,7 @@ import Footer from '../components/Footer.astro';
             AI News Verification & Credibility Portal.
           </h1>
           <p class="text-base text-stone dark:text-body leading-relaxed">
-            Verify headlines, viral WhatsApp forwards, image screenshots, or article URLs. Our engine checks wire services (PTI, ANI), official government portals (PIB, RBI, ECI), and IFCN-certified fact-checkers before issuing a verdict with cited evidence.
+            Verify headlines, viral claims, or article URLs. Our engine checks published fact-checkers first, then live web sources, and only issues a verdict when the evidence supports one — otherwise it says so.
           </p>
         </div>
       </div>
@@ -44,19 +44,62 @@ import Footer from '../components/Footer.astro';
 
         <div class="space-y-6 text-sm text-body leading-relaxed">
           <div class="p-4 bg-surface-card border border-hairline rounded-md">
-            <h3 class="font-semibold text-ink mb-1">1. Claim Isolation & Extraction</h3>
-            <p>Every submitted text block, URL, or OCR image passes through a Named Entity Recognition (NER) model to isolate verifiable factual assertions from subjective opinions.</p>
+            <h3 class="font-semibold text-ink mb-1">1. Certified fact-check lookup</h3>
+            <p>Every claim is first checked against Google Fact Check Tools, an index of reviews published by IFCN-affiliated fact-checkers. A match returns that publisher's rating directly, with a link to their review.</p>
           </div>
 
           <div class="p-4 bg-surface-card border border-hairline rounded-md">
-            <h3 class="font-semibold text-ink mb-1">2. Multi-Source Evidence Cross-Referencing</h3>
-            <p>Claims are weighted against tier-1 sources: wire agencies (PTI, ANI, Reuters), official government gazettes (PIB, RBI, ECI), and IFCN signatories (Alt News, BOOM, Factly). If no corroborating or debunking evidence exists in verified archives, the tool outputs <strong>Unverifiable</strong> rather than guessing.</p>
+            <h3 class="font-semibold text-ink mb-1">2. Live web retrieval</h3>
+            <p>If no certified review exists, we run a live web search for the claim and fetch the text of the top results.</p>
           </div>
 
           <div class="p-4 bg-surface-card border border-hairline rounded-md">
-            <h3 class="font-semibold text-ink mb-1">3. Automated Escalation to Human Moderation</h3>
-            <p>High-stakes claims involving public health emergencies, election integrity, or communal sensitivity are automatically routed to our human review desk before public archiving.</p>
+            <h3 class="font-semibold text-ink mb-1">3. Grounded AI assessment</h3>
+            <p>A model reads only the fetched source text — never outside knowledge — and returns one of four verdicts: Verified, Misleading, False, or Not enough evidence to judge. When the sources don't clearly address the claim, or none can be found, the verdict is always "not enough evidence" rather than a guess.</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="w-full py-12 bg-surface-soft border-t border-hairline">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <span class="font-mono-caption text-primary-strong mb-2 block font-semibold">FACT CHECKING GUIDES</span>
+        <h2 class="text-2xl font-semibold text-ink tracking-tight mb-6">
+          Frequently Asked Questions
+        </h2>
+
+        <div class="space-y-3">
+          {[
+            {
+              q: 'How do I fact check something myself?',
+              a: 'Follow five steps: identify the core claim, its date, and its original publisher; search primary sources such as government records or statistical databases; run a reverse image or video search on any attached media; read laterally across multiple independent outlets; and only then summarize your findings with evidence links.',
+            },
+            {
+              q: 'How do I fact check on Google?',
+              a: 'Use search operators like site:gov.in or filetype:pdf, run Google Images or Google Lens reverse search on photos, and check Google Fact Check Explorer (toolbox.google.com/factcheck/explorer) for existing reviews. Cross-reference against multiple independent outlets before trusting a single result.',
+            },
+            {
+              q: 'How do I fact check a photo or video?',
+              a: 'Upload the image, or a clear keyframe from the video, to Google Lens or TinEye to find where and when it first appeared. Check image metadata (EXIF) for capture time and location where available, and look for signs of editing such as inconsistent lighting or warped detail.',
+            },
+            {
+              q: 'How do I fact check a social media or WhatsApp forward?',
+              a: "Don't share before checking. Search the exact wording in Google, check the account or number that originated it, run a reverse image search on any attached photo, and look for an existing debunk before treating it as news.",
+            },
+            {
+              q: 'Is Media Bias/Fact Check reliable?',
+              a: 'MBFC is a useful independent reference for how outlets lean editorially and their sourcing track record. Treat it as one input among several — combine it with IFCN-affiliated fact-checker reviews and primary-source verification rather than relying on it alone.',
+            },
+          ].map((item) => (
+            <details class="group p-4 bg-surface-card border border-hairline rounded-md">
+              <summary class="cursor-pointer font-semibold text-ink text-sm list-none flex items-center justify-between">
+                {item.q}
+                <span class="text-mute group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <p class="mt-2 text-sm text-body leading-relaxed">{item.a}</p>
+            </details>
+          ))}
         </div>
       </div>
     </section>
