@@ -122,6 +122,55 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE);
     >
       Skip to Main Content
     </a>
+    <div
+      id="nav-progress"
+      aria-hidden="true"
+      class="fixed top-0 left-0 z-[200] h-[3px] w-0 bg-primary-strong opacity-0 transition-[width] duration-[400ms] ease-out"
+    ></div>
     <slot />
+
+    <script>
+      // Full-page navigations (category links, pagination, language switch)
+      // give no visual feedback until the next page paints. A thin top bar
+      // that races toward 90% on click, then lets the incoming page's own
+      // load/unload finish it, is the smallest honest way to say "working" -
+      // it never claims completion the click hasn't earned yet.
+      const bar = document.getElementById('nav-progress');
+      if (bar) {
+        let timer: ReturnType<typeof setInterval> | undefined;
+
+        const start = () => {
+          bar.style.opacity = '1';
+          bar.style.width = '20%';
+          let width = 20;
+          timer = setInterval(() => {
+            width = Math.min(width + (90 - width) * 0.1, 90);
+            bar.style.width = `${width}%`;
+          }, 200);
+        };
+
+        document.addEventListener('click', (e) => {
+          const link = (e.target as HTMLElement)?.closest('a');
+          if (!link) return;
+          const href = link.getAttribute('href');
+          if (!href || href.startsWith('#')) return;
+          if (link.target === '_blank' || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
+          let url: URL;
+          try {
+            url = new URL(href, window.location.href);
+          } catch {
+            return;
+          }
+          if (url.origin !== window.location.origin) return;
+          start();
+        });
+
+        window.addEventListener('pageshow', () => {
+          if (timer) clearInterval(timer);
+          bar.style.width = '0%';
+          bar.style.opacity = '0';
+        });
+      }
+    </script>
   </body>
 </html>

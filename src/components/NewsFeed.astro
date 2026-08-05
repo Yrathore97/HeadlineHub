@@ -2,7 +2,7 @@
 import type { Article, NewsPage } from '../lib/news/types';
 import { prepareArticles } from '../lib/news/feed';
 import { DEFAULT_CATEGORY } from '../lib/news/categories';
-import { DEFAULT_LANGUAGE } from '../lib/news/languages';
+import { DEFAULT_LANGUAGE, LANGUAGES } from '../lib/news/languages';
 import ArticleCard from './ArticleCard.astro';
 
 interface Props {
@@ -44,6 +44,11 @@ try {
 
 const exclude = new Set(excludeUrls);
 articles = prepareArticles(articles, MAX_CARDS).filter((a) => !exclude.has(a.url));
+
+// The language selector only ever changes what's fetched here, never the
+// site's own UI text - this note is the one place that says so out loud,
+// rather than leaving a first-time switcher to infer it from a hover title.
+const languageName = LANGUAGES.find((l) => l.code === language)?.name ?? language;
 ---
 
 <section id="news-feed" class="w-full py-12 bg-surface-soft transition-colors duration-200">
@@ -55,6 +60,11 @@ articles = prepareArticles(articles, MAX_CARDS).filter((a) => !exclude.has(a.url
           <span id="feed-type-badge" class="font-mono-caption text-mute">LIVE HEADLINE STREAM</span>
         </div>
         <h2 class="text-2xl sm:text-3xl font-semibold text-ink tracking-[-0.96px]">{heading}</h2>
+        {language !== DEFAULT_LANGUAGE && (
+          <p class="text-xs text-mute mt-1">
+            Showing headlines in {languageName} — site menus and buttons stay in English.
+          </p>
+        )}
       </div>
 
       {articles.length > 0 && (

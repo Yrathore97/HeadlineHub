@@ -15,7 +15,7 @@ const rawLanguage = Astro.url.searchParams.get('language');
 const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
-<header class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline transition-colors duration-200">
+<header id="site-header" class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline transition-[transform,colors] duration-300 ease-out">
   <div class="max-w-[1400px] mx-auto h-[64px] px-3 sm:px-6 flex items-center justify-between">
 
     <!-- Brand Logo & Live Indicator -->
@@ -194,4 +194,30 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
     else url.searchParams.set('language', code);
     window.location.assign(url.toString());
   });
+
+  // Hide the header on scroll-down past the fold, reveal on scroll-up. Two
+  // sticky rows (nav + category strip) cost ~107px of a phone viewport, so
+  // giving that back while reading is worth more than permanent visibility.
+  const header = document.getElementById('site-header');
+  if (header) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const REVEAL_THRESHOLD = 120; // px scrolled before hiding kicks in
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          const scrollingDown = y > lastY;
+          header.classList.toggle('-translate-y-full', scrollingDown && y > REVEAL_THRESHOLD);
+          lastY = y;
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+  }
 </script>

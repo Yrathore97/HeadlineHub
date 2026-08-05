@@ -49,8 +49,12 @@ articles = prepareArticles(articles).filter((a) => !exclude.has(a.url)).slice(0,
         </a>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {articles.map((article) => <ArticleCard article={article} />)}
+      <div class="flex gap-5 overflow-x-auto pb-1 snap-x snap-mandatory no-scrollbar">
+        {articles.map((article) => (
+          <div class="shrink-0 w-[280px] sm:w-[300px] snap-start">
+            <ArticleCard article={article} />
+          </div>
+        ))}
       </div>
     </div>
   </section>
