@@ -82,7 +82,14 @@ const languageName = LANGUAGES.find((l) => l.code === language)?.name ?? languag
       </p>
     ) : (
       <>
-        <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- items-start: CSS Grid's default stretch makes every card in a row
+             match the tallest card's height. ArticleCard's h-full + its
+             footer's justify-between then pushes the footer to that full
+             stretched height, leaving a blank gap in any shorter card sharing
+             a row with a taller one (varying summary length, or one card with
+             an image and its row-mate without). Same bug, same fix, as
+             LeadStory.astro. -->
+        <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
           {articles.map((article) => <ArticleCard article={article} />)}
         </div>
 
