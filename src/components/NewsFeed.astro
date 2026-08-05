@@ -81,13 +81,15 @@ function formatPublished(value: string): string {
     ) : (
       <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {articles.map((article) => (
-          <article data-article-id={article.id} class="article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-all flex flex-col group">
+          <article data-article-id={article.id} class="article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-[box-shadow,border-color] flex flex-col group">
 
             {article.imageUrl && (
               <div class="relative h-44 w-full overflow-hidden bg-surface-card">
                 <img
                   src={article.imageUrl}
-                  alt={article.title}
+                  alt=""
+                  width="400"
+                  height="176"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
@@ -136,7 +138,7 @@ function formatPublished(value: string): string {
                   href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="px-3 py-1 bg-ink hover:bg-charcoal text-canvas text-xs font-semibold rounded-md shadow-stacked-sm transition-all flex items-center gap-1.5"
+                  class="px-3 py-1 bg-ink hover:bg-charcoal text-canvas text-xs font-semibold rounded-md shadow-stacked-sm transition-colors flex items-center gap-1.5"
                 >
                   <span>Read at source</span>
                   <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>

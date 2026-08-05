@@ -7,13 +7,15 @@ interface Props {
   image?: string;
 }
 
+const SITE = 'https://newzwale.editall.workers.dev';
+
 const {
-  title = 'NewzWale | Only Facts News - Autonomous Multilingual Ecosystem',
-  description = 'NewzWale is India & South Asia’s 24/7 autonomous news ecosystem. Discover breaking news, verified claims, hyperlocal updates, and multi-format media.',
-  image = 'https://newzwale.com/og-default.jpg'
+  title = 'NewzWale | Only Facts News',
+  description = 'Live Indian news headlines, plus a fact-check tool that checks claims against published fact-checkers and real sources before returning a verdict.',
+  image = `${SITE}/web-app-manifest-512x512.png`
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://newzwale.com');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE);
 ---
 
 <!doctype html>
@@ -28,6 +30,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://newzwale
     <meta name="apple-mobile-web-app-title" content="NewzWale" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Match the browser chrome to --color-canvas in each theme. -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a18" media="(prefers-color-scheme: dark)" />
+
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
 
     <!-- Google tag (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-GB803SMK37"></script>
@@ -90,34 +98,30 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://newzwale
         "@type": "NewsMediaOrganization",
         "name": "NewzWale",
         "alternateName": ["NewzWale News", "NewzWale India"],
-        "url": "https://newzwale.com",
+        "url": SITE,
         "logo": {
           "@type": "ImageObject",
-          "url": "https://newzwale.com/logo.png",
+          "url": `${SITE}/web-app-manifest-512x512.png`,
           "width": 512,
           "height": 512
         },
-        "sameAs": [
-          "https://twitter.com/NewzWale",
-          "https://instagram.com/newzwale",
-          "https://t.me/newzwale"
-        ],
-        "knowsLanguage": ["en", "hi", "kn", "mr", "bn", "ta", "te", "gu", "ml", "pa"]
+        "knowsLanguage": ["en"]
       },
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "NewzWale",
-        "url": "https://newzwale.com",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://newzwale.com/news?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
+        "url": SITE
       }
     ])} />
   </head>
   <body class="bg-surface-soft text-ink min-h-screen flex flex-col antialiased transition-colors duration-200">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-ink focus:text-canvas focus:rounded-md focus:shadow-stacked-md"
+    >
+      Skip to Main Content
+    </a>
     <slot />
   </body>
 </html>
