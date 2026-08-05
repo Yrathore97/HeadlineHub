@@ -17,7 +17,7 @@ Full task list and rationale: `docs/superpowers/plans/2026-08-05-newzwale-rebuil
 - **Deployed:** NOT deployed. All work below is local and uncommitted to `main`.
 - **Local verification:** `npm test` 131/131 pass, `npx astro check` 0 errors, `npm run build` completes.
 
-**Progress on the categories/language/pagination plan: 16 of 20 tasks done.**
+**Progress on the categories/language/pagination plan: 18 of 20 tasks done.**
 
 Done: category allowlist, language list, paginated data layer, cache key v2,
 feed helpers, `/api/news` params, ArticleCard, NewsFeed props, category pages,
@@ -28,9 +28,27 @@ new homepage composition, Tavily fact-check swap.
 
 | Task | Blocker |
 | --- | --- |
-| Task 1 (API verification spike) | `.dev.vars` exists but `NEWSDATA_API_KEY=` is EMPTY. Needs the real key. |
-| Task 10 (Load more button) | Gated on Task 1 — we do not yet know whether the free tier returns a usable `nextPage` token. The button markup exists and stays hidden while `nextPage` is null, so nothing is broken; the click handler is simply not written yet. |
-| ~~Task 19 (fact-check end-to-end test)~~ | **Done.** `TAVILY_API_KEY` set both locally and in prod; verified live, see below. |
+| Task 10 (Load more button) | **Unblocked** — see NewsData verification below. Not yet built, but the spike confirms it's safe to build. |
+
+### NewsData.io free-tier constraints (verified 2026-08-06)
+
+| Question | Answer |
+| --- | --- |
+| Articles per request | 10 |
+| `nextPage` token present | yes |
+| Page 2 works with that token | yes — 0 overlap between page 1 and page 2 results, confirmed genuinely advancing |
+| Categories returning results | all 7: politics, world, business, sports, entertainment, technology, health (plus `top`, the default) |
+| Categories returning nothing | none |
+| Languages returning results | all 13: en, hi, bn, mr, te, ta, gu, kn, ml, pa, or, as, ur — native-script headlines confirmed for each |
+| Languages returning nothing | none |
+| Daily request cap on this plan | not tested |
+
+No categories or languages need to be dropped from the allowlists. The `india`
+slug's provisional mapping to `politics` (see `src/lib/news/categories.ts`) is
+confirmed reasonable — it returned real India-relevant political headlines.
+
+**Decision: build Load more (Task 10) as planned** — the free tier's `nextPage`
+token is real and advances correctly.
 
 ### ⚠️ What could NOT be verified locally, and why
 
