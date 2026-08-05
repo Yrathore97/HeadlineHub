@@ -60,9 +60,11 @@ export async function search(binding: WebSearch, query: string): Promise<SearchH
   try {
     const res = await binding.search({ query, limit: MAX_RESULTS });
     return parseWebSearchResults(res);
-  } catch {
+  } catch (err) {
     // Evidence retrieval is best-effort: the caller falls back to reporting
-    // insufficient evidence rather than failing the whole fact check.
+    // insufficient evidence rather than failing the whole fact check. Logged
+    // because a silent failure here is indistinguishable from "no results".
+    console.error('WEBSEARCH binding failed:', err);
     return [];
   }
 }

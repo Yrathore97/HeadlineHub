@@ -93,7 +93,9 @@
       );
 
       if (!weatherRes.ok) throw new Error('Weather API error');
-      const weatherData = await weatherRes.json();
+      const weatherData = (await weatherRes.json()) as {
+        current_weather?: { temperature: number; weathercode: number };
+      };
       const current = weatherData.current_weather;
 
       if (!current) throw new Error('No weather data');
@@ -129,7 +131,12 @@
           { signal: AbortSignal.timeout(3000) }
         );
         if (geoRes.ok) {
-          const geoData = await geoRes.json();
+          const geoData = (await geoRes.json()) as {
+            city?: string;
+            locality?: string;
+            principalSubdivision?: string;
+            countryName?: string;
+          };
           resolvedCity = geoData.city || geoData.locality || geoData.principalSubdivision || geoData.countryName || '';
         }
       } catch (e) {}
@@ -143,7 +150,12 @@
     try {
       const ipRes = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3500) });
       if (ipRes.ok) {
-        const data = await ipRes.json();
+        const data = (await ipRes.json()) as {
+          latitude?: number;
+          longitude?: number;
+          city?: string;
+          region?: string;
+        };
         if (data.latitude && data.longitude) {
           const cityName = data.city || data.region || 'Local';
           await fetchWeather(data.latitude, data.longitude, cityName);
@@ -210,8 +222,8 @@
   type Quote = { price: number; changePct: number | null };
 
   fetch('/api/ticker')
-    .then((r) => (r.ok ? r.json() : Promise.reject(new Error('ticker unavailable'))))
-    .then((d: { sensex: Quote; nifty: Quote }) => {
+    .then((r) => (r.ok ? (r.json() as Promise<{ sensex: Quote; nifty: Quote }>) : Promise.reject(new Error('ticker unavailable'))))
+    .then((d) => {
       const el = document.getElementById('ticker');
       if (!el) return;
       const fmt = (n: Quote, label: string) =>

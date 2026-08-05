@@ -1,11 +1,22 @@
 ---
-const breakingNews = [
-  "⚡ ECI updates voter registration API protocols for upcoming elections",
-  "📈 RBI keeps repo rate steady; projects 7.2% GDP growth for FY27",
-  "🚀 ISRO launches Next-Gen NavIC satellite constellation successfully",
-  "🏏 India leads T20 series against Australia by 2-0 after dominant win in Bangalore",
-  "🔍 PIB Fact Check clarifies viral social media message regarding tax exemptions"
-];
+import type { Article } from '../lib/news/types';
+
+const MAX_TICKER_ITEMS = 8;
+
+let breakingNews: string[] = [];
+try {
+  const res = await fetch(new URL('/api/news?category=top', Astro.url));
+  if (res.ok) {
+    const articles = ((await res.json()) as { articles?: Article[] }).articles ?? [];
+    breakingNews = articles
+      .filter((a) => a?.title)
+      .sort((a, b) => Date.parse(b.publishedAt || '') - Date.parse(a.publishedAt || ''))
+      .slice(0, MAX_TICKER_ITEMS)
+      .map((a) => a.title);
+  }
+} catch {
+  /* stays hidden - never show invented headlines */
+}
 ---
 
 <section class="relative w-full overflow-hidden border-b border-hairline mesh-gradient-bg py-8 sm:py-12 md:py-16 transition-colors duration-200">
@@ -30,7 +41,7 @@ const breakingNews = [
 
       <!-- Subtitle -->
       <p class="text-xs sm:text-base md:text-lg text-body max-w-2xl font-normal leading-relaxed mb-6 sm:mb-8 px-2 sm:px-0">
-        NewzWale operates 24/7 collecting from news portals, wire agencies, government gazettes, and official releases across 10 Indian languages.
+        NewzWale collects live English-language headlines from Indian news sources, and checks claims against real evidence before returning a verdict.
       </p>
 
       <!-- Instant Fact-Check Quick Query Bar -->
@@ -57,7 +68,7 @@ const breakingNews = [
       <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-6 text-xs text-body">
         <div class="flex items-center gap-1.5 font-medium">
           <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          10 Indian Languages
+          Live Headline Stream
         </div>
         <span class="hidden sm:inline text-stone">•</span>
         <div class="flex items-center gap-1.5 font-medium">
@@ -74,7 +85,8 @@ const breakingNews = [
     </div>
   </div>
 
-  <!-- Ticker Marquee Bar -->
+  <!-- Ticker Marquee Bar (only renders with real headlines from /api/news) -->
+  {breakingNews.length > 0 && (
   <div class="w-full bg-surface-dark text-canvas dark:text-ink py-2 sm:py-2.5 mt-8 sm:mt-10 overflow-hidden border-y border-charcoal dark:border-hairline-soft">
     <div class="max-w-[1400px] mx-auto px-3 sm:px-4 flex items-center gap-3 sm:gap-4">
       <span class="font-mono-caption text-[10px] sm:text-[11px] text-primary font-semibold shrink-0 flex items-center gap-1 bg-charcoal dark:bg-hairline-soft px-2 py-0.5 rounded-full">
@@ -97,4 +109,5 @@ const breakingNews = [
       </div>
     </div>
   </div>
+  )}
 </section>
