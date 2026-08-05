@@ -145,7 +145,7 @@ const languages = [
   });
 
   // Language Selector Sync
-  const langSelect = document.getElementById('language-select') as HTMLSelectElement;
+  const langSelect = document.getElementById('language-select') as unknown as HTMLSelectElement;
   langSelect?.addEventListener('change', (e) => {
     const code = (e.target as HTMLSelectElement).value;
     const selectedOption = langSelect.options[langSelect.selectedIndex];

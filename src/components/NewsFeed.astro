@@ -12,7 +12,7 @@ const MAX_CARDS = 24;
 let articles: Article[] = [];
 try {
   const res = await fetch(new URL(`/api/news?category=${encodeURIComponent(category)}`, Astro.url));
-  if (res.ok) articles = (await res.json()).articles ?? [];
+  if (res.ok) articles = ((await res.json()) as { articles?: Article[] }).articles ?? [];
 } catch {
   /* leave empty; the template renders an empty state */
 }
