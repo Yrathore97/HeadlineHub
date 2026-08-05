@@ -9,6 +9,11 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
+    env:
+      # astro build spins up a Cloudflare preview server to prerender static
+      # pages, which eagerly opens a remote proxy session for any binding
+      # marked remote: true (the WEBSEARCH binding has no local emulation).
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
     steps:
     - uses: actions/checkout@v4
