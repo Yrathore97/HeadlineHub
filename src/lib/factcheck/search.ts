@@ -1,41 +1,20 @@
-// Web search provider: Cloudflare Web Search (native binding), NOT Tavily.
+// Web search provider: Tavily.
 //
-// WHY: Cloudflare ships a first-party Web Search binding over one shared
-// public-web corpus. It needs no third-party account, no extra secret, no
-// 1,000/month cap, and bills on the account already running this Worker.
-// The account token already carries the `websearch.run` scope, so access is
-// live. Declared in wrangler.jsonc as `"websearch": { "binding": "WEBSEARCH" }`
-// -- zero-config, a single object rather than an array, because there is
-// exactly one corpus and so no namespace or instance to name.
+// WHY NOT the Cloudflare Web Search binding: it was the original choice, but
+// every call on this account throws `Error: account_disabled` (confirmed via
+// `wrangler tail`). That is an account entitlement, not a bug we can fix in
+// code - Web Search is absent from Cloudflare's public bindings docs, so it
+// appears not to be generally available. The practical effect was that stage 2
+// retrieved nothing, stage 3 never ran, and every claim without a published
+// fact-check came back `insufficient_evidence`. Do not restore the binding
+// without first confirming it works on the account.
 //
-// SOURCES CONSULTED (this feature is NOT yet in the public developer docs at
-// developers.cloudflare.com -- the bindings index omits it -- so the
-// authoritative references are the shipped tooling and runtime types):
-//   - node_modules/wrangler/config-schema.json
-//     -> definitions.RawConfig.properties.websearch (wrangler 4.118.0):
-//        "Cloudflare Web Search binding. There is exactly one shared web
-//         corpus, so the binding is zero-config."
-//   - worker-configuration.d.ts (workerd@1.20260730.1), `declare abstract
-//     class WebSearch`: search(options) -> Promise<{ items, metadata }>.
-//   - Verified empirically: `npx wrangler types` accepts the `websearch` key
-//     and emits `WEBSEARCH: WebSearch` into the Env interface.
-//   - https://developers.cloudflare.com/ai-gateway/usage/web-search/ -- rejected:
-//     that proxies OpenAI/Anthropic/Perplexity search and needs their API keys.
-//   - https://developers.cloudflare.com/ai-search/ -- rejected: AI Search
-//     (formerly AutoRAG) indexes YOUR OWN content, not the live public web.
+// Tavily also returns better evidence: `content` is a query-relevant extract,
+// whereas Web Search only ever exposed the page-level meta description.
+// Grounding on an extract beats grounding on a meta tag.
 //
-// IMPORTANT CAVEAT: Web Search is discovery-only. It returns URLs and catalog
-// metadata but never page bodies or query-matched excerpts. The richest text
-// available per result is the page-level `description` (typically the meta
-// or og:description), which is what we surface as `snippet`. That is weaker
-// grounding than a query-relevant extract, so if stage 3 needs real passages,
-// fetch the hit's `url` and run it through `extractReadableText` in
-// ./extract.ts. Publisher access controls (including Pay-per-Crawl) apply at
-// fetch time, not at search time.
-//
-// The binding is injected rather than imported so this module stays pure
+// The API key is injected rather than imported so this module stays pure
 // TypeScript with no Worker imports, matching `cached(kv, ...)` in ../cache.ts.
-// `WebSearch` is an ambient global type from worker-configuration.d.ts.
 
 export interface SearchHit {
   title: string;
@@ -43,28 +22,54 @@ export interface SearchHit {
   snippet: string;
 }
 
+const ENDPOINT = 'https://api.tavily.com/search';
 const MAX_RESULTS = 5;
 
-export function parseWebSearchResults(raw: any): SearchHit[] {
-  const items = Array.isArray(raw?.items) ? raw.items : [];
-  return items
+export function parseTavilyResults(raw: any): SearchHit[] {
+  const results = Array.isArray(raw?.results) ? raw.results : [];
+  return results
     .filter((r: any) => r?.url && r?.title)
     .map((r: any) => ({
       title: String(r.title),
       url: String(r.url),
-      snippet: String(r.description ?? ''),
+      snippet: String(r.content ?? ''),
     }));
 }
 
-export async function search(binding: WebSearch, query: string): Promise<SearchHit[]> {
+export async function search(apiKey: string, query: string): Promise<SearchHit[]> {
+  // No key means no search. Returning [] degrades to insufficient_evidence,
+  // which is the honest outcome - never a guessed verdict.
+  if (!apiKey) {
+    console.error('TAVILY_API_KEY is not set; skipping evidence retrieval.');
+    return [];
+  }
+
   try {
-    const res = await binding.search({ query, limit: MAX_RESULTS });
-    return parseWebSearchResults(res);
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {
+        // Header, not a query param: a key in the URL leaks into logs.
+        Authorization: `Bearer ${apiKey}`,
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        query,
+        max_results: MAX_RESULTS,
+        search_depth: 'basic',
+      }),
+    });
+
+    if (!res.ok) {
+      console.error('Tavily search failed:', res.status);
+      return [];
+    }
+
+    return parseTavilyResults(await res.json());
   } catch (err) {
     // Evidence retrieval is best-effort: the caller falls back to reporting
     // insufficient evidence rather than failing the whole fact check. Logged
     // because a silent failure here is indistinguishable from "no results".
-    console.error('WEBSEARCH binding failed:', err);
+    console.error('Tavily search failed:', err);
     return [];
   }
 }
