@@ -1,5 +1,10 @@
-export function newsCacheKey(category = 'top'): string {
-  return `news:v1:${category}`;
+/** Cache key for one page of one category in one language.
+ *
+ *  v2 because v1 keyed on category ONLY - it would serve a Hindi reader the
+ *  cached English feed. The version bump also avoids reading v1 entries, which
+ *  were written under the old value shape (a bare Article[], not a NewsPage). */
+export function newsCacheKey(category = 'top', language = 'en', page?: string): string {
+  return `news:v2:${category}:${language}:${page ?? 'first'}`;
 }
 
 export function factCheckCacheKey(claim: string): string {
