@@ -22,7 +22,7 @@ const languages = [
 ];
 ---
 
-<header class="sticky top-0 z-50 w-full bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md border-b border-[#ebebeb] dark:border-[#262626] h-[64px] transition-colors duration-200">
+<header class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline h-[64px] transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto h-full px-3 sm:px-6 flex items-center justify-between">
 
     <!-- Brand Logo & Live Indicator -->
@@ -30,12 +30,12 @@ const languages = [
       <a href="/" class="flex items-center gap-2 group">
         <div class="relative flex items-center justify-center group-hover:scale-105 transition-transform">
           <LogoIcon className="w-7 h-7 sm:w-8 sm:h-8" />
-          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#2563eb] rounded-full animate-ping"></span>
-          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#2563eb] rounded-full"></span>
+          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-primary rounded-full animate-ping"></span>
+          <span class="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-primary rounded-full"></span>
         </div>
         <div class="flex flex-col">
-          <span class="font-semibold text-sm sm:text-base tracking-tight leading-tight text-[#171717] dark:text-white">NewzWale</span>
-          <span class="font-mono-caption text-[9px] sm:text-[10px] text-[#1d4ed8] dark:text-[#60a5fa] font-semibold tracking-widest leading-none">Only Facts News</span>
+          <span class="font-semibold text-sm sm:text-base tracking-tight leading-tight text-ink">NewzWale</span>
+          <span class="font-mono-caption text-[9px] sm:text-[10px] text-primary-strong font-semibold tracking-widest leading-none">Only Facts News</span>
         </div>
       </a>
     </div>
@@ -47,8 +47,8 @@ const languages = [
         aria-current={isNewsActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
           isNewsActive
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold'
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
+            ? 'bg-primary-strong text-on-primary shadow-stacked-sm font-semibold'
+            : 'text-body hover:text-ink hover:bg-gradient-start'
         }`}
       >
         News
@@ -59,11 +59,11 @@ const languages = [
         aria-current={isVerifyActive ? "page" : undefined}
         class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 ${
           isVerifyActive
-            ? 'bg-[#2563eb] text-white shadow-sm font-semibold'
-            : 'text-[#4d4d4d] dark:text-[#a1a1a1] hover:text-[#171717] dark:hover:text-white hover:bg-[#eff6ff] dark:hover:bg-[#1e293b]'
+            ? 'bg-primary-strong text-on-primary shadow-stacked-sm font-semibold'
+            : 'text-body hover:text-ink hover:bg-gradient-start'
         }`}
       >
-        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-white' : 'text-[#1d4ed8] dark:text-[#60a5fa]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-on-primary' : 'text-primary-strong'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         Fact Check
       </a>
     </nav>
@@ -75,12 +75,12 @@ const languages = [
       <button
         type="button"
         aria-label="Toggle Theme"
-        class="theme-toggle-trigger px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-[#171717] dark:bg-white hover:bg-[#333333] dark:hover:bg-[#262626] text-white dark:text-[#171717] border border-[#171717] dark:border-white rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 cursor-pointer shrink-0"
+        class="theme-toggle-trigger px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-ink hover:bg-charcoal text-canvas border border-ink rounded-full text-xs font-semibold shadow-stacked-sm transition-all duration-200 cursor-pointer shrink-0"
       >
-        <svg class="hidden dark:block w-3.5 h-3.5 text-[#171717]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="hidden dark:block w-3.5 h-3.5 text-canvas" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
-        <svg class="block dark:hidden w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="block dark:hidden w-3.5 h-3.5 text-canvas" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
         </svg>
         <span class="text-[10px] sm:text-[11px] uppercase tracking-wide hidden xs:inline">
@@ -91,12 +91,12 @@ const languages = [
 
       <!-- Global Language Selector -->
       <div class="relative group">
-        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-[#fafafa] dark:bg-[#141414] hover:bg-[#f5f5f5] dark:hover:bg-[#1f1f1f] text-[#171717] dark:text-white text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-[#2563eb]/50 dark:border-[#3b82f6]/60 rounded-lg cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#2563eb] h-[32px] truncate">
+        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-surface-card hover:bg-secondary-bg text-ink text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-hairline rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong h-[32px] truncate">
           {languages.map(lang => (
             <option value={lang.code}>{lang.name}</option>
           ))}
         </select>
-        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#1d4ed8] dark:text-[#60a5fa]">
+        <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-primary-strong">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
@@ -108,7 +108,7 @@ const languages = [
         aria-label="Toggle Navigation Menu"
         aria-expanded="false"
         aria-controls="mobile-menu-drawer"
-        class="lg:hidden p-1.5 text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#1f1f1f] rounded-lg transition-colors cursor-pointer"
+        class="lg:hidden p-1.5 text-ink hover:bg-surface-card rounded-md transition-colors cursor-pointer"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
@@ -116,11 +116,11 @@ const languages = [
   </div>
 
   <!-- Mobile Drawer Menu -->
-  <div id="mobile-menu-drawer" class="hidden lg:hidden border-b border-[#ebebeb] dark:border-[#262626] bg-white dark:bg-[#0a0a0a] px-4 py-4 space-y-2 shadow-lg text-xs font-semibold">
-    <a href="/" class={`block px-3.5 py-2 rounded-lg ${isNewsActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#171717] dark:text-white hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+  <div id="mobile-menu-drawer" class="hidden lg:hidden border-b border-hairline bg-canvas px-lg py-lg space-y-2 shadow-stacked-lg text-xs font-semibold">
+    <a href="/" class={`block px-3.5 py-2 rounded-md ${isNewsActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-ink hover:bg-surface-card'}`}>
       News
     </a>
-    <a href="/verify" class={`block px-3.5 py-2 rounded-lg flex items-center gap-2 ${isVerifyActive ? 'bg-[#2563eb] text-white font-bold shadow-sm' : 'text-[#1d4ed8] dark:text-[#60a5fa] hover:bg-[#fafafa] dark:hover:bg-[#141414]'}`}>
+    <a href="/verify" class={`block px-3.5 py-2 rounded-md flex items-center gap-2 ${isVerifyActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-primary-strong hover:bg-surface-card'}`}>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
       Fact Check
     </a>
