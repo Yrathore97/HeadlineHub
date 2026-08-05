@@ -30,7 +30,7 @@ new homepage composition, Tavily fact-check swap.
 | --- | --- |
 | Task 1 (API verification spike) | `.dev.vars` exists but `NEWSDATA_API_KEY=` is EMPTY. Needs the real key. |
 | Task 10 (Load more button) | Gated on Task 1 — we do not yet know whether the free tier returns a usable `nextPage` token. The button markup exists and stays hidden while `nextPage` is null, so nothing is broken; the click handler is simply not written yet. |
-| Task 19 (fact-check end-to-end test) | Needs `TAVILY_API_KEY`. Sign up at tavily.com, then `npx wrangler secret put TAVILY_API_KEY` for prod and add it to `.dev.vars` for local. |
+| ~~Task 19 (fact-check end-to-end test)~~ | **Done.** `TAVILY_API_KEY` set both locally and in prod; verified live, see below. |
 
 ### ⚠️ What could NOT be verified locally, and why
 
@@ -68,9 +68,23 @@ real key is in place.
 
 Local: `npm test` 99/99 pass, `npx astro check` 0 errors, CI green on PR #4.
 
-### Fact-check stage 2: switched from Cloudflare Web Search to Tavily
+### Fact-check stage 2: switched from Cloudflare Web Search to Tavily — CONFIRMED WORKING
 
-**Resolved in code, not yet proven live.** The old `WEBSEARCH` binding threw
+**Verified live 2026-08-06** against `TAVILY_API_KEY` (set locally in `.dev.vars`
+and in prod via `wrangler secret put`). Four claims tested through `/api/factcheck`:
+
+| Claim | Verdict | Basis |
+| --- | --- | --- |
+| "COVID vaccines contain microchips" | `insufficient_evidence` (unreadable, one cold-start request) | none |
+| "Chocolate cures the common cold within 24 hours" | `misleading`, correct nuanced reasoning | `ai_assessment` |
+| "RBI kept the repo rate unchanged..." | `verified`, 3 real citations | `ai_assessment` |
+| "Purple goats secretly run the postal service in Belgium" | `insufficient_evidence` | none |
+
+Stage 2 now returns real evidence (3 URLs with titles/publishers per query) instead
+of `[]` every time. Stage 3 reasons over it correctly — verdicts and citations are
+real, not guessed. The nonsense-claim guard still holds: no invented verdict.
+
+The old `WEBSEARCH` binding threw
 `Error: account_disabled` on every call — an account entitlement problem, not a
 code bug. Stage 2 returned `[]` every time, stage 3 never ran, and any claim
 without a published fact-check came back `insufficient_evidence`.
@@ -82,12 +96,6 @@ binding is removed from `wrangler.jsonc`.
 
 Tavily is also better evidence: its `content` field is a query-relevant extract,
 whereas Web Search only ever returned the page-level meta description.
-
-**Still to do (Task 19):** set `TAVILY_API_KEY` and confirm against the live
-model that (a) a claim with a published fact-check still returns `false` with a
-citation, (b) a claim WITHOUT one now returns a real verdict plus evidence
-instead of `insufficient_evidence`, and (c) a nonsense claim still refuses to
-guess. Until that runs, the fix is unproven in production.
 
 **Do not restore the Cloudflare binding** without first confirming it works on
 the account — that history is recorded in the comment at the top of `search.ts`
