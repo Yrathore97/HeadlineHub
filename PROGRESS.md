@@ -12,13 +12,48 @@ Full task list and rationale: `docs/superpowers/plans/2026-08-05-newzwale-rebuil
 ## Status
 
 - **Branch:** `rebuild/two-interface`
-- **Last commit:** `54174b6` — "fix: drop fabricated ticker headlines and unearned homepage SEO claims"
-- **Plan progress:** Phases 0–4 done (Tasks 1–20 of the plan). Phase 5 (Task 21) not started.
+- **Last commit:** `e364bdf` — "fix: log WEBSEARCH binding failures instead of swallowing them"
+- **Deployed:** yes, live at https://newzwale.editall.workers.dev (Version ID `fc1cae01-66c4-4995-a716-2a8b201bfcdd`)
+- **Plan progress:** Phases 0–4 done (Tasks 1–20). Task 21 (verification) run — deploy succeeded, code-level checks pass, but **two production evidence sources are dead**. See below. Not fixable from code; needs the user to act.
 
-**Next task:** Task 21 — full verification against production. Requires
-`npm run deploy` and a live checklist against the deployed Worker (see the
-plan's Task 21 table). **This deploys to the shared Cloudflare Worker —
-confirm with the user before running it, don't just do it.**
+**Next task:** Get the fact-check pipeline's evidence sources actually
+working in production (see "🔴 Blocking" below), then redo the Task 21
+checklist claim tests (`COVID vaccines contain microchips` should return
+`false`/`misleading` with a real citation — right now it returns
+`insufficient_evidence` because there is no evidence to check it against,
+not because the pipeline logic is wrong).
+
+### 🔴 Blocking — production fact-check has no evidence sources
+
+`npx wrangler secret list` on the deployed Worker returns `[]` — empty.
+Confirmed via `wrangler tail` during a live request:
+
+- **`GOOGLE_FACTCHECK_API_KEY` was never set.** Stage 1 (certified fact-checker
+  lookup) is silently skipped for every claim (code already handles a missing
+  key gracefully — see `src/pages/api/factcheck.ts`).
+- **`NEWSDATA_API_KEY` was never set.** `/api/news` runs entirely on the RSS
+  fallback (works, confirmed live — but no NewsData.io content, and RSS
+  ignores the `category` param).
+- **The `WEBSEARCH` binding throws `account_disabled` on every call**, caught
+  and logged (as of `e364bdf`) rather than silently swallowed as before. This
+  is a Cloudflare account entitlement issue, not a code bug — the API token
+  carries the `websearch.run` scope, but the account itself isn't enrolled.
+  This needs checking in the Cloudflare dashboard, or the search provider
+  needs to move to Tavily (`src/lib/factcheck/search.ts` docs the earlier
+  Task 16 decision to use the native binding instead — that decision may need
+  revisiting if Web Search stays unavailable on this account).
+
+**Net effect:** with all three sources down, `/api/factcheck` can only ever
+return `insufficient_evidence` right now — not because anything is broken
+logically (unit tests all pass, the pipeline correctly reports "nothing to
+check against"), but because there is genuinely nothing to check against in
+production. This is a config/account problem, not a code problem.
+
+**What the user needs to do (I can't do these — account creation and
+dashboard/plan changes are outside what I can act on):**
+1. Get a NewsData.io API key, then `npx wrangler secret put NEWSDATA_API_KEY`.
+2. Get a Google Fact Check Tools API key (Google Cloud Console), then `npx wrangler secret put GOOGLE_FACTCHECK_API_KEY`.
+3. Check the Cloudflare dashboard for why Web Search is `account_disabled` for this account — may need a beta opt-in, or a plan that supports it. If it can't be enabled, fall back to Tavily per the plan's Task 16 alternative (needs a `TAVILY_API_KEY` secret and a small rewrite of `search.ts`).
 
 ---
 
