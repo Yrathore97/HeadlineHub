@@ -17,18 +17,30 @@ Full task list and rationale: `docs/superpowers/plans/2026-08-05-newzwale-rebuil
 - **Deployed:** NOT deployed. All work below is local and uncommitted to `main`.
 - **Local verification:** `npm test` 131/131 pass, `npx astro check` 0 errors, `npm run build` completes.
 
-**Progress on the categories/language/pagination plan: 18 of 20 tasks done.**
+**Progress on the categories/language/pagination plan: 20 of 20 tasks done.**
 
 Done: category allowlist, language list, paginated data layer, cache key v2,
 feed helpers, `/api/news` params, ArticleCard, NewsFeed props, category pages,
 navbar category strip, functional language selector, CategoryRail, LeadStory,
-new homepage composition, Tavily fact-check swap.
+new homepage composition, Tavily fact-check swap, Load more pagination.
 
-### ⛔ Blocked — needs the user, not an agent
+**Next step: nothing blocking.** The branch is ready for review and deploy. It
+has NOT been deployed — that is a deliberate hand-back, not an oversight.
 
-| Task | Blocker |
+### Verified live against real APIs (2026-08-06)
+
+Both keys now set locally (`.dev.vars`) and in prod (`wrangler secret list` shows
+`NEWSDATA_API_KEY`, `GOOGLE_FACTCHECK_API_KEY`, `TAVILY_API_KEY`). Everything the
+earlier RSS-fallback runs could not confirm is now confirmed:
+
+| Check | Result |
 | --- | --- |
-| Task 10 (Load more button) | **Unblocked** — see NewsData verification below. Not yet built, but the spike confirms it's safe to build. |
+| Category differentiation | Real. `sports` returns Neeraj Chopra/CWG, `business` returns e-commerce policy, `health` returns medical stories — genuinely distinct feeds. |
+| In-language headlines | Real. `/?language=hi` renders Devanagari headlines (3/3 sampled), `<select>` stays on `hi` after reload. |
+| Lead story images | Real. 22 images render on the homepage; the imageless fallback path is no longer the only one exercised. |
+| Load more | Real. Homepage grid 6 → 16 cards on one click, all unique, `data-next-page` token advanced, console clean. Category pages also confirmed (10 → 20 on `/category/sports`). |
+| Homepage dedup | 26 cards, 26 unique — no repeats across lead / rails / grid. |
+| Fact-check pipeline | Real verdicts with real citations, see below. |
 
 ### NewsData.io free-tier constraints (verified 2026-08-06)
 
@@ -50,26 +62,17 @@ confirmed reasonable — it returned real India-relevant political headlines.
 **Decision: build Load more (Task 10) as planned** — the free tier's `nextPage`
 token is real and advances correctly.
 
-### ⚠️ What could NOT be verified locally, and why
+### Known local-dev gotcha: stale KV cache
 
-The local `.dev.vars` has an empty `NEWSDATA_API_KEY`, so `/api/news` served the
-English RSS fallback for every request during development. RSS has no category
-support, no images, and no pagination. Consequently these remain **unverified
-against real data**:
+`/api/news` caches per category+language+page in KV for 20 minutes. During the
+keyless phase of development, RSS-fallback responses (115 articles,
+`nextPage: null`) were cached under several keys. After adding the real API key,
+those entries keep serving until their TTL expires — which looks exactly like
+"the category param is broken" or "Load more is missing".
 
-- Whether each category actually returns distinct articles.
-- Whether the lead story renders correctly with an image (RSS gives none, so the
-  imageless fallback path is what was exercised).
-- Whether `?language=hi` returns genuinely Hindi headlines. The plumbing is
-  verified — URL, param validation, server-rendered `selected` option, and the
-  masthead date correctly re-localising to `बुध, 5 अग॰ 2026` — but the headline
-  text itself stayed English because the upstream call never had a key.
-- Pagination end to end.
-
-On the homepage with RSS data, all four category rails select the same trailing
-articles (40 card nodes, 26 unique ids). That is the RSS artifact, not a dedup
-bug — lead-vs-rest dedup was verified to have zero overlap. Re-check this once a
-real key is in place.
+If a category returns 115 articles with a null `nextPage`, that is the stale
+cache, not a bug. Wait out the TTL or use an uncached category/language combo to
+check. Do not "fix" the code in response to it.
 
 ### Task 21 checklist results (run 2026-08-05 against production)
 
