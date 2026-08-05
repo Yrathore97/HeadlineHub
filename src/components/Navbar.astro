@@ -1,29 +1,22 @@
 ---
 import LogoIcon from './LogoIcon.astro';
+import { CATEGORIES } from '../lib/news/categories';
+import { LANGUAGES, isValidLanguage, DEFAULT_LANGUAGE } from '../lib/news/languages';
 
 const currentPath = Astro.url.pathname;
 const isNewsActive = currentPath === '/' || currentPath === '';
 const isVerifyActive = currentPath.startsWith('/verify');
 
-const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'hi', name: 'हिंदी (Hindi)' },
-  { code: 'bn', name: 'বাংলা (Bengali)' },
-  { code: 'mr', name: 'मराठी (Marathi)' },
-  { code: 'te', name: 'తెలుగు (Telugu)' },
-  { code: 'ta', name: 'தமிழ் (Tamil)' },
-  { code: 'gu', name: 'ગુજરાતી (Gujarati)' },
-  { code: 'kn', name: 'ಕನ್ನಡ (Kannada)' },
-  { code: 'ml', name: 'മലയാളം (Malayalam)' },
-  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
-  { code: 'or', name: 'ଓଡ଼ିଆ (Odia)' },
-  { code: 'as', name: 'অসমীয়া (Assamese)' },
-  { code: 'ur', name: 'اردو (Urdu)' },
-];
+const activeCategory = currentPath.startsWith('/category/')
+  ? currentPath.split('/')[2]
+  : null;
+
+const rawLanguage = Astro.url.searchParams.get('language');
+const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
-<header class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline h-[64px] transition-colors duration-200">
-  <div class="max-w-[1400px] mx-auto h-full px-3 sm:px-6 flex items-center justify-between">
+<header class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto h-[64px] px-3 sm:px-6 flex items-center justify-between">
 
     <!-- Brand Logo & Live Indicator -->
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -91,8 +84,8 @@ const languages = [
       <!-- Global Language Selector -->
       <div class="relative group">
         <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-surface-card hover:bg-secondary-bg text-ink text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-hairline rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong h-[32px] truncate">
-          {languages.map(lang => (
-            <option value={lang.code}>{lang.name}</option>
+          {LANGUAGES.map(lang => (
+            <option value={lang.code} selected={lang.code === currentLanguage}>{lang.name}</option>
           ))}
         </select>
         <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-primary-strong">
@@ -114,6 +107,28 @@ const languages = [
     </div>
   </div>
 
+  <!-- Category strip: horizontally scrollable on narrow screens -->
+  <div class="w-full border-t border-hairline-soft bg-surface-soft">
+    <nav
+      aria-label="News categories"
+      class="max-w-[1400px] mx-auto px-3 sm:px-6 flex items-center gap-1 overflow-x-auto no-scrollbar h-[42px]"
+    >
+      {CATEGORIES.map((c) => (
+        <a
+          href={`/category/${c.slug}`}
+          aria-current={activeCategory === c.slug ? 'page' : undefined}
+          class={`shrink-0 px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 ${
+            activeCategory === c.slug
+              ? 'bg-primary-strong text-on-primary font-semibold shadow-stacked-sm'
+              : 'text-body hover:text-ink hover:bg-gradient-start'
+          }`}
+        >
+          {c.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+
   <!-- Mobile Drawer Menu -->
   <div id="mobile-menu-drawer" class="hidden lg:hidden border-b border-hairline bg-canvas px-4 py-4 space-y-2 shadow-stacked-lg text-xs font-semibold">
     <a href="/" class={`block px-3.5 py-2 rounded-md ${isNewsActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-ink hover:bg-surface-card'}`}>
@@ -122,6 +137,23 @@ const languages = [
     <a href="/verify" class={`block px-3.5 py-2 rounded-md ${isVerifyActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-primary-strong hover:bg-surface-card'}`}>
       Fact Check
     </a>
+
+    <div class="pt-2 mt-2 border-t border-hairline-soft">
+      <p class="px-3.5 pb-1 font-mono-caption text-mute">CATEGORIES</p>
+      {CATEGORIES.map((c) => (
+        <a
+          href={`/category/${c.slug}`}
+          aria-current={activeCategory === c.slug ? 'page' : undefined}
+          class={`block px-3.5 py-2 rounded-md ${
+            activeCategory === c.slug
+              ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm'
+              : 'text-ink hover:bg-surface-card'
+          }`}
+        >
+          {c.label}
+        </a>
+      ))}
+    </div>
   </div>
 </header>
 
