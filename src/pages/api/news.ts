@@ -8,6 +8,20 @@ import { isValidLanguage, DEFAULT_LANGUAGE } from '../../lib/news/languages';
 import type { NewsPage } from '../../lib/news/types';
 
 const TTL = 20 * 60;
+// NewsData occasionally fails when the call originates from Cloudflare's
+// shared Worker egress IPs, even though the identical request succeeds
+// reliably from a normal client (observed: ~40% success rate from the Worker
+// vs 100% from a plain script, against the same key at the same time). RSS
+// fallback content is real content, not an error, so caching it for the full
+// 20 minutes would leave a transient failure looking permanent to a reader.
+// ponytail: short TTL + a few retries is a mitigation for shared-IP flakiness,
+// not a fix for it - if NewsData is hard-blocking the range outright rather
+// than probabilistically throttling it, revisit with a different egress path.
+const FALLBACK_TTL = 2 * 60;
+const NEWSDATA_ATTEMPTS = 3;
+const RETRY_DELAY_MS = 300;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const GET: APIRoute = async ({ url }) => {
   // Unrecognised values fall back to the default rather than being forwarded
@@ -24,28 +38,38 @@ export const GET: APIRoute = async ({ url }) => {
 
   const apiKey = (env as unknown as { NEWSDATA_API_KEY?: string }).NEWSDATA_API_KEY ?? '';
 
-  const result = await cached<NewsPage>(
-    env.NEWZ_CACHE,
-    newsCacheKey(category, language, page),
-    TTL,
-    async () => {
+  let usedFallback = false;
+  const cacheKey = newsCacheKey(category, language, page);
+
+  const result = await cached<NewsPage>(env.NEWZ_CACHE, cacheKey, TTL, async () => {
+    for (let attempt = 1; attempt <= NEWSDATA_ATTEMPTS; attempt++) {
       try {
         const fresh = await fetchNewsData(apiKey, { category, language, page });
         if (fresh.articles.length > 0) return fresh;
-        throw new Error('empty');
       } catch {
-        // RSS is English-only and unpaginated, so it contributes no nextPage.
-        // It is a last resort for the first page only - paging into a fallback
-        // that cannot page would return the same articles forever.
-        if (page) throw new Error('no further pages');
-        const articles = await fetchRssFallback();
-        // Throw rather than return [] so cached() can serve its stale copy
-        // instead of caching an empty feed for the full TTL.
-        if (articles.length === 0) throw new Error('no articles');
-        return { articles, nextPage: null };
+        // try again, or fall through to RSS below on the last attempt
       }
-    },
-  );
+      if (attempt < NEWSDATA_ATTEMPTS) await sleep(RETRY_DELAY_MS);
+    }
+
+    usedFallback = true;
+    // RSS is English-only and unpaginated, so it contributes no nextPage.
+    // It is a last resort for the first page only - paging into a fallback
+    // that cannot page would return the same articles forever.
+    if (page) throw new Error('no further pages');
+    const articles = await fetchRssFallback();
+    // Throw rather than return [] so cached() can serve its stale copy
+    // instead of caching an empty feed for the full TTL.
+    if (articles.length === 0) throw new Error('no articles');
+    return { articles, nextPage: null };
+  });
+
+  if (usedFallback && result) {
+    // cached() already wrote this at the full 20-minute TTL above - overwrite
+    // it with the short one so the next request retries NewsData soon instead
+    // of serving English fallback content for the rest of that window.
+    await env.NEWZ_CACHE.put(cacheKey, JSON.stringify(result), { expirationTtl: FALLBACK_TTL });
+  }
 
   return new Response(
     JSON.stringify({

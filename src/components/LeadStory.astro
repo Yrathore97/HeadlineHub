@@ -17,7 +17,12 @@ const { lead, secondary } = Astro.props;
       <span class="font-mono-caption text-mute">TOP STORY</span>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <!-- items-start: without it, grid stretches the lead column to match the
+         3-stacked-secondary-cards column height. ArticleCard's h-full +
+         justify-between then pushes its footer to that full stretched height,
+         leaving a large blank gap under the summary whenever the lead article
+         has no image (its natural content is much shorter than 3 cards). -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
       <div class="lg:col-span-2">
         <ArticleCard article={lead} size="lead" />
       </div>
