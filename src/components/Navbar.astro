@@ -57,13 +57,12 @@ const languages = [
       <a
         href="/verify"
         aria-current={isVerifyActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 flex items-center gap-1 ${
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 ${
           isVerifyActive
             ? 'bg-primary-strong text-on-primary shadow-stacked-sm font-semibold'
             : 'text-body hover:text-ink hover:bg-gradient-start'
         }`}
       >
-        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-on-primary' : 'text-primary-strong'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         Fact Check
       </a>
     </nav>
@@ -120,8 +119,7 @@ const languages = [
     <a href="/" class={`block px-3.5 py-2 rounded-md ${isNewsActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-ink hover:bg-surface-card'}`}>
       News
     </a>
-    <a href="/verify" class={`block px-3.5 py-2 rounded-md flex items-center gap-2 ${isVerifyActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-primary-strong hover:bg-surface-card'}`}>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <a href="/verify" class={`block px-3.5 py-2 rounded-md ${isVerifyActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-primary-strong hover:bg-surface-card'}`}>
       Fact Check
     </a>
   </div>
