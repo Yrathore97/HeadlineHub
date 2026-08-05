@@ -16,7 +16,7 @@
       </div>
 
       <!-- Verification Tool Panel -->
-      <div class="bg-surface-soft border border-hairline rounded-lg p-lg sm:p-xl shadow-stacked-md">
+      <div class="bg-surface-soft border border-hairline rounded-lg p-4 sm:p-6 shadow-stacked-md">
         
         <!-- Input Tabs -->
         <div class="flex items-center gap-2 border-b border-hairline pb-3 mb-4 overflow-x-auto text-xs font-medium">
@@ -43,7 +43,7 @@
             id="claim-text" 
             rows="3" 
             placeholder="Paste news headline or claim to verify (e.g. 'RBI keeps repo rate steady at 6.5%')"
-            class="w-full bg-surface-elevated border border-hairline rounded-md p-md text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong resize-none"
+            class="w-full bg-surface-elevated border border-hairline rounded-md p-3 text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong resize-none"
           ></textarea>
         </div>
 
@@ -80,7 +80,7 @@
         <!-- Output Verdict Card -->
         <div id="verdict-card" class="hidden mt-6 pt-6 border-t border-hairline animate-fade-in space-y-6">
           
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-lg rounded-md bg-surface-elevated border border-hairline">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-md bg-surface-elevated border border-hairline">
             <div class="flex items-center gap-3">
               <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm">
                 <!-- Injected via JS -->
@@ -96,7 +96,7 @@
           <!-- Short Verdict Explanation -->
           <div>
             <h4 class="text-xs font-mono-caption text-mute mb-1">SHORT VERDICT & FACT SUMMARY</h4>
-            <div id="verdict-short-answer" class="text-sm font-medium text-ink bg-surface-elevated p-lg rounded-md border border-hairline leading-relaxed shadow-stacked-sm">
+            <div id="verdict-short-answer" class="text-sm font-medium text-ink bg-surface-elevated p-4 rounded-md border border-hairline leading-relaxed shadow-stacked-sm">
               <!-- Injected via JS -->
             </div>
           </div>
@@ -120,7 +120,7 @@
             </div>
 
             <!-- Chat History Messages Container -->
-            <div id="chat-messages-box" class="space-y-3 max-h-72 overflow-y-auto p-lg bg-surface-elevated border border-hairline rounded-md text-xs">
+            <div id="chat-messages-box" class="space-y-3 max-h-72 overflow-y-auto p-4 bg-surface-elevated border border-hairline rounded-md text-xs">
               <div class="text-mute text-center font-mono text-[11px] py-2">
                 Ask follow-up questions about this specific claim and its cited evidence...
               </div>
@@ -132,7 +132,7 @@
                 type="text" 
                 id="chat-input" 
                 placeholder="Why is this claim false? What do official sources say?"
-                class="flex-1 bg-surface-elevated border border-hairline rounded-md px-md py-sm text-xs text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong"
+                class="flex-1 bg-surface-elevated border border-hairline rounded-md px-3 py-2 text-xs text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong"
               />
               <button 
                 type="submit" 
@@ -222,7 +222,7 @@
 
       if (sourcesList && data.sources_checked) {
         sourcesList.innerHTML = data.sources_checked.map((s: any) => `
-          <a href="${s.url || '#'}" target="_blank" class="p-md bg-surface-elevated border border-hairline rounded-md hover:border-primary transition-all flex items-center justify-between group">
+          <a href="${s.url || '#'}" target="_blank" class="p-3 bg-surface-elevated border border-hairline rounded-md hover:border-primary transition-all flex items-center justify-between group">
             <span class="font-medium text-ink group-hover:text-primary-strong">${s.name || 'Wire Dispatch'}</span>
             <span class="font-mono text-[10px] text-mute">View Primary Source ↗</span>
           </a>
@@ -256,7 +256,7 @@
     if (!chatMessagesBox) return;
     chatMessagesBox.innerHTML = msgs.map(m => `
       <div class="flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}">
-        <div class="max-w-[85%] p-md rounded-md text-xs ${m.role === 'user' ? 'bg-primary-strong text-on-primary font-semibold' : 'bg-surface-soft text-ink border border-hairline'} shadow-stacked-sm">
+        <div class="max-w-[85%] p-3 rounded-md text-xs ${m.role === 'user' ? 'bg-primary-strong text-on-primary font-semibold' : 'bg-surface-soft text-ink border border-hairline'} shadow-stacked-sm">
           <div class="font-mono text-[10px] opacity-75 mb-0.5">${m.role === 'user' ? 'YOU' : 'GROUNDED AI ASSISTANT'}</div>
           <div>${m.content}</div>
         </div>
@@ -277,7 +277,7 @@
     const userBubble = document.createElement('div');
     userBubble.className = 'flex flex-col items-end';
     userBubble.innerHTML = `
-      <div class="max-w-[85%] p-md rounded-md text-xs bg-primary-strong text-on-primary font-semibold shadow-stacked-sm">
+      <div class="max-w-[85%] p-3 rounded-md text-xs bg-primary-strong text-on-primary font-semibold shadow-stacked-sm">
         <div class="font-mono text-[10px] opacity-75 mb-0.5">YOU</div>
         <div>${msg}</div>
       </div>
@@ -298,7 +298,7 @@
       const aiBubble = document.createElement('div');
       aiBubble.className = 'flex flex-col items-start';
       aiBubble.innerHTML = `
-        <div class="max-w-[85%] p-md rounded-md text-xs bg-surface-soft text-ink border border-hairline shadow-stacked-sm">
+        <div class="max-w-[85%] p-3 rounded-md text-xs bg-surface-soft text-ink border border-hairline shadow-stacked-sm">
           <div class="font-mono text-[10px] opacity-75 mb-0.5 text-primary-strong font-semibold">GROUNDED AI ASSISTANT</div>
           <div>${data.reply}</div>
         </div>

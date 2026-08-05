@@ -33,13 +33,13 @@ const inquiryTypes = [
         </p>
       </div>
 
-      <div class="bg-surface-elevated border border-hairline rounded-md p-xl sm:p-xxl shadow-stacked-sm">
+      <div class="bg-surface-elevated border border-hairline rounded-md p-6 sm:p-8 shadow-stacked-sm">
         <h2 class="text-lg font-bold text-ink mb-2">Email the editorial desk</h2>
         <p class="text-sm text-body leading-relaxed">
           Write to us directly and your message lands with the editors and engineers who run the wire. Include source links and the exact claim text where you can — it makes verification much faster.
         </p>
 
-        <ul class="mt-lg space-y-2 text-xs text-body">
+        <ul class="mt-4 space-y-2 text-xs text-body">
           {inquiryTypes.map((type) => (
             <li class="flex items-center gap-2">
               <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
@@ -50,13 +50,13 @@ const inquiryTypes = [
 
         <a
           href={`mailto:${contactEmail}`}
-          class="btn-primary inline-flex items-center gap-2 px-xl mt-xl text-sm break-all"
+          class="btn-primary inline-flex items-center gap-2 px-6 mt-6 text-sm break-all"
         >
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
           {contactEmail}
         </a>
 
-        <p class="mt-lg text-xs text-mute leading-relaxed">
+        <p class="mt-4 text-xs text-mute leading-relaxed">
           We read every message. Corrections to published summaries are prioritised over all other inquiries.
         </p>
       </div>

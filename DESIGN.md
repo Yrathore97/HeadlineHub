@@ -110,8 +110,23 @@ Note that `@theme` **overrides** Tailwind's default radius scale. `rounded-lg` h
 
 ## Spacing
 
-Eight-point scale: `xxs` 4, `xs` 6, `sm` 8, `md` 12, `lg` 16, `xl` 24, `xxl` 32,
-`section` 64. Available as `p-*`, `m-*`, `gap-*`.
+Use Tailwind's **stock numeric scale**. It already lands on the system's 8-point values:
+
+| System | px | Utility |
+|---|---|---|
+| xxs | 4 | `p-1` |
+| xs | 6 | `p-1.5` |
+| sm | 8 | `p-2` |
+| md | 12 | `p-3` |
+| lg | 16 | `p-4` |
+| xl | 24 | `p-6` |
+| xxl | 32 | `p-8` |
+| section | 64 | `p-16` |
+
+**Do not add named `--spacing-*` tokens to `@theme`.** Tailwind v4 resolves
+`max-w-*`, `w-*` and `h-*` through the spacing scale, so defining `--spacing-xl`
+silently redefines `max-w-xl` from 36rem to 24px. That shipped once and collapsed a
+paragraph on /verify into a one-word-per-line column.
 
 ## Components
 

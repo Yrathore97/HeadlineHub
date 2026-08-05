@@ -80,15 +80,14 @@
   --radius-md: 16px;
   --radius-lg: 32px;
 
-  /* 8-point spacing */
-  --spacing-xxs: 4px;
-  --spacing-xs: 6px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-  --spacing-xxl: 32px;
-  --spacing-section: 64px;
+  /* NO custom --spacing-* tokens here, deliberately.
+     Tailwind v4 resolves max-w-*, w-* and h-* through the spacing scale, so
+     naming a token `--spacing-xl` silently redefines `max-w-xl` from 36rem to
+     that token's value. That shipped once and collapsed a paragraph to a 24px
+     column. The stock numeric scale already lands on the system's 8-point
+     values, so use it:
+       4px = 1 | 6px = 1.5 | 8px = 2 | 12px = 3
+      16px = 4 | 24px = 6  | 32px = 8 | 64px = 16 */
 }
 
 /* ---------------------------------------------------------------------------
