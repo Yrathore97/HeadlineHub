@@ -1,35 +1,35 @@
 ---
 ---
 
-<div id="masthead-info-strip" class="w-full bg-[#eff6ff] dark:bg-[#091329] border-b border-[#bfdbfe] dark:border-[#1e293b] py-1.5 px-4 text-xs font-mono transition-colors duration-200">
+<div id="masthead-info-strip" class="w-full bg-gradient-start border-b border-hairline py-1.5 px-4 text-xs font-mono transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
-    
+
     <!-- Left: Weather & Location -->
-    <div id="weather-widget-container" class="flex items-center gap-2 text-[#1e40af] dark:text-[#93c5fd] shrink-0">
-      <span class="text-[#2563eb] dark:text-[#60a5fa]">📍</span>
-      <span id="weather-location" class="font-semibold text-[#0f172a] dark:text-[#f8fafc]">New Delhi</span>
-      <span id="weather-temp" class="font-semibold text-[#1d4ed8] dark:text-[#60a5fa]">31°C</span>
+    <div id="weather-widget-container" class="flex items-center gap-2 text-body shrink-0">
+      <span class="text-primary-strong">📍</span>
+      <span id="weather-location" class="font-semibold text-ink">New Delhi</span>
+      <span id="weather-temp" class="font-semibold text-primary-strong">31°C</span>
       <span id="weather-condition">☀️ Sunny</span>
     </div>
 
     <!-- Center: Today's Date in Selected Language -->
-    <div class="flex items-center gap-1.5 text-[#1e40af] dark:text-[#93c5fd] shrink-0">
-      <span class="text-[#2563eb] dark:text-[#60a5fa]">📅</span>
-      <span id="masthead-date-text" class="font-medium text-[#0f172a] dark:text-[#f8fafc]">
+    <div class="flex items-center gap-1.5 text-body shrink-0">
+      <span class="text-primary-strong">📅</span>
+      <span id="masthead-date-text" class="font-medium text-ink">
         Tue, Aug 4, 2026
       </span>
     </div>
 
     <!-- Right: Front-Page Financial Market Index Snippets (live; hidden unless real quotes load) -->
     <div class="flex items-center gap-3 text-[11px] shrink-0">
-      <span id="ticker" hidden class="font-semibold text-[#18181b] dark:text-[#f4f4f5] whitespace-nowrap"></span>
+      <span id="ticker" hidden class="font-semibold text-ink whitespace-nowrap"></span>
     </div>
 
   </div>
 </div>
 
 <script>
-  const WEATHER_CACHE_KEY = 'headlinehub_weather_cache';
+  const WEATHER_CACHE_KEY = 'newzwale_weather_cache';
   const WEATHER_TTL = 15 * 60 * 1000; // 15 minutes TTL
 
   // Locale mapper for dates

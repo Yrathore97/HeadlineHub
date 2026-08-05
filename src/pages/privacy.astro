@@ -60,28 +60,28 @@ const privacySchema = {
   <Navbar />
   <MastheadInfoStrip />
 
-  <main class="flex-1 py-12 bg-[#fafafa] dark:bg-[#000000]">
+  <main class="flex-1 py-12 bg-surface-soft">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="mb-10">
-        <span class="font-mono-caption text-[#1d4ed8] dark:text-[#60a5fa] text-xs font-semibold">LEGAL & PRIVACY</span>
-        <h1 class="text-3xl sm:text-5xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+        <span class="font-mono-caption text-primary-strong text-xs font-semibold">LEGAL & PRIVACY</span>
+        <h1 class="text-3xl sm:text-5xl font-bold text-ink tracking-tight mt-1">
           Privacy Policy
         </h1>
-        <p class="text-base text-[#71717a] dark:text-[#a1a1aa] mt-3 leading-relaxed">
+        <p class="text-base text-body mt-3 leading-relaxed">
           Last updated: August 2026. NewzWale ("we", "our", "us") is committed to protecting your privacy and handling your personal data with transparency. This policy explains what we collect, how we use it, and the choices you have.
         </p>
       </div>
 
       <div class="space-y-6">
         {sections.map((section, index) => (
-          <div class="p-6 bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl">
+          <div class="p-xl bg-surface-elevated border border-hairline rounded-md">
             <div class="flex items-center gap-3 mb-2">
-              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-[#dbeafe] dark:bg-[#172554] text-[#1d4ed8] dark:text-[#60a5fa] text-[11px] font-mono font-bold flex items-center justify-center">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-primary-strong text-on-primary text-[11px] font-mono font-bold flex items-center justify-center">
                 {index + 1}
               </span>
-              <h2 class="text-base font-bold text-[#171717] dark:text-white">{section.heading}</h2>
+              <h2 class="text-base font-bold text-ink">{section.heading}</h2>
             </div>
-            <p class="pl-9 text-xs sm:text-sm text-[#4d4d4d] dark:text-[#a1a1aa] leading-relaxed">
+            <p class="pl-9 text-xs sm:text-sm text-body leading-relaxed">
               {section.body}
             </p>
           </div>

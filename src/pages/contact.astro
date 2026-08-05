@@ -5,56 +5,60 @@ import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import Footer from '../components/Footer.astro';
 
 export const prerender = true;
+
+const contactEmail = 'yrathore.97.dhn@gmail.com';
+
+const inquiryTypes = [
+  'Claim Verification Tip',
+  'Editorial Correction',
+  'API & Syndication Request',
+  'General Support'
+];
 ---
 
 <Layout title="Contact Editorial & Wire Tip Line | NewzWale">
   <Navbar />
   <MastheadInfoStrip />
-  
-  <main class="flex-1 py-12 bg-[#fafafa] dark:bg-[#000000]">
+
+  <main class="flex-1 py-12 bg-surface-soft">
     <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      
+
       <div class="mb-8">
-        <span class="font-mono-caption text-[#1d4ed8] dark:text-[#60a5fa] text-xs font-semibold">GET IN TOUCH</span>
-        <h1 class="text-3xl font-bold text-[#171717] dark:text-white tracking-tight mt-1">
+        <span class="font-mono-caption text-primary-strong text-xs font-semibold">GET IN TOUCH</span>
+        <h1 class="text-3xl font-bold text-ink tracking-tight mt-1">
           Editorial Tip Line & Inquiries
         </h1>
-        <p class="text-sm text-[#71717a] dark:text-[#a1a1aa] mt-1">
+        <p class="text-sm text-body mt-1">
           Submit claim verification leads, report corrections, or get in touch with our editorial and AI engineering team.
         </p>
       </div>
 
-      <div class="bg-white dark:bg-[#0a0a0a] border border-[#ebebeb] dark:border-[#262626] rounded-2xl p-6 sm:p-8 shadow-sm">
-        <form id="contact-form" class="space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-[#171717] dark:text-white mb-1">Your Full Name</label>
-            <input type="text" required placeholder="e.g. Rahul Sharma" class="w-full p-3 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-xl text-xs text-[#171717] dark:text-white focus:outline-none focus:border-[#2563eb]" />
-          </div>
+      <div class="bg-surface-elevated border border-hairline rounded-md p-xl sm:p-xxl shadow-stacked-sm">
+        <h2 class="text-lg font-bold text-ink mb-2">Email the editorial desk</h2>
+        <p class="text-sm text-body leading-relaxed">
+          Write to us directly and your message lands with the editors and engineers who run the wire. Include source links and the exact claim text where you can — it makes verification much faster.
+        </p>
 
-          <div>
-            <label class="block text-xs font-semibold text-[#171717] dark:text-white mb-1">Email Address</label>
-            <input type="email" required placeholder="name@example.com" class="w-full p-3 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-xl text-xs text-[#171717] dark:text-white focus:outline-none focus:border-[#2563eb]" />
-          </div>
+        <ul class="mt-lg space-y-2 text-xs text-body">
+          {inquiryTypes.map((type) => (
+            <li class="flex items-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></span>
+              {type}
+            </li>
+          ))}
+        </ul>
 
-          <div>
-            <label class="block text-xs font-semibold text-[#171717] dark:text-white mb-1">Subject / Inquiry Type</label>
-            <select class="w-full p-3 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-xl text-xs text-[#171717] dark:text-white focus:outline-none focus:border-[#2563eb]">
-              <option value="claim">Claim Verification Tip</option>
-              <option value="correction">Editorial Correction</option>
-              <option value="api">API & Syndication Request</option>
-              <option value="general">General Support</option>
-            </select>
-          </div>
+        <a
+          href={`mailto:${contactEmail}`}
+          class="btn-primary inline-flex items-center gap-2 px-xl mt-xl text-sm break-all"
+        >
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          {contactEmail}
+        </a>
 
-          <div>
-            <label class="block text-xs font-semibold text-[#171717] dark:text-white mb-1">Message Details</label>
-            <textarea rows="5" required placeholder="Provide links, claim text, or message details..." class="w-full p-3 bg-[#fafafa] dark:bg-[#141414] border border-[#ebebeb] dark:border-[#262626] rounded-xl text-xs text-[#171717] dark:text-white focus:outline-none focus:border-[#2563eb]"></textarea>
-          </div>
-
-          <button type="submit" class="w-full py-3 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold text-xs rounded-xl shadow-sm transition-all cursor-pointer">
-            Submit Inquiries
-          </button>
-        </form>
+        <p class="mt-lg text-xs text-mute leading-relaxed">
+          We read every message. Corrections to published summaries are prioritised over all other inquiries.
+        </p>
       </div>
 
     </div>
@@ -62,11 +66,3 @@ export const prerender = true;
 
   <Footer />
 </Layout>
-
-<script>
-  document.getElementById('contact-form')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('Thank you! Your message has been routed to the NewzWale editorial desk.');
-    (e.target as HTMLFormElement).reset();
-  });
-</script>
