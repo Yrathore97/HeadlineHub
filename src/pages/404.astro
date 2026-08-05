@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import LogoIcon from '../components/LogoIcon.astro';
+
+export const prerender = true;
 ---
 
 <Layout title="404 - Page Not Found | NewzWale" description="The page you are looking for could not be found. Explore the latest news and fact-checked stories on NewzWale.">
@@ -10,24 +12,24 @@ import LogoIcon from '../components/LogoIcon.astro';
         <a href="/" class="flex items-center gap-2.5">
           <LogoIcon className="w-9 h-9" />
           <span class="text-left">
-            <span class="block font-semibold text-lg text-[#171717] dark:text-white leading-none">NewzWale</span>
-            <span class="block font-mono-caption text-[10px] text-[#1d4ed8] dark:text-[#60a5fa] font-semibold tracking-widest mt-0.5">Only Facts News</span>
+            <span class="block font-semibold text-lg text-ink leading-none">NewzWale</span>
+            <span class="block font-mono-caption text-[10px] text-primary-strong font-semibold tracking-widest mt-0.5">Only Facts News</span>
           </span>
         </a>
 
-        <div class="font-mono-caption text-xs text-[#1d4ed8] dark:text-[#60a5fa] flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-[#2563eb] animate-pulse"></span>
+        <div class="font-mono-caption text-xs text-primary-strong flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
           HTTP 404 — ROUTE NOT FOUND
         </div>
 
-        <h1 class="text-6xl sm:text-8xl font-bold tracking-tighter text-[#171717] dark:text-white leading-none">
+        <h1 class="text-6xl sm:text-8xl font-bold tracking-tighter text-ink leading-none">
           404
         </h1>
 
-        <p class="text-lg font-semibold text-[#171717] dark:text-white tracking-tight">
+        <p class="text-lg font-semibold text-ink tracking-tight">
           This page doesn't exist.
         </p>
-        <p class="text-sm text-[#4d4d4d] dark:text-[#a1a1a1] leading-relaxed max-w-md">
+        <p class="text-sm text-body leading-relaxed max-w-md">
           The link you followed may be broken, or the story may have been removed. Head back to the homepage to catch up on the latest breaking news and fact checks.
         </p>
 
@@ -36,12 +38,12 @@ import LogoIcon from '../components/LogoIcon.astro';
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h2a1 1 0 001-1v-7"></path></svg>
             Back to Homepage
           </a>
-          <a href="/news" class="btn-pill-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm">
+          <a href="/" class="btn-pill-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm">
             Browse News
           </a>
         </div>
 
-        <div class="text-[11px] font-mono text-[#888888] dark:text-[#a1a1aa] pt-2">
+        <div class="text-[11px] font-mono text-mute pt-2">
           ERROR_CODE · 404 · NEWZWALE_EDGE
         </div>
       </div>

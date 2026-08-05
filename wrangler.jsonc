@@ -5,9 +5,22 @@
 	"name": "newzwale",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"assets": {
-		"directory": "./dist",
+		"directory": "./dist/client",
 		"binding": "ASSETS"
 	},
+	"kv_namespaces": [
+		{ "binding": "NEWZ_CACHE", "id": "e05934d898ea4c90b96f0df3bade9191" },
+		// The Astro Cloudflare adapter auto-enables sessions and injects a
+		// SESSION binding with no id. Declared here so deploys don't fail.
+		{ "binding": "SESSION", "id": "1850d81959b6492fa926dea8cbe993f2" }
+	],
+	"ai": { "binding": "AI" },
+	// Cloudflare Web Search: one shared public-web corpus, so the binding is
+	// zero-config -- a single object, not an array. Discovery-only: it returns
+	// URLs and catalog metadata, never page bodies.
+	// `remote: true` because Web Search has no local emulation -- it always hits
+	// the real service, so local dev consumes real quota either way.
+	"websearch": { "binding": "WEBSEARCH", "remote": true },
 	"observability": {
 		"enabled": true
 	}

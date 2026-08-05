@@ -4,47 +4,138 @@
 /* Enable class-based dark mode in Tailwind v4 for html.dark */
 @variant dark (&:where(.dark, .dark *));
 
-:root {
-  --color-primary: #171717;
+/* ---------------------------------------------------------------------------
+   Subtle Gradient Design System
+
+   Tokens live in @theme (not `@theme inline`) so utilities compile to
+   var(--color-*). That lets html.dark below re-point the same variables and
+   re-skin the whole site without a second set of utilities.
+
+   Accessibility contract, enforced by tests/contrast.test.ts:
+   - `primary` (#ff6b57) is only 2.8:1 on white. It is a DECORATIVE colour:
+     large shapes, fills, rules, accents. Never put text on it or use it as
+     text on a light surface.
+   - `primary-strong` (#cc4430) is the text-safe coral at 4.73:1 on white.
+     Use it for links and for buttons carrying white labels.
+   If you change either value, the contrast tests will tell you.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Brand */
+  --color-primary: #ff6b57;
+  --color-primary-strong: #cc4430;
+  --color-primary-pressed: #e45444;
   --color-on-primary: #ffffff;
-  --color-ink: #0f172a;
-  --color-body: #475569;
-  --color-mute: #64748b;
-  --color-hairline: #e2e8f0;
-  --color-hairline-strong: #3b82f6;
+
+  /* Text */
+  --color-ink: #111111;
+  --color-ink-soft: #262626;
+  --color-body: #3a3a35;
+  --color-charcoal: #2d2d29;
+  --color-mute: #686860;
+  --color-ash: #9a9a94;
+
+  /* Lines and secondary surfaces */
+  --color-stone: #cdcdc7;
+  --color-hairline: #ddddda;
+  --color-hairline-soft: #ecece8;
+  --color-secondary-bg: #ecece8;
+  --color-secondary-pressed: #d3d3cd;
+
+  /* Surfaces */
   --color-canvas: #ffffff;
-  --color-canvas-soft: #f8fafc;
-  --color-canvas-soft-2: #f1f5f9;
-  --color-link: #2563eb;
-  --color-link-deep: #1d4ed8;
-  --color-brand-blue: #1d4ed8;
-  --color-brand-royal: #2563eb;
-  --color-success: #16a34a;
-  --color-error: #dc2626;
-  --color-warning: #d97706;
-  
+  --color-surface-soft: #faf9f7;
+  --color-surface-card: #f4f3ef;
+  --color-surface-elevated: #ffffff;
+  --color-surface-dark: #232320;
+
+  /* Gradient stops */
+  --color-gradient-start: #fff6f2;
+  --color-gradient-end: #f7efe8;
+
+  /* Status */
+  --color-success: #2f7d4f;
+  --color-error: #c0392b;
+  --color-warning: #a86a1c;
+
+  /* Type */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --text-display-xl: 70px;
+  --text-display-xl--line-height: 1.1;
+  --text-display-xl--letter-spacing: -1.2px;
+  --text-display-xl--font-weight: 600;
+
+  --text-display-lg: 44px;
+  --text-display-lg--line-height: 1.15;
+  --text-display-lg--letter-spacing: -0.8px;
+  --text-display-lg--font-weight: 700;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.4;
+
+  /* Geometry - the system's 8px / 16px / 32px / pill scale */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 32px;
+
+  /* NO custom --spacing-* tokens here, deliberately.
+     Tailwind v4 resolves max-w-*, w-* and h-* through the spacing scale, so
+     naming a token `--spacing-xl` silently redefines `max-w-xl` from 36rem to
+     that token's value. That shipped once and collapsed a paragraph to a 24px
+     column. The stock numeric scale already lands on the system's 8-point
+     values, so use it:
+       4px = 1 | 6px = 1.5 | 8px = 2 | 12px = 3
+      16px = 4 | 24px = 6  | 32px = 8 | 64px = 16 */
 }
 
+/* ---------------------------------------------------------------------------
+   Dark palette.
+
+   The design system ships one dark token (surface-dark #232320) and no dark
+   mappings, so the rest is derived from it: surfaces step up in warmth from
+   #1a1a18, text steps down from #f5f4f1, and the coral is lifted to #ff8b7a
+   so it clears 4.5:1 on dark surfaces (the light-mode #cc4430 would not).
+   All of it is asserted in tests/contrast.test.ts.
+--------------------------------------------------------------------------- */
+
 html.dark {
-  --color-primary: #ffffff;
-  --color-on-primary: #000000;
-  --color-ink: #f8fafc;
-  --color-body: #94a3b8;
-  --color-mute: #64748b;
-  --color-hairline: #1e293b;
-  --color-hairline-strong: #1d4ed8;
-  --color-canvas: #0b1329;
-  --color-canvas-soft: #030712;
-  --color-canvas-soft-2: #0f172a;
-  --color-brand-blue: #3b82f6;
-  --color-brand-royal: #60a5fa;
+  --color-primary: #ff8b7a;
+  --color-primary-strong: #ff8b7a;
+  --color-primary-pressed: #ff6b57;
+  --color-on-primary: #1a1a18;
+
+  --color-ink: #f5f4f1;
+  --color-ink-soft: #e5e4df;
+  --color-body: #c9c8c2;
+  --color-charcoal: #d3d3cd;
+  --color-mute: #9a9a94;
+  --color-ash: #686860;
+
+  --color-stone: #3a3a35;
+  --color-hairline: #3a3a35;
+  --color-hairline-soft: #2d2d29;
+  --color-secondary-bg: #2d2d29;
+  --color-secondary-pressed: #3a3a35;
+
+  --color-canvas: #1a1a18;
+  --color-surface-soft: #232320;
+  --color-surface-card: #2d2d29;
+  --color-surface-elevated: #2d2d29;
+  --color-surface-dark: #111110;
+
+  --color-gradient-start: #241d1b;
+  --color-gradient-end: #1f1c19;
+
+  --color-success: #6ec48f;
+  --color-error: #f08a7d;
+  --color-warning: #e0b070;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-canvas-soft);
+  background-color: var(--color-surface-soft);
   color: var(--color-ink);
   margin: 0;
   padding: 0;
@@ -52,7 +143,8 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Monospace Captions & Code */
+/* Monospace captions, kept for datelines, tickers and source labels -
+   news UI benefits from tabular, non-prose type for metadata. */
 .font-mono-caption {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -60,65 +152,107 @@ body {
   text-transform: uppercase;
 }
 
-/* Vibrant Royal Blue mesh gradient hero background for light mode */
+/* ---------------------------------------------------------------------------
+   Soft neutral gradients. The system's direction is "subtle gradients that
+   stay out of the imagery's way", so these are low-contrast warm washes
+   rather than the previous saturated blue mesh.
+--------------------------------------------------------------------------- */
+
 .mesh-gradient-bg {
-  background: radial-gradient(at 10% 20%, rgba(37, 99, 235, 0.22) 0px, transparent 50%),
-              radial-gradient(at 90% 10%, rgba(29, 78, 216, 0.18) 0px, transparent 50%),
-              radial-gradient(at 50% 80%, rgba(96, 165, 250, 0.15) 0px, transparent 50%),
-              radial-gradient(at 80% 80%, rgba(219, 234, 254, 0.4) 0px, transparent 50%),
-              radial-gradient(at 20% 90%, rgba(30, 64, 175, 0.15) 0px, transparent 50%);
+  background:
+    radial-gradient(at 12% 18%, rgba(255, 107, 87, 0.10) 0px, transparent 55%),
+    radial-gradient(at 88% 12%, rgba(247, 239, 232, 0.9) 0px, transparent 50%),
+    radial-gradient(at 50% 88%, rgba(255, 246, 242, 0.8) 0px, transparent 55%);
   background-color: var(--color-canvas);
 }
 
-/* Deep obsidian dark mode mesh background with sleek royal blue ambient glows */
 html.dark .mesh-gradient-bg {
-  background: radial-gradient(at 10% 20%, rgba(37, 99, 235, 0.25) 0px, transparent 55%),
-              radial-gradient(at 90% 10%, rgba(29, 78, 216, 0.18) 0px, transparent 50%),
-              radial-gradient(at 50% 80%, rgba(96, 165, 250, 0.12) 0px, transparent 50%);
-  background-color: #030712;
+  background:
+    radial-gradient(at 12% 18%, rgba(255, 107, 87, 0.14) 0px, transparent 55%),
+    radial-gradient(at 88% 12%, rgba(45, 45, 41, 0.9) 0px, transparent 50%),
+    radial-gradient(at 50% 88%, rgba(35, 35, 32, 0.9) 0px, transparent 55%);
+  background-color: var(--color-canvas);
 }
 
 .mesh-gradient-glow {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(29, 78, 216, 0.3), rgba(96, 165, 250, 0.2));
-  filter: blur(40px);
+  background: linear-gradient(135deg, rgba(255, 107, 87, 0.22), rgba(247, 239, 232, 0.35));
+  filter: blur(48px);
 }
 
-/* Stacked Elevation Shadows matching DESIGN.md */
+/* Elevation. Warm-tinted rather than neutral black, to sit on warm surfaces. */
 .shadow-stacked-sm {
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 2px 2px rgba(0, 0, 0, 0.04);
-}
-
-html.dark .shadow-stacked-sm {
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3), 0px 2px 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 1px 1px rgba(45, 45, 41, 0.03), 0px 2px 2px rgba(45, 45, 41, 0.04);
 }
 
 .shadow-stacked-md {
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.04), 0px 8px 8px -4px rgba(0, 0, 0, 0.04);
-}
-
-html.dark .shadow-stacked-md {
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4), 0px 8px 8px -4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 2px 2px rgba(45, 45, 41, 0.04), 0px 8px 8px -4px rgba(45, 45, 41, 0.05);
 }
 
 .shadow-stacked-lg {
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.04), 0px 8px 16px -4px rgba(0, 0, 0, 0.06), 0px 24px 32px -8px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0px 2px 2px rgba(45, 45, 41, 0.04),
+    0px 8px 16px -4px rgba(45, 45, 41, 0.06),
+    0px 24px 32px -8px rgba(45, 45, 41, 0.08);
+}
+
+html.dark .shadow-stacked-sm {
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.35), 0px 2px 2px rgba(0, 0, 0, 0.45);
+}
+
+html.dark .shadow-stacked-md {
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.45), 0px 8px 8px -4px rgba(0, 0, 0, 0.45);
 }
 
 html.dark .shadow-stacked-lg {
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4), 0px 8px 16px -4px rgba(0, 0, 0, 0.5), 0px 24px 32px -8px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0px 2px 2px rgba(0, 0, 0, 0.45),
+    0px 8px 16px -4px rgba(0, 0, 0, 0.55),
+    0px 24px 32px -8px rgba(0, 0, 0, 0.6);
 }
 
-/* Custom Pill Buttons */
-.btn-pill-primary {
-  background-color: var(--color-primary);
+/* ---------------------------------------------------------------------------
+   Buttons. The system specifies a 40px-high, 16px-radius primary button.
+   Text-bearing coral uses --color-primary-strong so white labels clear AA.
+--------------------------------------------------------------------------- */
+
+.btn-primary {
+  background-color: var(--color-primary-strong);
   color: var(--color-on-primary);
-  border-radius: 100px;
+  border-radius: var(--radius-md);
+  min-height: 40px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-pressed);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary-bg);
+  color: var(--color-ink);
+  border-radius: var(--radius-md);
+  min-height: 40px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-pressed);
+}
+
+/* Pill variants kept as aliases so existing markup keeps working. */
+.btn-pill-primary {
+  background-color: var(--color-primary-strong);
+  color: var(--color-on-primary);
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .btn-pill-primary:hover {
-  opacity: 0.92;
+  background-color: var(--color-primary-pressed);
   transform: translateY(-1px);
 }
 
@@ -126,17 +260,36 @@ html.dark .shadow-stacked-lg {
   background-color: var(--color-canvas);
   color: var(--color-ink);
   border: 1px solid var(--color-hairline);
-  border-radius: 100px;
+  border-radius: 9999px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .btn-pill-secondary:hover {
-  border-color: var(--color-hairline-strong);
-  background-color: var(--color-canvas-soft);
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-card);
 }
 
-/* Marquee Animation for Breaking News */
+/* The system's pill search field. */
+.search-pill {
+  background-color: var(--color-surface-card);
+  border-radius: 9999px;
+}
+
+/* Photography-led content card. */
+.content-card {
+  background-color: var(--color-surface-card);
+  border-radius: var(--radius-md);
+}
+
+/* Visible keyboard focus on every interactive surface. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary-strong);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Marquee for the breaking-news strip. */
 @keyframes marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
@@ -150,4 +303,17 @@ html.dark .shadow-stacked-lg {
 
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+    width: 100%;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
