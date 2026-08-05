@@ -1,10 +1,17 @@
 /** News-content languages the site offers. This is NOT interface translation -
  *  the UI chrome stays English; only the headlines change language.
  *
- *  These codes are what NewsData.io advertises for India. Which of them
- *  actually return results has NOT yet been verified against the live API;
- *  a language that returns nothing must be removed rather than left in to
- *  disappoint. */
+ *  Every code here is verified against the live NewsData.io API to return
+ *  real results - see PROGRESS.md for verification dates. A language that
+ *  stops returning results must be removed rather than left in to disappoint.
+ *
+ *  Requested-but-rejected (checked 2026-08-06, all 22 Eighth Schedule
+ *  languages considered): Bodo, Dogri, Kashmiri, Konkani, Maithili, Manipuri,
+ *  Sanskrit, Santali are not recognised by NewsData.io's language database at
+ *  all ("language you provided does not exist"). Sindhi (`sd`) IS a
+ *  recognised code but returns zero results across every category tested -
+ *  excluded for the same "don't advertise what isn't there" reason. Nepali
+ *  (`ne`) is recognised and does return results, so it's included below. */
 export interface Language {
   code: string;
   name: string;
@@ -26,6 +33,7 @@ export const LANGUAGES: Language[] = [
   { code: 'or', name: 'ଓଡ଼ିଆ (Odia)' },
   { code: 'as', name: 'অসমীয়া (Assamese)' },
   { code: 'ur', name: 'اردو (Urdu)' },
+  { code: 'ne', name: 'नेपाली (Nepali)' },
 ];
 
 const CODES = new Set(LANGUAGES.map((l) => l.code));
