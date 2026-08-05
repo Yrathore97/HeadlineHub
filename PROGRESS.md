@@ -11,14 +11,47 @@ Full task list and rationale: `docs/superpowers/plans/2026-08-05-newzwale-rebuil
 
 ## Status
 
-- **Branch:** `rebuild/two-interface` (PR #3 merged to `main`; PR #4 open with the CI token fix, CI green, awaiting merge)
-- **Last commit:** `9d3ccbe` — "fix: recolor favicons to brand coral and fix accessibility gaps"
-- **Deployed:** yes, live at https://newzwale.editall.workers.dev (Version ID `d4aad4b6-1f74-4ec8-ab33-2315467ca38e`)
-- **Plan progress:** Phases 0–5 done (Tasks 1–21). Task 21 checklist run against production — **7 of 8 checks pass**. One partial: fact-check stage 2 (see below).
+- **Branch:** `claude/news-website-redesign-c3de89` (worktree at `.claude/worktrees/news-website-redesign-c3de89`)
+- **Plan:** `docs/superpowers/plans/2026-08-05-categories-language-pagination.md`
+- **Spec:** `docs/superpowers/specs/2026-08-05-categories-language-pagination-design.md`
+- **Deployed:** NOT deployed. All work below is local and uncommitted to `main`.
+- **Local verification:** `npm test` 131/131 pass, `npx astro check` 0 errors, `npm run build` completes.
 
-**Next task:** Nothing blocking. Optional follow-ups listed under "Deferred".
-The one open item needing a decision is fact-check stage 2 (web search) — see
-below. Everything else is working in production.
+**Progress on the categories/language/pagination plan: 16 of 20 tasks done.**
+
+Done: category allowlist, language list, paginated data layer, cache key v2,
+feed helpers, `/api/news` params, ArticleCard, NewsFeed props, category pages,
+navbar category strip, functional language selector, CategoryRail, LeadStory,
+new homepage composition, Tavily fact-check swap.
+
+### ⛔ Blocked — needs the user, not an agent
+
+| Task | Blocker |
+| --- | --- |
+| Task 1 (API verification spike) | `.dev.vars` exists but `NEWSDATA_API_KEY=` is EMPTY. Needs the real key. |
+| Task 10 (Load more button) | Gated on Task 1 — we do not yet know whether the free tier returns a usable `nextPage` token. The button markup exists and stays hidden while `nextPage` is null, so nothing is broken; the click handler is simply not written yet. |
+| Task 19 (fact-check end-to-end test) | Needs `TAVILY_API_KEY`. Sign up at tavily.com, then `npx wrangler secret put TAVILY_API_KEY` for prod and add it to `.dev.vars` for local. |
+
+### ⚠️ What could NOT be verified locally, and why
+
+The local `.dev.vars` has an empty `NEWSDATA_API_KEY`, so `/api/news` served the
+English RSS fallback for every request during development. RSS has no category
+support, no images, and no pagination. Consequently these remain **unverified
+against real data**:
+
+- Whether each category actually returns distinct articles.
+- Whether the lead story renders correctly with an image (RSS gives none, so the
+  imageless fallback path is what was exercised).
+- Whether `?language=hi` returns genuinely Hindi headlines. The plumbing is
+  verified — URL, param validation, server-rendered `selected` option, and the
+  masthead date correctly re-localising to `बुध, 5 अग॰ 2026` — but the headline
+  text itself stayed English because the upstream call never had a key.
+- Pagination end to end.
+
+On the homepage with RSS data, all four category rails select the same trailing
+articles (40 card nodes, 26 unique ids). That is the RSS artifact, not a dedup
+bug — lead-vs-rest dedup was verified to have zero overlap. Re-check this once a
+real key is in place.
 
 ### Task 21 checklist results (run 2026-08-05 against production)
 
@@ -35,33 +68,30 @@ below. Everything else is working in production.
 
 Local: `npm test` 99/99 pass, `npx astro check` 0 errors, CI green on PR #4.
 
-### ⚠️ Fact-check stage 2 (web search) is unavailable on this Cloudflare account
+### Fact-check stage 2: switched from Cloudflare Web Search to Tavily
 
-The `WEBSEARCH` binding throws `Error: account_disabled` on every call
-(confirmed via `wrangler tail`; logged rather than swallowed as of `e364bdf`).
-This is an **account entitlement** issue, not a code bug or a missing secret —
-the API token carries the `websearch.run` scope and wrangler's config schema
-accepts the binding, but Cloudflare Web Search does not appear in the public
-bindings documentation, so it looks not-generally-available on this account.
+**Resolved in code, not yet proven live.** The old `WEBSEARCH` binding threw
+`Error: account_disabled` on every call — an account entitlement problem, not a
+code bug. Stage 2 returned `[]` every time, stage 3 never ran, and any claim
+without a published fact-check came back `insufficient_evidence`.
 
-**Practical effect on the pipeline:**
-- Stage 1 (Google Fact Check Tools) — **working**. Claims that a published
-  fact-checker has reviewed get a real verdict with a real citation.
-- Stage 2 (web search retrieval) — **dead**, returns `[]` every time.
-- Stage 3 (Workers AI over retrieved passages) — **never reached**, because
-  stage 2 supplies no passages.
+`search()` in `src/lib/factcheck/search.ts` now posts to Tavily instead. The
+`SearchHit` interface is unchanged, so stages 1 and 3 were untouched — the diff
+to `src/pages/api/factcheck.ts` is 5 lines, all inside stage 2. The `websearch`
+binding is removed from `wrangler.jsonc`.
 
-So a claim with no published fact-check always returns `insufficient_evidence`.
-That is honest behaviour (it never guesses), but it means the AI-assessment
-path is effectively unexercised in production.
+Tavily is also better evidence: its `content` field is a query-relevant extract,
+whereas Web Search only ever returned the page-level meta description.
 
-**To close this, pick one:**
-1. Enable Web Search on the Cloudflare account (dashboard — may need a beta
-   opt-in or a plan change). Nothing in the code needs to change if this works.
-2. Switch the provider to Tavily per the plan's Task 16 alternative: sign up at
-   tavily.com, `npx wrangler secret put TAVILY_API_KEY`, and rewrite the body of
-   `search()` in `src/lib/factcheck/search.ts` (the interface is deliberately
-   provider-agnostic, so only that one function body and its test change).
+**Still to do (Task 19):** set `TAVILY_API_KEY` and confirm against the live
+model that (a) a claim with a published fact-check still returns `false` with a
+citation, (b) a claim WITHOUT one now returns a real verdict plus evidence
+instead of `insufficient_evidence`, and (c) a nonsense claim still refuses to
+guess. Until that runs, the fix is unproven in production.
+
+**Do not restore the Cloudflare binding** without first confirming it works on
+the account — that history is recorded in the comment at the top of `search.ts`
+so it does not get re-litigated.
 
 ---
 
@@ -89,7 +119,12 @@ path is effectively unexercised in production.
 - Custom domain (`newzwale.com` not yet owned).
 - Image/screenshot OCR tab — UI exists, disabled with "coming soon"; no backend wiring.
 - `DECISIONS.md` still needs its rewrite or deletion (see gotchas).
-- Navbar language selector writes `userLanguage` to localStorage and fires a `language-changed` event, but nothing translates — only the masthead date listens. The control implies multilingual support the site does not have. Either wire real i18n or drop the selector.
+- Site UI translation. The language selector now fetches news content in the
+  chosen language (real, not cosmetic), but the interface chrome — nav labels,
+  buttons, "Read at source" — stays English by design. The control's `title`
+  says so explicitly rather than over-promising.
+- In-site article reading. Headlines still link out to the publisher; hosting
+  article bodies is a licensing question, not an engineering one.
 - Keyboard arrow-key navigation between fact-check tabs (roving tabindex) is not implemented; tabs are reachable by Tab and activate on Enter/Space, which is workable but not the full ARIA tabs pattern.
 
 ---
