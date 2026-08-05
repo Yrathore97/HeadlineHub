@@ -1,0 +1,54 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import MastheadInfoStrip from '../../components/MastheadInfoStrip.astro';
+import NewsFeed from '../../components/NewsFeed.astro';
+import Footer from '../../components/Footer.astro';
+import { CATEGORIES, isValidCategory } from '../../lib/news/categories';
+import { isValidLanguage, DEFAULT_LANGUAGE } from '../../lib/news/languages';
+
+const { slug } = Astro.params;
+
+// An unknown slug 404s rather than being forwarded upstream. Astro.rewrite('/404')
+// fails under this project's Cloudflare SSR build ("unable to find a component
+// instance for route /404"), so return the 404 status directly instead.
+if (!isValidCategory(slug)) {
+  return new Response(null, { status: 404 });
+}
+
+const category = CATEGORIES.find((c) => c.slug === slug)!;
+
+const rawLanguage = Astro.url.searchParams.get('language');
+const language = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
+---
+
+<Layout
+  title={`${category.label} News Today — Latest ${category.label} Headlines | NewzWale`}
+  description={`Latest ${category.label.toLowerCase()} news and breaking headlines from Indian and international publishers, updated through the day on NewzWale.`}
+>
+  <Navbar />
+  <MastheadInfoStrip />
+  <main id="main" class="flex-1">
+    <div class="w-full bg-gradient-start border-b border-hairline">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-6 py-10">
+        <nav aria-label="Breadcrumb" class="mb-3">
+          <ol class="flex items-center gap-2 text-xs text-mute font-mono-caption">
+            <li><a href="/" class="hover:text-primary-strong">Home</a></li>
+            <li aria-hidden="true">/</li>
+            <li class="text-ink font-semibold">{category.label}</li>
+          </ol>
+        </nav>
+        <h1 class="text-3xl sm:text-4xl font-semibold text-ink tracking-[-1px]">
+          {category.label} News
+        </h1>
+      </div>
+    </div>
+
+    <NewsFeed
+      category={category.slug}
+      language={language}
+      heading={`Latest in ${category.label}`}
+    />
+  </main>
+  <Footer />
+</Layout>
