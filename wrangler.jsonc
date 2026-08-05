@@ -15,6 +15,12 @@
 		{ "binding": "SESSION", "id": "1850d81959b6492fa926dea8cbe993f2" }
 	],
 	"ai": { "binding": "AI" },
+	// Cloudflare Web Search: one shared public-web corpus, so the binding is
+	// zero-config -- a single object, not an array. Discovery-only: it returns
+	// URLs and catalog metadata, never page bodies.
+	// `remote: true` because Web Search has no local emulation -- it always hits
+	// the real service, so local dev consumes real quota either way.
+	"websearch": { "binding": "WEBSEARCH", "remote": true },
 	"observability": {
 		"enabled": true
 	}
