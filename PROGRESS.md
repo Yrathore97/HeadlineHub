@@ -12,8 +12,8 @@ Full task list and rationale: `docs/superpowers/plans/2026-08-05-newzwale-rebuil
 ## Status
 
 - **Branch:** `rebuild/two-interface` (PR #3 merged to `main`; PR #4 open with the CI token fix, CI green, awaiting merge)
-- **Last commit:** `1df8baa` — "fix: give CI a Cloudflare API token so the build step can complete"
-- **Deployed:** yes, live at https://newzwale.editall.workers.dev (Version ID `88cecfba-08b1-4cc8-84b3-0971155b0ce8`)
+- **Last commit:** `9d3ccbe` — "fix: recolor favicons to brand coral and fix accessibility gaps"
+- **Deployed:** yes, live at https://newzwale.editall.workers.dev (Version ID `d4aad4b6-1f74-4ec8-ab33-2315467ca38e`)
 - **Plan progress:** Phases 0–5 done (Tasks 1–21). Task 21 checklist run against production — **7 of 8 checks pass**. One partial: fact-check stage 2 (see below).
 
 **Next task:** Nothing blocking. Optional follow-ups listed under "Deferred".
@@ -88,8 +88,9 @@ path is effectively unexercised in production.
 
 - Custom domain (`newzwale.com` not yet owned).
 - Image/screenshot OCR tab — UI exists, disabled with "coming soon"; no backend wiring.
-- `HeroMesh.astro` ticker sorts on `Date.parse(publishedAt)`; `publishedAt` can be `''` (both `newsdata.ts` and `rss.ts` default it), making the comparator `NaN` and leaving those items in engine-defined order. Cosmetic only — worth a `|| 0` guard if the ticker ever looks mis-ordered.
 - `DECISIONS.md` still needs its rewrite or deletion (see gotchas).
+- Navbar language selector writes `userLanguage` to localStorage and fires a `language-changed` event, but nothing translates — only the masthead date listens. The control implies multilingual support the site does not have. Either wire real i18n or drop the selector.
+- Keyboard arrow-key navigation between fact-check tabs (roving tabindex) is not implemented; tabs are reachable by Tab and activate on Enter/Space, which is workable but not the full ARIA tabs pattern.
 
 ---
 
