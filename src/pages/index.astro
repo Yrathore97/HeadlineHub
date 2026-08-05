@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import HeroMesh from '../components/HeroMesh.astro';
+import SearchResults from '../components/SearchResults.astro';
 import LeadStory from '../components/LeadStory.astro';
 import CategoryRail from '../components/CategoryRail.astro';
 import NewsFeed from '../components/NewsFeed.astro';
@@ -52,6 +53,7 @@ const shownUrls = [lead?.url, ...secondary.map((a) => a.url)].filter(
   <MastheadInfoStrip />
   <main id="main" class="flex-1">
     <HeroMesh />
+    <SearchResults />
 
     {lead && <LeadStory lead={lead} secondary={secondary} />}
 

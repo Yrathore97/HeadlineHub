@@ -3,11 +3,11 @@ import { newsCacheKey, cached } from '../src/lib/cache';
 
 describe('newsCacheKey', () => {
   it('namespaces by category, language, and page', () => {
-    expect(newsCacheKey('business', 'en')).toBe('news:v2:business:en:first');
+    expect(newsCacheKey('business', 'en')).toBe('news:v2:business:en:first:none');
   });
 
-  it('defaults to the top category in English, first page', () => {
-    expect(newsCacheKey()).toBe('news:v2:top:en:first');
+  it('defaults to the top category in English, first page, no query', () => {
+    expect(newsCacheKey()).toBe('news:v2:top:en:first:none');
   });
 
   it('gives different languages different keys', () => {
@@ -15,8 +15,22 @@ describe('newsCacheKey', () => {
   });
 
   it('gives different pages different keys', () => {
-    expect(newsCacheKey('top', 'en', 'tok2')).toBe('news:v2:top:en:tok2');
+    expect(newsCacheKey('top', 'en', 'tok2')).toBe('news:v2:top:en:tok2:none');
     expect(newsCacheKey('top', 'en', 'tok2')).not.toBe(newsCacheKey('top', 'en'));
+  });
+
+  it('gives different search queries different keys', () => {
+    expect(newsCacheKey('top', 'en', undefined, 'cricket')).toBe('news:v2:top:en:first:cricket');
+    expect(newsCacheKey('top', 'en', undefined, 'cricket')).not.toBe(
+      newsCacheKey('top', 'en', undefined, 'football'),
+    );
+    expect(newsCacheKey('top', 'en', undefined, 'cricket')).not.toBe(newsCacheKey('top', 'en'));
+  });
+
+  it('normalises query case and whitespace so equivalent searches share a cache entry', () => {
+    expect(newsCacheKey('top', 'en', undefined, '  Cricket  ')).toBe(
+      newsCacheKey('top', 'en', undefined, 'cricket'),
+    );
   });
 });
 

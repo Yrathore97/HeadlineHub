@@ -36,20 +36,34 @@ export const GET: APIRoute = async ({ url }) => {
   // used to stuff an unbounded string into a cache key.
   const page = url.searchParams.get('page')?.slice(0, 200) || undefined;
 
+  // Free-text search. Bounded for the same reason as page. Trimmed so
+  // "cricket" and " cricket " share a cache entry instead of two.
+  const q = url.searchParams.get('q')?.trim().slice(0, 200) || undefined;
+
   const apiKey = (env as unknown as { NEWSDATA_API_KEY?: string }).NEWSDATA_API_KEY ?? '';
 
   let usedFallback = false;
-  const cacheKey = newsCacheKey(category, language, page);
+  const cacheKey = newsCacheKey(category, language, page, q);
 
   const result = await cached<NewsPage>(env.NEWZ_CACHE, cacheKey, TTL, async () => {
     for (let attempt = 1; attempt <= NEWSDATA_ATTEMPTS; attempt++) {
       try {
-        const fresh = await fetchNewsData(apiKey, { category, language, page });
+        const fresh = await fetchNewsData(apiKey, { category, language, page, q });
         if (fresh.articles.length > 0) return fresh;
       } catch {
-        // try again, or fall through to RSS below on the last attempt
+        // try again, or fall through below on the last attempt
       }
       if (attempt < NEWSDATA_ATTEMPTS) await sleep(RETRY_DELAY_MS);
+    }
+
+    // RSS is a fixed set of national feeds with no keyword filtering - it
+    // cannot answer a search query. Showing it under a search would show
+    // stories unrelated to what the reader typed, which is worse than
+    // honestly reporting no results. Category browsing still falls back to
+    // it, since RSS at least matches "top" (unfiltered) reasonably well.
+    if (q) {
+      usedFallback = true;
+      throw new Error('search unavailable');
     }
 
     usedFallback = true;

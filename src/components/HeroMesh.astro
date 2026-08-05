@@ -1,30 +1,4 @@
 ---
-import type { Article } from '../lib/news/types';
-
-const MAX_TICKER_ITEMS = 8;
-
-let breakingNews: string[] = [];
-try {
-  const res = await fetch(new URL('/api/news?category=top', Astro.url));
-  if (res.ok) {
-    const articles = ((await res.json()) as { articles?: Article[] }).articles ?? [];
-    // publishedAt can be '' (both the NewsData and RSS parsers default it), and
-    // Date.parse('') is NaN - which makes the comparator return NaN and leaves
-    // those items in engine-defined order. Coerce to 0 so they sort last.
-    const time = (value: string): number => {
-      const t = Date.parse(value || '');
-      return Number.isNaN(t) ? 0 : t;
-    };
-
-    breakingNews = articles
-      .filter((a) => a?.title)
-      .sort((a, b) => time(b.publishedAt) - time(a.publishedAt))
-      .slice(0, MAX_TICKER_ITEMS)
-      .map((a) => a.title);
-  }
-} catch {
-  /* stays hidden - never show invented headlines */
-}
 ---
 
 <section class="relative w-full overflow-hidden border-b border-hairline mesh-gradient-bg py-8 sm:py-12 md:py-16 transition-colors duration-200">
@@ -44,34 +18,34 @@ try {
 
       <!-- Main Headline -->
       <h1 class="text-2xl sm:text-4xl md:text-5xl font-semibold text-ink tracking-[-0.8px] sm:tracking-[-2px] leading-snug sm:leading-[1.05] mb-4 sm:mb-5">
-        Real-Time News Crawled, Verified & Summarized by AI.
+        Search Real-Time News, in Your Language.
       </h1>
 
       <!-- Subtitle -->
       <p class="text-xs sm:text-base md:text-lg text-body max-w-2xl font-normal leading-relaxed mb-6 sm:mb-8 px-2 sm:px-0">
-        NewzWale collects live English-language headlines from Indian news sources, and checks claims against real evidence before returning a verdict.
+        NewzWale collects live headlines from Indian news sources. Search any topic below, or use the Fact Check tab to verify a specific claim.
       </p>
 
-      <!-- Instant Fact-Check Quick Query Bar -->
+      <!-- News Search Bar -->
       <div class="w-full max-w-2xl bg-surface-elevated border border-hairline rounded-md p-1.5 sm:p-2 shadow-stacked-md mb-6 sm:mb-8 hover:border-primary focus-within:border-primary-strong focus-within:ring-1 focus-within:ring-primary-strong transition-colors">
-        <form action="/verify" method="GET" class="flex flex-col sm:flex-row items-center gap-2">
+        <form id="hero-search-form" class="flex flex-col sm:flex-row items-center gap-2">
           <div class="relative w-full flex-1 flex items-center pl-3 min-w-0">
             <svg class="w-4 h-4 text-mute shrink-0 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <label for="hero-query" class="sr-only">Headline, claim, or article URL to fact check</label>
+            <label for="hero-query" class="sr-only">Search for news, e.g. "India cricket" or "budget 2026"</label>
             <input
               id="hero-query"
               type="text"
               name="query"
               autocomplete="off"
               spellcheck="false"
-              placeholder="Paste headline, WhatsApp forward, or URL to verify…"
+              placeholder="Search for news… e.g. India cricket, budget 2026"
               class="w-full min-w-0 bg-transparent text-xs sm:text-sm text-ink placeholder:text-mute border-none focus:outline-none py-1.5 sm:py-2"
               required
             />
           </div>
           <button type="submit" class="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-2 shrink-0 cursor-pointer shadow-stacked-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
-            <svg class="w-3.5 h-3.5 text-on-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Run Fact Check
+            <svg class="w-3.5 h-3.5 text-on-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            Search
           </button>
         </form>
       </div>
@@ -85,7 +59,7 @@ try {
         <span class="hidden sm:inline text-stone">•</span>
         <div class="flex items-center gap-1.5 font-medium">
           <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          Multi-Source Evidence Matrix
+          13 Languages
         </div>
         <span class="hidden sm:inline text-stone">•</span>
         <div class="flex items-center gap-1.5 font-medium">
@@ -96,28 +70,20 @@ try {
 
     </div>
   </div>
-
-  <!-- Ticker Marquee Bar (only renders with real headlines from /api/news) -->
-  {breakingNews.length > 0 && (
-  <div class="w-full bg-surface-dark text-canvas dark:text-ink py-2 sm:py-2.5 mt-8 sm:mt-10 overflow-hidden border-y border-charcoal dark:border-hairline-soft">
-    <div class="max-w-[1400px] mx-auto px-3 sm:px-4 flex items-center gap-3 sm:gap-4">
-      <span class="font-mono-caption text-[10px] sm:text-[11px] text-primary font-semibold shrink-0 flex items-center gap-1 bg-charcoal dark:bg-hairline-soft px-2 py-0.5 rounded-full">
-        <span class="w-1.5 h-1.5 bg-primary rounded-full animate-ping" aria-hidden="true"></span>
-        BREAKING
-      </span>
-      <div class="overflow-hidden relative w-full">
-        <div class="animate-marquee whitespace-nowrap flex items-center gap-6 sm:gap-8 text-[11px] sm:text-xs font-normal">
-          {breakingNews.map((news) => (
-            <span class="flex items-center gap-2">{news}</span>
-          ))}
-          {/* Duplicated purely so the marquee loops seamlessly; hidden from
-              assistive tech so headlines are not announced twice. */}
-          {breakingNews.map((news) => (
-            <span class="flex items-center gap-2" aria-hidden="true">{news}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
-  )}
 </section>
+
+<script>
+  const form = document.getElementById('hero-search-form') as HTMLFormElement | null;
+  const input = document.getElementById('hero-query') as HTMLInputElement | null;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = input?.value.trim();
+    if (!query) return;
+
+    const languageSelect = document.getElementById('language-select') as HTMLSelectElement | null;
+    const language = languageSelect?.value || 'en';
+
+    window.dispatchEvent(new CustomEvent('news-search', { detail: { query, language } }));
+  });
+</script>

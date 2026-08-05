@@ -33,6 +33,10 @@ export interface FetchNewsOptions {
   language?: string;
   /** Opaque token from a previous response's nextPage. */
   page?: string;
+  /** Free-text search query. When present, category is not sent upstream -
+   *  a search spans every category by design, so applying one would silently
+   *  narrow results the caller never asked to narrow. */
+  q?: string;
 }
 
 export async function fetchNewsData(
@@ -45,10 +49,14 @@ export async function fetchNewsData(
     language: opts.language ?? DEFAULT_LANGUAGE,
   });
 
-  // upstreamCategory returns null for 'top' and for anything unrecognised, so
-  // an unvalidated slug can never be forwarded upstream.
-  const upstream = upstreamCategory(opts.category);
-  if (upstream) params.set('category', upstream);
+  if (opts.q) {
+    params.set('q', opts.q);
+  } else {
+    // upstreamCategory returns null for 'top' and for anything unrecognised,
+    // so an unvalidated slug can never be forwarded upstream.
+    const upstream = upstreamCategory(opts.category);
+    if (upstream) params.set('category', upstream);
+  }
 
   if (opts.page) params.set('page', opts.page);
 

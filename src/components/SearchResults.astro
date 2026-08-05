@@ -1,0 +1,152 @@
+---
+// Server-renders nothing: a search only exists once a reader submits one,
+// and there is no query at page-load time to render results for. HeroMesh's
+// search form dispatches a `news-search` event on submit; this component
+// listens for it and does the rest entirely client-side, so results appear
+// on the homepage itself with no navigation.
+---
+
+<section id="search-results" class="w-full py-12 bg-canvas border-b border-hairline" hidden>
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between gap-4 mb-6 border-b border-hairline pb-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+          <span class="font-mono-caption text-mute">SEARCH RESULTS</span>
+        </div>
+        <h2 id="search-results-heading" class="text-2xl sm:text-3xl font-semibold text-ink tracking-[-0.96px]"></h2>
+      </div>
+      <button
+        type="button"
+        id="search-results-close"
+        aria-label="Close search results"
+        class="shrink-0 px-3 py-1.5 text-xs font-semibold text-body hover:text-ink bg-surface-elevated border border-hairline rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong"
+      >
+        Close ✕
+      </button>
+    </div>
+
+    <p id="search-results-status" role="status" aria-live="polite" class="text-sm text-body"></p>
+
+    <div id="search-results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+    <div class="mt-8 flex flex-col items-center gap-3">
+      <button
+        type="button"
+        id="search-load-more"
+        hidden
+        class="px-6 py-2.5 bg-ink hover:bg-charcoal text-canvas text-sm font-semibold rounded-md shadow-stacked-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        Load more results
+      </button>
+      <p id="search-load-more-status" role="status" aria-live="polite" class="text-xs text-mute"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { buildArticleCardElement, isSafeUrlClient, type CardArticle } from '../lib/news/card-dom';
+
+  const section = document.getElementById('search-results');
+  const heading = document.getElementById('search-results-heading');
+  const status = document.getElementById('search-results-status');
+  const grid = document.getElementById('search-results-grid');
+  const closeBtn = document.getElementById('search-results-close');
+  const loadMoreBtn = document.getElementById('search-load-more') as HTMLButtonElement | null;
+  const loadMoreStatus = document.getElementById('search-load-more-status');
+
+  let currentQuery = '';
+  let currentLanguage = 'en';
+
+  async function runSearch(query: string, language: string, page?: string) {
+    const params = new URLSearchParams({ q: query, language });
+    if (page) params.set('page', page);
+    const res = await fetch(`/api/news?${params}`);
+    if (!res.ok) throw new Error(`status ${res.status}`);
+    return (await res.json()) as { articles?: CardArticle[]; nextPage?: string | null };
+  }
+
+  async function search(query: string, language: string) {
+    if (!section || !grid || !heading || !status) return;
+
+    currentQuery = query;
+    currentLanguage = language;
+
+    section.hidden = false;
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    heading.textContent = `Results for "${query}"`;
+    grid.textContent = '';
+    status.textContent = 'Searching…';
+    loadMoreBtn?.setAttribute('hidden', '');
+    if (loadMoreStatus) loadMoreStatus.textContent = '';
+
+    try {
+      const page = await runSearch(query, language);
+      const articles = (page.articles ?? []).filter((a) => a?.url && a?.title && isSafeUrlClient(a.url));
+
+      if (articles.length === 0) {
+        // Honest empty state: a failed or genuinely empty search looks the
+        // same to the reader, and both mean "nothing to show right now" -
+        // never invent results to fill the space.
+        status.textContent = `No headlines found for "${query}". Try a different search.`;
+        return;
+      }
+
+      status.textContent = '';
+      for (const a of articles) grid.appendChild(buildArticleCardElement(a));
+
+      if (page.nextPage && loadMoreBtn) {
+        loadMoreBtn.dataset.nextPage = page.nextPage;
+        loadMoreBtn.hidden = false;
+      }
+    } catch {
+      status.textContent = 'Search is temporarily unavailable. Please try again shortly.';
+    }
+  }
+
+  loadMoreBtn?.addEventListener('click', async () => {
+    const token = loadMoreBtn.dataset.nextPage;
+    if (!token || !grid) return;
+
+    loadMoreBtn.disabled = true;
+    const label = loadMoreBtn.textContent;
+    loadMoreBtn.textContent = 'Loading…';
+    if (loadMoreStatus) loadMoreStatus.textContent = '';
+
+    try {
+      const page = await runSearch(currentQuery, currentLanguage, token);
+      const seen = new Set(
+        Array.from(grid.querySelectorAll<HTMLElement>('[data-article-id]')).map(
+          (n) => n.dataset.articleId ?? '',
+        ),
+      );
+      const fresh = (page.articles ?? []).filter(
+        (a) => a?.url && a?.title && isSafeUrlClient(a.url) && !seen.has(a.id),
+      );
+      for (const a of fresh) grid.appendChild(buildArticleCardElement(a));
+
+      if (page.nextPage) {
+        loadMoreBtn.dataset.nextPage = page.nextPage;
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.textContent = label;
+        if (loadMoreStatus && fresh.length === 0) loadMoreStatus.textContent = 'No new results in that batch.';
+      } else {
+        loadMoreBtn.hidden = true;
+        if (loadMoreStatus) loadMoreStatus.textContent = "You've reached the end of the results.";
+      }
+    } catch {
+      loadMoreBtn.disabled = false;
+      loadMoreBtn.textContent = label;
+      if (loadMoreStatus) loadMoreStatus.textContent = 'Could not load more results. Tap to try again.';
+    }
+  });
+
+  closeBtn?.addEventListener('click', () => {
+    if (section) section.hidden = true;
+  });
+
+  window.addEventListener('news-search', (e) => {
+    const { query, language } = (e as CustomEvent<{ query: string; language: string }>).detail;
+    if (query?.trim()) search(query.trim(), language || 'en');
+  });
+</script>
