@@ -6,6 +6,10 @@ import HeroMesh from '../components/HeroMesh.astro';
 import NewsFeed from '../components/NewsFeed.astro';
 import SeoContentSection from '../components/SeoContentSection.astro';
 import Footer from '../components/Footer.astro';
+import { isValidLanguage, DEFAULT_LANGUAGE } from '../lib/news/languages';
+
+const rawLanguage = Astro.url.searchParams.get('language');
+const language = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
 <Layout 
@@ -16,7 +20,7 @@ import Footer from '../components/Footer.astro';
   <MastheadInfoStrip />
   <main id="main" class="flex-1">
     <HeroMesh />
-    <NewsFeed />
+    <NewsFeed language={language} />
     <SeoContentSection />
   </main>
   <Footer />

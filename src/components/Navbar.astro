@@ -83,7 +83,7 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
 
       <!-- Global Language Selector -->
       <div class="relative group">
-        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-surface-card hover:bg-secondary-bg text-ink text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-hairline rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong h-[32px] truncate">
+        <select id="language-select" aria-label="Choose the language of news headlines" title="Changes the language of news headlines, not the site interface" class="appearance-none max-w-[110px] sm:max-w-none bg-surface-card hover:bg-secondary-bg text-ink text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-hairline rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong h-[32px] truncate">
           {LANGUAGES.map(lang => (
             <option value={lang.code} selected={lang.code === currentLanguage}>{lang.name}</option>
           ))}
@@ -174,26 +174,24 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
     mobileBtn.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // Language Selector Sync
-  const langSelect = document.getElementById('language-select') as unknown as HTMLSelectElement;
-  langSelect?.addEventListener('change', (e) => {
-    const code = (e.target as HTMLSelectElement).value;
-    const selectedOption = langSelect.options[langSelect.selectedIndex];
-    const name = selectedOption ? selectedOption.text : code;
+  // Language selector. Navigating (rather than refetching client-side) keeps
+  // the choice in the URL, so it is shareable and survives a reload. The
+  // localStorage copy is what the masthead date listens to.
+  const langSelect = document.getElementById('language-select') as HTMLSelectElement | null;
+  langSelect?.addEventListener('change', () => {
+    const code = langSelect.value;
+    const name = langSelect.options[langSelect.selectedIndex]?.text ?? code;
 
     localStorage.setItem('userLanguage', code);
     localStorage.setItem('userLanguageName', name);
 
-    window.dispatchEvent(new CustomEvent('language-changed', {
-      detail: { langCode: code, langName: name }
-    }));
-  });
+    window.dispatchEvent(
+      new CustomEvent('language-changed', { detail: { langCode: code, langName: name } }),
+    );
 
-  // Restore state on DOM load
-  document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('userLanguage');
-    if (savedLang && langSelect) {
-      langSelect.value = savedLang;
-    }
+    const url = new URL(window.location.href);
+    if (code === 'en') url.searchParams.delete('language');
+    else url.searchParams.set('language', code);
+    window.location.assign(url.toString());
   });
 </script>
