@@ -19,24 +19,26 @@
       <div class="bg-surface-soft border border-hairline rounded-lg p-4 sm:p-6 shadow-stacked-md">
 
         <!-- Input Tabs -->
-        <div class="flex items-center gap-2 border-b border-hairline pb-3 mb-4 overflow-x-auto text-xs font-medium">
-          <button data-tab="text" class="tab-btn active px-3 py-1.5 font-semibold text-ink bg-surface-elevated border border-hairline rounded-full shadow-stacked-sm">
-            📝 Text / Claim
+        <div role="tablist" aria-label="Fact check input type" class="flex items-center gap-2 border-b border-hairline pb-3 mb-4 overflow-x-auto text-xs font-medium">
+          <button type="button" role="tab" id="tab-text" aria-controls="panel-text" aria-selected="true" data-tab="text" class="tab-btn active px-3 py-1.5 font-semibold text-ink bg-surface-elevated border border-hairline rounded-full shadow-stacked-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong">
+            <span aria-hidden="true">📝</span> Text / Claim
           </button>
-          <button data-tab="url" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
-            🔗 Article URL
+          <button type="button" role="tab" id="tab-url" aria-controls="panel-url" aria-selected="false" data-tab="url" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong">
+            <span aria-hidden="true">🔗</span> Article URL
           </button>
-          <button data-tab="image" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full">
-            🖼️ Image / Screenshot
+          <button type="button" role="tab" id="tab-image" aria-controls="panel-image" aria-selected="false" data-tab="image" class="tab-btn px-3 py-1.5 text-body hover:text-ink rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong">
+            <span aria-hidden="true">🖼️</span> Image / Screenshot
           </button>
         </div>
 
         <!-- Input Area -->
         <div id="input-container" class="space-y-3 mb-4">
-          <div id="panel-text" class="tab-panel space-y-3">
+          <div id="panel-text" role="tabpanel" aria-labelledby="tab-text" class="tab-panel space-y-3">
+            <label for="claim-text" class="sr-only">Headline or claim to fact check</label>
             <textarea
               id="claim-text"
               rows="3"
+              autocomplete="off"
               placeholder="Paste news headline or claim to verify (e.g. 'RBI keeps repo rate steady at 6.5%')"
               class="w-full bg-surface-elevated border border-hairline rounded-md p-3 text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong resize-none"
             ></textarea>
@@ -56,16 +58,20 @@
             </div>
           </div>
 
-          <div id="panel-url" class="tab-panel" hidden>
+          <div id="panel-url" role="tabpanel" aria-labelledby="tab-url" class="tab-panel" hidden>
+            <label for="claim-url" class="sr-only">Article URL to fact check</label>
             <input
               id="claim-url"
               type="url"
+              inputmode="url"
+              autocomplete="url"
+              spellcheck="false"
               placeholder="https://example.com/article-to-check"
               class="w-full bg-surface-elevated border border-hairline rounded-md p-3 text-sm text-ink placeholder:text-mute focus:outline-none focus:ring-1 focus:ring-primary-strong"
             />
           </div>
 
-          <div id="panel-image" class="tab-panel" hidden>
+          <div id="panel-image" role="tabpanel" aria-labelledby="tab-image" class="tab-panel" hidden>
             <p class="text-sm text-mute p-4 bg-surface-elevated border border-dashed border-hairline rounded-md text-center">
               Image / screenshot checking is coming soon.
             </p>
@@ -75,24 +81,25 @@
         <!-- Verification Action Button -->
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2 text-xs text-mute">
-            <svg class="w-3.5 h-3.5 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <svg class="w-3.5 h-3.5 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
             Checks published fact-checkers, then live web sources
           </div>
 
           <button
+            type="button"
             id="verify-submit-btn"
-            class="px-5 py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-md shadow-stacked-sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-5 py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-md shadow-stacked-sm transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
           >
-            <span id="btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
-            <span>Check Claim</span>
+            <span id="btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-on-primary border-t-transparent rounded-full animate-spin" aria-hidden="true"></span>
+            <span id="verify-submit-label">Check Claim</span>
           </button>
         </div>
 
         <!-- Error state -->
-        <p id="verify-error" class="hidden mt-4 text-xs text-error bg-error/10 border border-error/30 rounded-md p-3"></p>
+        <p id="verify-error" role="alert" class="hidden mt-4 text-xs text-error bg-error/10 border border-error/30 rounded-md p-3"></p>
 
         <!-- Output Verdict Card -->
-        <div id="verdict-card" class="hidden mt-6 pt-6 border-t border-hairline animate-fade-in space-y-6">
+        <div id="verdict-card" aria-live="polite" class="hidden mt-6 pt-6 border-t border-hairline animate-fade-in space-y-6">
 
           <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-4 rounded-md bg-surface-elevated border border-hairline">
             <span id="verdict-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-stacked-sm">
@@ -137,6 +144,7 @@
   const verdictShortAnswer = document.getElementById('verdict-short-answer');
   const sourcesList = document.getElementById('sources-list');
   const btnSpinner = document.getElementById('btn-spinner');
+  const submitLabel = document.getElementById('verify-submit-label');
   const errorBox = document.getElementById('verify-error');
 
   let activeTab: 'text' | 'url' | 'image' = 'text';
@@ -145,7 +153,10 @@
     btn.addEventListener('click', () => {
       const tab = btn.getAttribute('data-tab') as 'text' | 'url' | 'image';
       activeTab = tab;
-      buttons.forEach((b) => b.classList.toggle('active', b === btn));
+      buttons.forEach((b) => {
+        b.classList.toggle('active', b === btn);
+        b.setAttribute('aria-selected', String(b === btn));
+      });
       panels.forEach((p) => { p.hidden = p.id !== `panel-${tab}`; });
       submitBtn.disabled = tab === 'image';
     });
@@ -186,7 +197,7 @@
       a.href = e.url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
-      a.className = 'p-3 bg-surface-elevated border border-hairline rounded-md hover:border-primary transition-all flex items-center justify-between gap-2 group';
+      a.className = 'p-3 bg-surface-elevated border border-hairline rounded-md hover:border-primary transition-colors flex items-center justify-between gap-2 group';
 
       const title = document.createElement('span');
       title.className = 'font-medium text-ink group-hover:text-primary-strong';
@@ -209,6 +220,7 @@
 
     btnSpinner?.classList.remove('hidden');
     submitBtn.disabled = true;
+    if (submitLabel) submitLabel.textContent = 'Checking…';
     errorBox?.classList.add('hidden');
     verdictCard?.classList.add('hidden');
 
@@ -261,7 +273,8 @@
       }
     } finally {
       btnSpinner?.classList.add('hidden');
-      submitBtn.disabled = false;
+      submitBtn.disabled = activeTab === 'image';
+      if (submitLabel) submitLabel.textContent = 'Check Claim';
     }
   });
 </script>

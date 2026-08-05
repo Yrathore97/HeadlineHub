@@ -181,11 +181,11 @@ async function runPipeline(claim: string): Promise<FactCheckResult> {
   }
 
   // ---- Stage 2: retrieve evidence. ----------------------------------------
-  // Web Search is discovery-only: it never returns page bodies, and `snippet`
-  // is just the page-level meta description. Reasoning over meta descriptions
-  // is not grounding, so fetch the actual pages and fall back to the snippet
-  // only when a fetch fails.
-  const hits = (await search(env.WEBSEARCH, query)).slice(0, MAX_SOURCES);
+  // Tavily returns a query-relevant extract per result. Page bodies are still
+  // better, so each hit's URL is fetched and the extract is used only when the
+  // fetch fails.
+  const tavilyKey = (env as unknown as { TAVILY_API_KEY?: string }).TAVILY_API_KEY ?? '';
+  const hits = (await search(tavilyKey, query)).slice(0, MAX_SOURCES);
   const fetched = await Promise.allSettled(hits.map((h) => fetchArticleText(h.url)));
 
   const passages: { hit: SearchHit; text: string }[] = [];

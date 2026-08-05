@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeNewsData } from '../../src/lib/news/newsdata';
+import { normalizeNewsData, extractNextPage } from '../../src/lib/news/newsdata';
 
 describe('normalizeNewsData', () => {
   it('maps a NewsData response to Article[]', () => {
@@ -32,5 +32,21 @@ describe('normalizeNewsData', () => {
 
   it('returns an empty array when results is missing', () => {
     expect(normalizeNewsData({ status: 'error' })).toEqual([]);
+  });
+});
+
+describe('extractNextPage', () => {
+  it('returns the token when present', () => {
+    expect(extractNextPage({ nextPage: 'abc123token' })).toBe('abc123token');
+  });
+
+  it('returns null when absent, empty, or the wrong type', () => {
+    expect(extractNextPage({})).toBeNull();
+    expect(extractNextPage({ nextPage: '' })).toBeNull();
+    expect(extractNextPage({ nextPage: null })).toBeNull();
+    expect(extractNextPage({ nextPage: 42 })).toBeNull();
+    expect(extractNextPage(null)).toBeNull();
+    expect(extractNextPage(undefined)).toBeNull();
+    expect(extractNextPage('nonsense')).toBeNull();
   });
 });

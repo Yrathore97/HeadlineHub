@@ -1,3 +1,4 @@
 # Copy to .dev.vars for local development. Never commit .dev.vars.
 NEWSDATA_API_KEY=
 GOOGLE_FACTCHECK_API_KEY=
+TAVILY_API_KEY=

@@ -1,26 +1,27 @@
-import { describe, it, expect, vi } from 'vitest';
-import { parseWebSearchResults, search } from '../../src/lib/factcheck/search';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { parseTavilyResults, search } from '../../src/lib/factcheck/search';
 
-describe('parseWebSearchResults', () => {
-  it('maps a well-formed Web Search response to hits', () => {
+describe('parseTavilyResults', () => {
+  it('maps a well-formed Tavily response to hits', () => {
     const raw = {
-      items: [
+      query: 'india gdp',
+      results: [
         {
-          url: 'https://reuters.com/a',
           title: 'India GDP grows 7.2% in Q1',
-          description: 'Official data showed the economy expanded 7.2 percent.',
-          lastModifiedDate: '2026-07-30T04:39:48',
+          url: 'https://reuters.com/a',
+          content: 'Official data showed the economy expanded 7.2 percent.',
+          score: 0.98,
         },
         {
-          url: 'https://pib.gov.in/b',
           title: 'Government statement on growth',
-          description: 'The ministry confirmed the revised figure.',
+          url: 'https://pib.gov.in/b',
+          content: 'The ministry confirmed the revised figure.',
+          score: 0.91,
         },
       ],
-      metadata: { query: 'india gdp', requestId: 'abc', latencyMs: 42 },
     };
 
-    const out = parseWebSearchResults(raw);
+    const out = parseTavilyResults(raw);
     expect(out).toHaveLength(2);
     expect(out[0]).toEqual({
       title: 'India GDP grows 7.2% in Q1',
@@ -31,57 +32,83 @@ describe('parseWebSearchResults', () => {
   });
 
   it('returns [] for malformed or empty responses', () => {
-    expect(parseWebSearchResults({ items: [] })).toEqual([]);
-    expect(parseWebSearchResults({})).toEqual([]);
-    expect(parseWebSearchResults(null)).toEqual([]);
-    expect(parseWebSearchResults(undefined)).toEqual([]);
-    expect(parseWebSearchResults('nonsense')).toEqual([]);
-    expect(parseWebSearchResults({ items: 'not-an-array' })).toEqual([]);
+    expect(parseTavilyResults({ results: [] })).toEqual([]);
+    expect(parseTavilyResults({})).toEqual([]);
+    expect(parseTavilyResults(null)).toEqual([]);
+    expect(parseTavilyResults(undefined)).toEqual([]);
+    expect(parseTavilyResults('nonsense')).toEqual([]);
+    expect(parseTavilyResults({ results: 'not-an-array' })).toEqual([]);
   });
 
-  it('does not throw when fields are missing, and drops unusable results', () => {
-    const raw = {
-      items: [
-        { url: 'https://ok.com/x', title: 'Has no description' },
+  it('drops results missing a url or a title', () => {
+    const out = parseTavilyResults({
+      results: [
+        { url: 'https://ok.com/x', title: 'Has no content' },
         { title: 'No url at all' },
-        { url: 'https://nourl-title.com' },
+        { url: 'https://no-title.com' },
         null,
         'garbage',
       ],
-    };
-
-    const out = parseWebSearchResults(raw);
-    // Only the entry carrying both a url and a title survives.
-    expect(out).toEqual([
-      { title: 'Has no description', url: 'https://ok.com/x', snippet: '' },
-    ]);
+    });
+    expect(out).toEqual([{ title: 'Has no content', url: 'https://ok.com/x', snippet: '' }]);
   });
 
   it('coerces non-string field values rather than leaking them through', () => {
-    const out = parseWebSearchResults({
-      items: [{ url: 'https://n.com/1', title: 42, description: 7 }],
-    });
+    const out = parseTavilyResults({ results: [{ url: 'https://n.com/1', title: 42, content: 7 }] });
     expect(out).toEqual([{ title: '42', url: 'https://n.com/1', snippet: '7' }]);
   });
 });
 
 describe('search', () => {
-  it('passes the query and a result limit to the binding, and parses the reply', async () => {
-    const binding = {
-      search: vi.fn().mockResolvedValue({
-        items: [{ url: 'https://a.com', title: 'A', description: 'snippet a' }],
-        metadata: { query: 'q', requestId: 'r', latencyMs: 1 },
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('posts the query to Tavily and parses the reply', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        results: [{ title: 'A', url: 'https://a.com', content: 'snippet a' }],
       }),
-    };
+    });
+    vi.stubGlobal('fetch', fetchMock);
 
-    const out = await search(binding as unknown as WebSearch, 'is the sky blue');
+    const out = await search('test-key', 'is the sky blue');
 
-    expect(binding.search).toHaveBeenCalledWith({ query: 'is the sky blue', limit: 5 });
     expect(out).toEqual([{ title: 'A', url: 'https://a.com', snippet: 'snippet a' }]);
+
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('https://api.tavily.com/search');
+    expect(init.method).toBe('POST');
+    const body = JSON.parse(init.body);
+    expect(body.query).toBe('is the sky blue');
+    expect(body.max_results).toBe(5);
   });
 
-  it('returns [] instead of throwing when the binding rejects', async () => {
-    const binding = { search: vi.fn().mockRejectedValue(new Error('upstream down')) };
-    await expect(search(binding as unknown as WebSearch, 'q')).resolves.toEqual([]);
+  it('sends the key in the Authorization header, never in the URL', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ results: [] }) });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await search('secret-key', 'q');
+
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(String(url)).not.toContain('secret-key');
+    expect(init.headers.Authorization).toBe('Bearer secret-key');
+  });
+
+  it('returns [] without calling out when the key is missing', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(search('', 'q')).resolves.toEqual([]);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('returns [] instead of throwing when the request fails', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('upstream down')));
+    await expect(search('k', 'q')).resolves.toEqual([]);
+  });
+
+  it('returns [] instead of throwing on a non-ok response', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 401 }));
+    await expect(search('k', 'q')).resolves.toEqual([]);
   });
 });

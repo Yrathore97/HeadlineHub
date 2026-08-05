@@ -100,7 +100,16 @@
    All of it is asserted in tests/contrast.test.ts.
 --------------------------------------------------------------------------- */
 
+/* Tells the UA to render scrollbars, form controls and native widgets in the
+   matching theme. Without it, dark mode leaves white scrollbars and light
+   <select> dropdowns. */
+html {
+  color-scheme: light;
+}
+
 html.dark {
+  color-scheme: dark;
+
   --color-primary: #ff8b7a;
   --color-primary-strong: #ff8b7a;
   --color-primary-pressed: #ff6b57;

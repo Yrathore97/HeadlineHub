@@ -3,20 +3,68 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
 import HeroMesh from '../components/HeroMesh.astro';
+import LeadStory from '../components/LeadStory.astro';
+import CategoryRail from '../components/CategoryRail.astro';
 import NewsFeed from '../components/NewsFeed.astro';
 import SeoContentSection from '../components/SeoContentSection.astro';
 import Footer from '../components/Footer.astro';
+import type { Article, NewsPage } from '../lib/news/types';
+import { prepareArticles } from '../lib/news/feed';
+import { isValidLanguage, DEFAULT_LANGUAGE } from '../lib/news/languages';
+
+const rawLanguage = Astro.url.searchParams.get('language');
+const language = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
+
+// The four categories that get a rail. Kept short deliberately: each one is a
+// separate upstream request, and the plan's rate-limit budget assumes four.
+const RAILS = [
+  { slug: 'sports', label: 'Sports' },
+  { slug: 'business', label: 'Business' },
+  { slug: 'technology', label: 'Technology' },
+  { slug: 'health', label: 'Health' },
+];
+
+let top: Article[] = [];
+try {
+  const res = await fetch(new URL(`/api/news?language=${encodeURIComponent(language)}`, Astro.url));
+  if (res.ok) top = prepareArticles(((await res.json()) as NewsPage).articles ?? []);
+} catch {
+  /* the lead block is skipped entirely when nothing loads */
+}
+
+// Prefer an article with an image for the hero, but fall back to the newest
+// without one rather than leaving a hole.
+const leadIndex = top.findIndex((a) => a.imageUrl);
+const lead = leadIndex >= 0 ? top[leadIndex] : top[0];
+const secondary = top.filter((a) => a.url !== lead?.url).slice(0, 3);
+
+// Everything already shown above, so the rails and the main grid do not repeat it.
+const shownUrls = [lead?.url, ...secondary.map((a) => a.url)].filter(
+  (u): u is string => typeof u === 'string',
+);
 ---
 
-<Layout 
+<Layout
   title="Latest News Today, Breaking India News & AI Fact Check Portal | NewzWale"
   description="NewzWale is your 24/7 destination for latest news, breaking news today, tech news, hindi news (news in hindi), and india news with real-time fact check explorer verification."
 >
   <Navbar />
   <MastheadInfoStrip />
-  <main class="flex-1">
+  <main id="main" class="flex-1">
     <HeroMesh />
-    <NewsFeed />
+
+    {lead && <LeadStory lead={lead} secondary={secondary} />}
+
+    {RAILS.map((rail) => (
+      <CategoryRail
+        slug={rail.slug}
+        label={rail.label}
+        language={language}
+        excludeUrls={shownUrls}
+      />
+    ))}
+
+    <NewsFeed language={language} excludeUrls={shownUrls} />
     <SeoContentSection />
   </main>
   <Footer />

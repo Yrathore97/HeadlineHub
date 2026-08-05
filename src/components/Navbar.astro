@@ -1,29 +1,22 @@
 ---
 import LogoIcon from './LogoIcon.astro';
+import { CATEGORIES } from '../lib/news/categories';
+import { LANGUAGES, isValidLanguage, DEFAULT_LANGUAGE } from '../lib/news/languages';
 
 const currentPath = Astro.url.pathname;
 const isNewsActive = currentPath === '/' || currentPath === '';
 const isVerifyActive = currentPath.startsWith('/verify');
 
-const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'hi', name: 'हिंदी (Hindi)' },
-  { code: 'bn', name: 'বাংলা (Bengali)' },
-  { code: 'mr', name: 'मराठी (Marathi)' },
-  { code: 'te', name: 'తెలుగు (Telugu)' },
-  { code: 'ta', name: 'தமிழ் (Tamil)' },
-  { code: 'gu', name: 'ગુજરાતી (Gujarati)' },
-  { code: 'kn', name: 'ಕನ್ನಡ (Kannada)' },
-  { code: 'ml', name: 'മലയാളം (Malayalam)' },
-  { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)' },
-  { code: 'or', name: 'ଓଡ଼ିଆ (Odia)' },
-  { code: 'as', name: 'অসমীয়া (Assamese)' },
-  { code: 'ur', name: 'اردو (Urdu)' },
-];
+const activeCategory = currentPath.startsWith('/category/')
+  ? currentPath.split('/')[2]
+  : null;
+
+const rawLanguage = Astro.url.searchParams.get('language');
+const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
-<header class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline h-[64px] transition-colors duration-200">
-  <div class="max-w-[1400px] mx-auto h-full px-3 sm:px-6 flex items-center justify-between">
+<header id="site-header" class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-md border-b border-hairline transition-[transform,colors] duration-300 ease-out">
+  <div class="max-w-[1400px] mx-auto h-[64px] px-3 sm:px-6 flex items-center justify-between">
 
     <!-- Brand Logo & Live Indicator -->
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -45,7 +38,7 @@ const languages = [
       <a
         href="/"
         aria-current={isNewsActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 ${
           isNewsActive
             ? 'bg-primary-strong text-on-primary shadow-stacked-sm font-semibold'
             : 'text-body hover:text-ink hover:bg-gradient-start'
@@ -57,13 +50,12 @@ const languages = [
       <a
         href="/verify"
         aria-current={isVerifyActive ? "page" : undefined}
-        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 ${
+        class={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors duration-200 ${
           isVerifyActive
             ? 'bg-primary-strong text-on-primary shadow-stacked-sm font-semibold'
             : 'text-body hover:text-ink hover:bg-gradient-start'
         }`}
       >
-        <svg class={`w-3.5 h-3.5 ${isVerifyActive ? 'text-on-primary' : 'text-primary-strong'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         Fact Check
       </a>
     </nav>
@@ -75,12 +67,12 @@ const languages = [
       <button
         type="button"
         aria-label="Toggle Theme"
-        class="theme-toggle-trigger px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-ink hover:bg-charcoal text-canvas border border-ink rounded-full text-xs font-semibold shadow-stacked-sm transition-all duration-200 cursor-pointer shrink-0"
+        class="theme-toggle-trigger px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-ink hover:bg-charcoal text-canvas border border-ink rounded-full text-xs font-semibold shadow-stacked-sm transition-colors duration-200 cursor-pointer shrink-0"
       >
-        <svg class="hidden dark:block w-3.5 h-3.5 text-canvas" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="hidden dark:block w-3.5 h-3.5 text-canvas" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
-        <svg class="block dark:hidden w-3.5 h-3.5 text-canvas" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="block dark:hidden w-3.5 h-3.5 text-canvas" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
         </svg>
         <span class="text-[10px] sm:text-[11px] uppercase tracking-wide hidden xs:inline">
@@ -91,13 +83,13 @@ const languages = [
 
       <!-- Global Language Selector -->
       <div class="relative group">
-        <select id="language-select" aria-label="Select Language" class="appearance-none max-w-[110px] sm:max-w-none bg-surface-card hover:bg-secondary-bg text-ink text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-hairline rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong h-[32px] truncate">
-          {languages.map(lang => (
-            <option value={lang.code}>{lang.name}</option>
+        <select id="language-select" aria-label="Choose the language of news headlines" title="Changes the language of news headlines, not the site interface" class="appearance-none max-w-[110px] sm:max-w-none bg-surface-card hover:bg-secondary-bg text-ink text-xs font-semibold px-2.5 sm:px-3 py-1.5 pr-7 border border-hairline rounded-full cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong h-[32px] truncate">
+          {LANGUAGES.map(lang => (
+            <option value={lang.code} selected={lang.code === currentLanguage}>{lang.name}</option>
           ))}
         </select>
         <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-primary-strong">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
 
@@ -110,9 +102,31 @@ const languages = [
         aria-controls="mobile-menu-drawer"
         class="lg:hidden p-1.5 text-ink hover:bg-surface-card rounded-md transition-colors cursor-pointer"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
     </div>
+  </div>
+
+  <!-- Category strip: horizontally scrollable on narrow screens -->
+  <div class="w-full border-t border-hairline-soft bg-surface-soft">
+    <nav
+      aria-label="News categories"
+      class="max-w-[1400px] mx-auto px-3 sm:px-6 flex items-center gap-1 overflow-x-auto no-scrollbar h-[42px]"
+    >
+      {CATEGORIES.map((c) => (
+        <a
+          href={`/category/${c.slug}`}
+          aria-current={activeCategory === c.slug ? 'page' : undefined}
+          class={`shrink-0 px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 ${
+            activeCategory === c.slug
+              ? 'bg-primary-strong text-on-primary font-semibold shadow-stacked-sm'
+              : 'text-body hover:text-ink hover:bg-gradient-start'
+          }`}
+        >
+          {c.label}
+        </a>
+      ))}
+    </nav>
   </div>
 
   <!-- Mobile Drawer Menu -->
@@ -120,10 +134,26 @@ const languages = [
     <a href="/" class={`block px-3.5 py-2 rounded-md ${isNewsActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-ink hover:bg-surface-card'}`}>
       News
     </a>
-    <a href="/verify" class={`block px-3.5 py-2 rounded-md flex items-center gap-2 ${isVerifyActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-primary-strong hover:bg-surface-card'}`}>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+    <a href="/verify" class={`block px-3.5 py-2 rounded-md ${isVerifyActive ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm' : 'text-primary-strong hover:bg-surface-card'}`}>
       Fact Check
     </a>
+
+    <div class="pt-2 mt-2 border-t border-hairline-soft">
+      <p class="px-3.5 pb-1 font-mono-caption text-mute">CATEGORIES</p>
+      {CATEGORIES.map((c) => (
+        <a
+          href={`/category/${c.slug}`}
+          aria-current={activeCategory === c.slug ? 'page' : undefined}
+          class={`block px-3.5 py-2 rounded-md ${
+            activeCategory === c.slug
+              ? 'bg-primary-strong text-on-primary font-bold shadow-stacked-sm'
+              : 'text-ink hover:bg-surface-card'
+          }`}
+        >
+          {c.label}
+        </a>
+      ))}
+    </div>
   </div>
 </header>
 
@@ -144,26 +174,50 @@ const languages = [
     mobileBtn.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // Language Selector Sync
-  const langSelect = document.getElementById('language-select') as unknown as HTMLSelectElement;
-  langSelect?.addEventListener('change', (e) => {
-    const code = (e.target as HTMLSelectElement).value;
-    const selectedOption = langSelect.options[langSelect.selectedIndex];
-    const name = selectedOption ? selectedOption.text : code;
+  // Language selector. Navigating (rather than refetching client-side) keeps
+  // the choice in the URL, so it is shareable and survives a reload. The
+  // localStorage copy is what the masthead date listens to.
+  const langSelect = document.getElementById('language-select') as HTMLSelectElement | null;
+  langSelect?.addEventListener('change', () => {
+    const code = langSelect.value;
+    const name = langSelect.options[langSelect.selectedIndex]?.text ?? code;
 
     localStorage.setItem('userLanguage', code);
     localStorage.setItem('userLanguageName', name);
 
-    window.dispatchEvent(new CustomEvent('language-changed', {
-      detail: { langCode: code, langName: name }
-    }));
+    window.dispatchEvent(
+      new CustomEvent('language-changed', { detail: { langCode: code, langName: name } }),
+    );
+
+    const url = new URL(window.location.href);
+    if (code === 'en') url.searchParams.delete('language');
+    else url.searchParams.set('language', code);
+    window.location.assign(url.toString());
   });
 
-  // Restore state on DOM load
-  document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('userLanguage');
-    if (savedLang && langSelect) {
-      langSelect.value = savedLang;
-    }
-  });
+  // Hide the header on scroll-down past the fold, reveal on scroll-up. Two
+  // sticky rows (nav + category strip) cost ~107px of a phone viewport, so
+  // giving that back while reading is worth more than permanent visibility.
+  const header = document.getElementById('site-header');
+  if (header) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const REVEAL_THRESHOLD = 120; // px scrolled before hiding kicks in
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          const scrollingDown = y > lastY;
+          header.classList.toggle('-translate-y-full', scrollingDown && y > REVEAL_THRESHOLD);
+          lastY = y;
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+  }
 </script>

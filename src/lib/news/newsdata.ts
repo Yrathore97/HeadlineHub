@@ -1,4 +1,6 @@
-import type { Article } from './types';
+import type { Article, NewsPage } from './types';
+import { upstreamCategory } from './categories';
+import { DEFAULT_LANGUAGE } from './languages';
 
 const ENDPOINT = 'https://newsdata.io/api/1/latest';
 
@@ -18,15 +20,41 @@ export function normalizeNewsData(raw: any): Article[] {
     }));
 }
 
-export async function fetchNewsData(apiKey: string, category?: string): Promise<Article[]> {
+/** NewsData paginates with an opaque token. Anything that is not a non-empty
+ *  string means "no further page" - never guess a token. */
+export function extractNextPage(raw: any): string | null {
+  const token = raw?.nextPage;
+  return typeof token === 'string' && token.length > 0 ? token : null;
+}
+
+export interface FetchNewsOptions {
+  /** Site category slug (not the upstream name) - mapped internally. */
+  category?: string;
+  language?: string;
+  /** Opaque token from a previous response's nextPage. */
+  page?: string;
+}
+
+export async function fetchNewsData(
+  apiKey: string,
+  opts: FetchNewsOptions = {},
+): Promise<NewsPage> {
   const params = new URLSearchParams({
     apikey: apiKey,
     country: 'in',
-    language: 'en',
+    language: opts.language ?? DEFAULT_LANGUAGE,
   });
-  if (category && category !== 'top') params.set('category', category);
+
+  // upstreamCategory returns null for 'top' and for anything unrecognised, so
+  // an unvalidated slug can never be forwarded upstream.
+  const upstream = upstreamCategory(opts.category);
+  if (upstream) params.set('category', upstream);
+
+  if (opts.page) params.set('page', opts.page);
 
   const res = await fetch(`${ENDPOINT}?${params}`);
   if (!res.ok) throw new Error(`NewsData ${res.status}`);
-  return normalizeNewsData(await res.json());
+
+  const raw = await res.json();
+  return { articles: normalizeNewsData(raw), nextPage: extractNextPage(raw) };
 }

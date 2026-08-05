@@ -2,11 +2,21 @@ import { describe, it, expect, vi } from 'vitest';
 import { newsCacheKey, cached } from '../src/lib/cache';
 
 describe('newsCacheKey', () => {
-  it('namespaces by category', () => {
-    expect(newsCacheKey('business')).toBe('news:v1:business');
+  it('namespaces by category, language, and page', () => {
+    expect(newsCacheKey('business', 'en')).toBe('news:v2:business:en:first');
   });
-  it('defaults to top', () => {
-    expect(newsCacheKey()).toBe('news:v1:top');
+
+  it('defaults to the top category in English, first page', () => {
+    expect(newsCacheKey()).toBe('news:v2:top:en:first');
+  });
+
+  it('gives different languages different keys', () => {
+    expect(newsCacheKey('top', 'hi')).not.toBe(newsCacheKey('top', 'en'));
+  });
+
+  it('gives different pages different keys', () => {
+    expect(newsCacheKey('top', 'en', 'tok2')).toBe('news:v2:top:en:tok2');
+    expect(newsCacheKey('top', 'en', 'tok2')).not.toBe(newsCacheKey('top', 'en'));
   });
 });
 
