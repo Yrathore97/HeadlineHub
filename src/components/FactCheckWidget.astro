@@ -149,13 +149,22 @@
 
   let activeTab: 'text' | 'url' | 'image' = 'text';
 
+  // The pill look is plain Tailwind utilities, not a `.tab-btn.active` CSS
+  // rule - so switching tabs has to move these classes itself, not just an
+  // inert "active" flag, or the highlight never leaves the first tab.
+  const ACTIVE_CLASSES = ['font-semibold', 'text-ink', 'bg-surface-elevated', 'border', 'border-hairline', 'shadow-stacked-sm'];
+  const INACTIVE_CLASSES = ['text-body', 'hover:text-ink'];
+
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
       const tab = btn.getAttribute('data-tab') as 'text' | 'url' | 'image';
       activeTab = tab;
       buttons.forEach((b) => {
-        b.classList.toggle('active', b === btn);
-        b.setAttribute('aria-selected', String(b === btn));
+        const isActive = b === btn;
+        b.classList.toggle('active', isActive);
+        b.classList.remove(...ACTIVE_CLASSES, ...INACTIVE_CLASSES);
+        b.classList.add(...(isActive ? ACTIVE_CLASSES : INACTIVE_CLASSES));
+        b.setAttribute('aria-selected', String(isActive));
       });
       panels.forEach((p) => { p.hidden = p.id !== `panel-${tab}`; });
       submitBtn.disabled = tab === 'image';
