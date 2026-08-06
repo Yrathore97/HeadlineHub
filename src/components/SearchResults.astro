@@ -49,7 +49,8 @@
 </section>
 
 <script>
-  import { buildArticleCardElement, isSafeUrlClient, type CardArticle } from '../lib/news/card-dom';
+  import { buildArticleCardElement, wireLoadMore, type CardArticle } from '../lib/news/card-dom';
+  import { isSafeUrl } from '../lib/news/feed';
 
   const section = document.getElementById('search-results');
   const heading = document.getElementById('search-results-heading');
@@ -62,12 +63,17 @@
   let currentQuery = '';
   let currentLanguage = 'en';
 
-  async function runSearch(query: string, language: string, page?: string) {
-    const params = new URLSearchParams({ q: query, language });
-    if (page) params.set('page', page);
-    const res = await fetch(`/api/news?${params}`);
-    if (!res.ok) throw new Error(`status ${res.status}`);
-    return (await res.json()) as { articles?: CardArticle[]; nextPage?: string | null };
+  if (loadMoreBtn && grid) {
+    // buildUrl reads currentQuery/currentLanguage at click time, so load more
+    // always continues whichever search ran most recently.
+    wireLoadMore({
+      button: loadMoreBtn,
+      grid,
+      status: loadMoreStatus,
+      itemNoun: 'results',
+      buildUrl: (token) =>
+        `/api/news?${new URLSearchParams({ q: currentQuery, language: currentLanguage, page: token })}`,
+    });
   }
 
   async function search(query: string, language: string) {
@@ -85,8 +91,11 @@
     if (loadMoreStatus) loadMoreStatus.textContent = '';
 
     try {
-      const page = await runSearch(query, language);
-      const articles = (page.articles ?? []).filter((a) => a?.url && a?.title && isSafeUrlClient(a.url));
+      const params = new URLSearchParams({ q: query, language });
+      const res = await fetch(`/api/news?${params}`);
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      const page = (await res.json()) as { articles?: CardArticle[]; nextPage?: string | null };
+      const articles = (page.articles ?? []).filter((a) => a?.url && a?.title && isSafeUrl(a.url));
 
       if (articles.length === 0) {
         // Honest empty state: a failed or genuinely empty search looks the
@@ -107,43 +116,6 @@
       status.textContent = 'Search is temporarily unavailable. Please try again shortly.';
     }
   }
-
-  loadMoreBtn?.addEventListener('click', async () => {
-    const token = loadMoreBtn.dataset.nextPage;
-    if (!token || !grid) return;
-
-    loadMoreBtn.disabled = true;
-    const label = loadMoreBtn.textContent;
-    loadMoreBtn.textContent = 'Loading…';
-    if (loadMoreStatus) loadMoreStatus.textContent = '';
-
-    try {
-      const page = await runSearch(currentQuery, currentLanguage, token);
-      const seen = new Set(
-        Array.from(grid.querySelectorAll<HTMLElement>('[data-article-id]')).map(
-          (n) => n.dataset.articleId ?? '',
-        ),
-      );
-      const fresh = (page.articles ?? []).filter(
-        (a) => a?.url && a?.title && isSafeUrlClient(a.url) && !seen.has(a.id),
-      );
-      for (const a of fresh) grid.appendChild(buildArticleCardElement(a));
-
-      if (page.nextPage) {
-        loadMoreBtn.dataset.nextPage = page.nextPage;
-        loadMoreBtn.disabled = false;
-        loadMoreBtn.textContent = label;
-        if (loadMoreStatus && fresh.length === 0) loadMoreStatus.textContent = 'No new results in that batch.';
-      } else {
-        loadMoreBtn.hidden = true;
-        if (loadMoreStatus) loadMoreStatus.textContent = "You've reached the end of the results.";
-      }
-    } catch {
-      loadMoreBtn.disabled = false;
-      loadMoreBtn.textContent = label;
-      if (loadMoreStatus) loadMoreStatus.textContent = 'Could not load more results. Tap to try again.';
-    }
-  });
 
   closeBtn?.addEventListener('click', () => {
     if (section) section.hidden = true;

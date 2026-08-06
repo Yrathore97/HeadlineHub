@@ -122,31 +122,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE);
     >
       Skip to Main Content
     </a>
-    <div
-      id="nav-progress"
-      aria-hidden="true"
-      class="fixed top-0 left-0 z-[200] h-[3px] w-0 bg-primary-strong opacity-0 transition-[width] duration-[400ms] ease-out"
-    ></div>
+    <div id="nav-progress" aria-hidden="true" class="fixed top-0 left-0 z-[200] h-[3px] w-0 bg-primary-strong opacity-0"></div>
     <slot />
 
     <script>
       // Full-page navigations (category links, pagination, language switch)
       // give no visual feedback until the next page paints. A thin top bar
-      // that races toward 90% on click, then lets the incoming page's own
+      // that eases toward 90% on click, then lets the incoming page's own
       // load/unload finish it, is the smallest honest way to say "working" -
-      // it never claims completion the click hasn't earned yet.
+      // it never claims completion the click hasn't earned yet. The easing
+      // is a plain CSS transition (cubic-bezier front-loads the motion, like
+      // the manual step-toward-90% loop this replaced) rather than a
+      // setInterval driving the width by hand.
       const bar = document.getElementById('nav-progress');
       if (bar) {
-        let timer: ReturnType<typeof setInterval> | undefined;
-
         const start = () => {
+          bar.style.transition = 'width 4s cubic-bezier(0.1, 0.7, 0.3, 1), opacity 200ms ease-out';
           bar.style.opacity = '1';
-          bar.style.width = '20%';
-          let width = 20;
-          timer = setInterval(() => {
-            width = Math.min(width + (90 - width) * 0.1, 90);
-            bar.style.width = `${width}%`;
-          }, 200);
+          bar.style.width = '90%';
         };
 
         document.addEventListener('click', (e) => {
@@ -166,7 +159,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE);
         });
 
         window.addEventListener('pageshow', () => {
-          if (timer) clearInterval(timer);
+          bar.style.transition = 'none';
           bar.style.width = '0%';
           bar.style.opacity = '0';
         });

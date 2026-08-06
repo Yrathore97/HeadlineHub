@@ -1,10 +1,13 @@
-// Browser-only. Builds one article card as a DOM element, for client scripts
-// that append cards without a full page navigation (Load more, homepage
-// search). Never call this during SSR - it uses `document`.
+// Browser-only. Builds article cards as DOM elements and wires "load more"
+// pagination, for client scripts that append cards without a full page
+// navigation (NewsFeed, SearchResults). Never call these during SSR - they
+// use `document`.
 //
 // Kept separate from feed.ts so that module stays pure/SSR-safe. Shares the
 // same markup and classes as ArticleCard.astro's server-rendered output, so
 // a client-appended card is visually identical to one the server rendered.
+
+import { isSafeUrl, formatPublished } from './feed';
 
 export interface CardArticle {
   id: string;
@@ -17,28 +20,6 @@ export interface CardArticle {
   publishedAt: string;
 }
 
-export function formatPublishedClient(value: string): string {
-  const t = Date.parse(value);
-  if (Number.isNaN(t)) return '';
-  // floor, not round: matches src/lib/news/feed.ts's formatPublished, which
-  // never reports an elapsed time as MORE than it actually is.
-  const mins = Math.floor((Date.now() - t) / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return new Date(t).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
-}
-
-export function isSafeUrlClient(value: string): boolean {
-  try {
-    const { protocol } = new URL(value);
-    return protocol === 'http:' || protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
-
 // Built with createElement + textContent throughout. Never innerHTML: a
 // headline is third-party text and would otherwise be an injection vector.
 export function buildArticleCardElement(a: CardArticle): HTMLElement {
@@ -47,7 +28,7 @@ export function buildArticleCardElement(a: CardArticle): HTMLElement {
   el.className =
     'article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-[box-shadow,border-color] flex flex-col group';
 
-  if (a.imageUrl && isSafeUrlClient(a.imageUrl)) {
+  if (a.imageUrl && isSafeUrl(a.imageUrl)) {
     const wrap = document.createElement('div');
     wrap.className = 'relative h-44 w-full overflow-hidden bg-surface-card';
     const img = document.createElement('img');
@@ -104,7 +85,7 @@ export function buildArticleCardElement(a: CardArticle): HTMLElement {
   foot.className = 'pt-3 border-t border-hairline flex items-center justify-between text-xs';
   const when = document.createElement('span');
   when.className = 'font-mono text-mute';
-  when.textContent = formatPublishedClient(a.publishedAt);
+  when.textContent = formatPublished(a.publishedAt);
   const read = document.createElement('a');
   read.href = a.url;
   read.target = '_blank';
@@ -119,4 +100,64 @@ export function buildArticleCardElement(a: CardArticle): HTMLElement {
   body.appendChild(foot);
   el.appendChild(body);
   return el;
+}
+
+export interface LoadMoreConfig {
+  button: HTMLButtonElement;
+  grid: HTMLElement;
+  status: HTMLElement | null;
+  /** Builds the /api/news URL for a given nextPage token. Called fresh on
+   *  every click, so callers whose query changes (search) can read current
+   *  state rather than a snapshot taken when this was wired up. */
+  buildUrl: (pageToken: string) => string;
+  /** "headlines" or "results" - used in the end-of-feed / error messages. */
+  itemNoun: string;
+}
+
+/** Wires a "load more" button: fetch the next page, append only unseen
+ *  cards (deduped by data-article-id already in the grid), and update
+ *  button/status state. Shared by NewsFeed and SearchResults so the same
+ *  fetch-append-dedupe logic isn't hand-rolled twice. */
+export function wireLoadMore({ button, grid, status, buildUrl, itemNoun }: LoadMoreConfig): void {
+  button.addEventListener('click', async () => {
+    const token = button.dataset.nextPage;
+    if (!token) return;
+
+    button.disabled = true;
+    const label = button.textContent;
+    button.textContent = 'Loading…';
+    if (status) status.textContent = '';
+
+    try {
+      const res = await fetch(buildUrl(token));
+      if (!res.ok) throw new Error(`status ${res.status}`);
+      const page = (await res.json()) as { articles?: CardArticle[]; nextPage?: string | null };
+
+      const seen = new Set(
+        Array.from(grid.querySelectorAll<HTMLElement>('[data-article-id]')).map(
+          (n) => n.dataset.articleId ?? '',
+        ),
+      );
+      const fresh = (page.articles ?? []).filter(
+        (a) => a?.url && a?.title && isSafeUrl(a.url) && !seen.has(a.id),
+      );
+      // Appended, so keyboard focus order stays natural.
+      for (const a of fresh) grid.appendChild(buildArticleCardElement(a));
+
+      if (page.nextPage) {
+        button.dataset.nextPage = page.nextPage;
+        button.disabled = false;
+        button.textContent = label;
+        if (status && fresh.length === 0) status.textContent = `No new ${itemNoun} in that batch.`;
+      } else {
+        button.hidden = true;
+        if (status) status.textContent = `You've reached the end of the ${itemNoun}.`;
+      }
+    } catch {
+      // Existing cards stay on screen - a failed page never clears the feed.
+      button.disabled = false;
+      button.textContent = label;
+      if (status) status.textContent = `Could not load more ${itemNoun}. Tap to try again.`;
+    }
+  });
 }

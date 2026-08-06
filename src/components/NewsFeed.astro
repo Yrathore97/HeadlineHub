@@ -113,59 +113,24 @@ const languageName = LANGUAGES.find((l) => l.code === language)?.name ?? languag
 </section>
 
 <script>
-  import { buildArticleCardElement, isSafeUrlClient, type CardArticle } from '../lib/news/card-dom';
+  import { wireLoadMore } from '../lib/news/card-dom';
 
-  const btn = document.getElementById('load-more') as HTMLButtonElement | null;
+  const button = document.getElementById('load-more') as HTMLButtonElement | null;
   const grid = document.getElementById('articles-grid');
   const status = document.getElementById('load-more-status');
 
-  btn?.addEventListener('click', async () => {
-    const token = btn.dataset.nextPage;
-    if (!token || !grid) return;
-
-    btn.disabled = true;
-    const label = btn.textContent;
-    btn.textContent = 'Loading…';
-    if (status) status.textContent = '';
-
-    const params = new URLSearchParams({
-      category: btn.dataset.category ?? 'top',
-      language: btn.dataset.language ?? 'en',
-      page: token,
+  if (button && grid) {
+    wireLoadMore({
+      button,
+      grid,
+      status,
+      itemNoun: 'headlines',
+      buildUrl: (token) =>
+        `/api/news?${new URLSearchParams({
+          category: button.dataset.category ?? 'top',
+          language: button.dataset.language ?? 'en',
+          page: token,
+        })}`,
     });
-
-    try {
-      const res = await fetch(`/api/news?${params}`);
-      if (!res.ok) throw new Error(`status ${res.status}`);
-      const page = (await res.json()) as { articles?: CardArticle[]; nextPage?: string | null };
-
-      const seen = new Set(
-        Array.from(grid.querySelectorAll<HTMLElement>('[data-article-id]')).map(
-          (n) => n.dataset.articleId ?? '',
-        ),
-      );
-
-      const fresh = (page.articles ?? []).filter(
-        (a) => a?.url && a?.title && isSafeUrlClient(a.url) && !seen.has(a.id),
-      );
-
-      // Appended, so keyboard focus order stays natural.
-      for (const a of fresh) grid.appendChild(buildArticleCardElement(a));
-
-      if (page.nextPage) {
-        btn.dataset.nextPage = page.nextPage;
-        btn.disabled = false;
-        btn.textContent = label;
-        if (status && fresh.length === 0) status.textContent = 'No new headlines in that batch.';
-      } else {
-        btn.remove();
-        if (status) status.textContent = "You've reached the end of the feed.";
-      }
-    } catch {
-      btn.disabled = false;
-      btn.textContent = label;
-      // Existing cards stay on screen - a failed page never clears the feed.
-      if (status) status.textContent = 'Could not load more headlines. Tap to try again.';
-    }
-  });
+  }
 </script>
