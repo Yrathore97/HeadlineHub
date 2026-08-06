@@ -1,6 +1,7 @@
 ---
 import type { Article } from '../lib/news/types';
 import ArticleCard from './ArticleCard.astro';
+import { formatPublished } from '../lib/news/feed';
 
 interface Props {
   lead: Article;
@@ -17,18 +18,36 @@ const { lead, secondary } = Astro.props;
       <span class="font-mono-caption text-mute">TOP STORY</span>
     </div>
 
-    <!-- items-start: without it, grid stretches the lead column to match the
-         3-stacked-secondary-cards column height. ArticleCard's h-full +
-         justify-between then pushes its footer to that full stretched height,
-         leaving a large blank gap under the summary whenever the lead article
-         has no image (its natural content is much shorter than 3 cards). -->
+    <!-- items-start: keeps the lead column at its own natural height rather
+         than being stretched to match the secondary column (CSS Grid's
+         default). The secondary column is a compact headline list rather than
+         full cards specifically so it stays shorter than the lead - a single
+         image-led hero card next to three full-size stacked cards would
+         almost always leave the lead noticeably shorter, no matter what its
+         content is (1 big card vs. 3 stacked ones just doesn't balance). A
+         short list ending above a tall hero reads as normal; a tall hero with
+         dead space under it reads as broken. -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
       <div class="lg:col-span-2">
         <ArticleCard article={lead} size="lead" />
       </div>
 
-      <div class="flex flex-col gap-5">
-        {secondary.map((article) => <ArticleCard article={article} />)}
+      <div class="flex flex-col bg-surface-elevated border border-hairline rounded-md shadow-stacked-sm divide-y divide-hairline overflow-hidden">
+        {secondary.map((article) => (
+          <a
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex flex-col gap-1.5 p-4 hover:bg-surface-card transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-strong"
+          >
+            <span class="text-[11px] font-mono text-mute">
+              {article.source} · {formatPublished(article.publishedAt)}
+            </span>
+            <h4 class="text-sm font-semibold text-ink leading-snug group-hover:text-primary-strong transition-colors line-clamp-2">
+              {article.title}
+            </h4>
+          </a>
+        ))}
       </div>
     </div>
   </div>
