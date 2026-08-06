@@ -5,30 +5,32 @@ const rawLanguage = Astro.url.searchParams.get('language');
 const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
-<div id="masthead-info-strip" class="w-full bg-surface-dark text-stone py-1.5 px-4 font-mono-caption transition-colors duration-200">
+<div id="masthead-info-strip" class="w-full bg-surface-dark text-canvas dark:text-ink py-1.5 px-4 font-mono-caption transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
 
-    <!-- Left: Weather, Location & Date -->
+    <!-- Left: Weather, Location & Date. This bar stays dark in both site
+         themes, so every text colour here is the "always-dark-band" pair
+         (light-mode token / dark:ink), never a token that inverts. -->
     <div class="flex items-center gap-4 shrink-0">
       <div id="weather-widget-container" class="flex items-center gap-1.5">
-        <span id="weather-location" class="font-semibold text-canvas">New Delhi</span>
-        <span>·</span>
+        <span id="weather-location" class="font-semibold text-canvas dark:text-ink">New Delhi</span>
+        <span class="opacity-70">·</span>
         <span id="weather-temp" class="font-semibold text-primary">31°C</span>
         <span id="weather-condition">☀️</span>
       </div>
-      <span class="opacity-60" id="masthead-date-text">Tue, Aug 4, 2026</span>
+      <span class="opacity-70" id="masthead-date-text">Tue, Aug 4, 2026</span>
       <span id="ticker" hidden class="opacity-80 whitespace-nowrap"></span>
     </div>
 
     <!-- Right: Language, Saved, Theme -->
     <div class="flex items-center gap-4 shrink-0">
       <label class="flex items-center gap-1.5">
-        <span class="opacity-60 hidden sm:inline">Language</span>
+        <span class="opacity-70 hidden sm:inline">Language</span>
         <select
           id="language-select"
           aria-label="Choose the language of news headlines"
           title="Changes the language of news headlines, not the site interface"
-          class="appearance-none bg-surface-dark text-stone border border-hairline rounded-md font-mono-caption px-1.5 py-0.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong"
+          class="appearance-none bg-surface-dark text-canvas dark:text-ink border border-charcoal dark:border-hairline-soft rounded-md font-mono-caption px-1.5 py-0.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong"
         >
           {LANGUAGES.map((lang) => (
             <option value={lang.code} selected={lang.code === currentLanguage}>{lang.name}</option>
@@ -42,14 +44,14 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
         aria-label="View saved articles"
         aria-expanded="false"
         aria-controls="saved-drawer"
-        class="bg-transparent border-none text-stone hover:text-canvas font-mono-caption uppercase cursor-pointer"
+        class="bg-transparent border-none text-canvas dark:text-ink hover:text-primary font-mono-caption uppercase cursor-pointer"
       >
         Saved (<span data-saved-count>0</span>)
       </button>
 
       <button
         type="button"
-        class="theme-toggle-trigger bg-transparent border-none text-stone hover:text-canvas font-mono-caption uppercase cursor-pointer"
+        class="theme-toggle-trigger bg-transparent border-none text-canvas dark:text-ink hover:text-primary font-mono-caption uppercase cursor-pointer"
       >
         <span class="block dark:hidden">Light</span>
         <span class="hidden dark:block">Dark</span>
