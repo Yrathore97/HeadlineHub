@@ -18,9 +18,16 @@ const headlineSize = isLead
 const summaryClamp = isLead ? 'line-clamp-3 text-sm' : 'line-clamp-3 text-xs';
 ---
 
+<!-- Do NOT add h-full here. When this card is a direct grid child (NewsFeed's
+     #articles-grid, SearchResults' #search-results-grid), height:100% resolves
+     against the row's track height regardless of the grid's align-items -
+     percentage height is a definite size request that align-items only
+     overrides for auto-sized items. That silently stretched every card in a
+     row to match its tallest sibling and pushed the footer down into a large
+     blank gap in shorter cards. Card height should always come from content. -->
 <article
   data-article-id={article.id}
-  class="article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-[box-shadow,border-color] flex flex-col group h-full"
+  class="article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-[box-shadow,border-color] flex flex-col group"
 >
   {article.imageUrl && (
     <div class={`relative ${imageHeight} w-full overflow-hidden bg-surface-card`}>

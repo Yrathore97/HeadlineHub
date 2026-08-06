@@ -45,7 +45,7 @@ export function buildArticleCardElement(a: CardArticle): HTMLElement {
   const el = document.createElement('article');
   el.dataset.articleId = a.id;
   el.className =
-    'article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-[box-shadow,border-color] flex flex-col group h-full';
+    'article-card bg-surface-elevated border border-hairline rounded-md overflow-hidden shadow-stacked-sm hover:shadow-stacked-md hover:border-primary transition-[box-shadow,border-color] flex flex-col group';
 
   if (a.imageUrl && isSafeUrlClient(a.imageUrl)) {
     const wrap = document.createElement('div');
