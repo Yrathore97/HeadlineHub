@@ -291,6 +291,14 @@ html.dark .shadow-stacked-lg {
   border-radius: var(--radius-md);
 }
 
+/* Saved-article toggle, shared by ArticleCard, the client-built NewsFeed
+   cards, and the mockup's top-story slot. */
+.save-toggle-btn.is-saved {
+  background-color: var(--color-primary-strong);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary-strong);
+}
+
 /* Visible keyboard focus on every interactive surface. */
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
   outline: 2px solid var(--color-primary-strong);
