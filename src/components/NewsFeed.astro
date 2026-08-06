@@ -49,66 +49,76 @@ articles = prepareArticles(articles, MAX_CARDS).filter((a) => !exclude.has(a.url
 // site's own UI text - this note is the one place that says so out loud,
 // rather than leaving a first-time switcher to infer it from a hover title.
 const languageName = LANGUAGES.find((l) => l.code === language)?.name ?? language;
+
+// Category pages and search don't pass a sidebar - skip the 4-column split
+// so they don't reserve an empty column of dead space.
+const hasSidebar = Astro.slots.has('sidebar');
 ---
 
 <section id="news-feed" class="w-full py-12 bg-surface-soft transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-hairline pb-4">
-      <div>
-        <div class="flex items-center gap-2 mb-1">
-          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-          <span id="feed-type-badge" class="font-mono-caption text-mute">LIVE HEADLINE STREAM</span>
+    <div class={hasSidebar ? 'grid grid-cols-1 lg:grid-cols-4 gap-8 items-start' : ''}>
+      <div class={hasSidebar ? 'lg:col-span-3' : ''}>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-hairline pb-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              <span id="feed-type-badge" class="font-mono-caption text-mute">LIVE HEADLINE STREAM</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-semibold text-ink tracking-[-0.96px]">{heading}</h2>
+            {language !== DEFAULT_LANGUAGE && (
+              <p class="text-xs text-mute mt-1">
+                Showing headlines in {languageName} — site menus and buttons stay in English.
+              </p>
+            )}
+          </div>
+
+          {articles.length > 0 && (
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1 bg-surface-elevated border border-hairline rounded-full text-xs font-semibold text-primary-strong flex items-center gap-1.5 shadow-stacked-sm">
+                <span>Headlines from publisher feeds</span>
+              </span>
+            </div>
+          )}
         </div>
-        <h2 class="text-2xl sm:text-3xl font-semibold text-ink tracking-[-0.96px]">{heading}</h2>
-        {language !== DEFAULT_LANGUAGE && (
-          <p class="text-xs text-mute mt-1">
-            Showing headlines in {languageName} — site menus and buttons stay in English.
+
+        {articles.length === 0 ? (
+          <p class="text-sm opacity-70 text-body">
+            Headlines are temporarily unavailable. Please check back shortly.
           </p>
+        ) : (
+          <>
+            <!-- items-start: CSS Grid's default stretch makes every card in a row
+                 match the tallest card's height. ArticleCard's h-full + its
+                 footer's justify-between then pushes the footer to that full
+                 stretched height, leaving a blank gap in any shorter card sharing
+                 a row with a taller one (varying summary length, or one card with
+                 an image and its row-mate without). Same bug, same fix, as
+                 LeadStory.astro. -->
+            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+              {articles.map((article) => <ArticleCard article={article} />)}
+            </div>
+
+            <div class="mt-8 flex flex-col items-center gap-3">
+              <button
+                id="load-more"
+                type="button"
+                hidden={!nextPage}
+                data-next-page={nextPage ?? ''}
+                data-category={category}
+                data-language={language}
+                class="px-6 py-2.5 bg-ink hover:bg-charcoal text-canvas text-sm font-semibold rounded-md shadow-stacked-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                Load more headlines
+              </button>
+              <p id="load-more-status" role="status" aria-live="polite" class="text-xs text-mute"></p>
+            </div>
+          </>
         )}
       </div>
 
-      {articles.length > 0 && (
-        <div class="flex items-center gap-2">
-          <span class="px-3 py-1 bg-surface-elevated border border-hairline rounded-full text-xs font-semibold text-primary-strong flex items-center gap-1.5 shadow-stacked-sm">
-            <span>Headlines from publisher feeds</span>
-          </span>
-        </div>
-      )}
+      {hasSidebar && <slot name="sidebar" />}
     </div>
-
-    {articles.length === 0 ? (
-      <p class="text-sm opacity-70 text-body">
-        Headlines are temporarily unavailable. Please check back shortly.
-      </p>
-    ) : (
-      <>
-        <!-- items-start: CSS Grid's default stretch makes every card in a row
-             match the tallest card's height. ArticleCard's h-full + its
-             footer's justify-between then pushes the footer to that full
-             stretched height, leaving a blank gap in any shorter card sharing
-             a row with a taller one (varying summary length, or one card with
-             an image and its row-mate without). Same bug, same fix, as
-             LeadStory.astro. -->
-        <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
-          {articles.map((article) => <ArticleCard article={article} />)}
-        </div>
-
-        <div class="mt-8 flex flex-col items-center gap-3">
-          <button
-            id="load-more"
-            type="button"
-            hidden={!nextPage}
-            data-next-page={nextPage ?? ''}
-            data-category={category}
-            data-language={language}
-            class="px-6 py-2.5 bg-ink hover:bg-charcoal text-canvas text-sm font-semibold rounded-md shadow-stacked-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            Load more headlines
-          </button>
-          <p id="load-more-status" role="status" aria-live="polite" class="text-xs text-mute"></p>
-        </div>
-      </>
-    )}
   </div>
 </section>
 

@@ -33,7 +33,7 @@ articles = prepareArticles(articles).filter((a) => !exclude.has(a.url)).slice(0,
 ---
 
 {articles.length > 0 && (
-  <section class="w-full py-8 border-b border-hairline-soft last:border-b-0">
+  <section id={`rail-${slug}`} data-topic={label} class="w-full py-8 border-b border-hairline-soft last:border-b-0" tabindex="-1">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between gap-4 mb-5">
         <h2 class="text-xl sm:text-2xl font-semibold text-ink tracking-[-0.6px] flex items-center gap-2">

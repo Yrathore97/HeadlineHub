@@ -1,0 +1,79 @@
+---
+import type { Article } from '../lib/news/types';
+import { RAIL_TOPICS } from '../lib/news/topics';
+
+interface Props {
+  /** Already-fetched, already-deduped articles from the homepage's main
+   *  feed - reused here rather than a second fetch. Not real read-count
+   *  analytics; "most read" means "most recent" until that exists. */
+  mostRead: Article[];
+}
+
+const { mostRead } = Astro.props;
+const MOST_READ_SIZE = 5;
+const items = mostRead.slice(0, MOST_READ_SIZE);
+---
+
+<aside class="w-full lg:w-auto space-y-6">
+  {items.length > 0 && (
+    <div class="bg-surface-elevated border border-hairline rounded-md shadow-stacked-sm p-4">
+      <h2 class="font-mono-caption text-mute mb-3">Most Read</h2>
+      <ol class="space-y-3">
+        {items.map((article, i) => (
+          <li class="flex gap-2.5">
+            <span class="font-mono text-primary-strong text-sm font-semibold shrink-0">{i + 1}</span>
+            <a
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm text-ink leading-snug hover:text-primary-strong transition-colors line-clamp-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong rounded-sm"
+            >
+              {article.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+
+  <div class="bg-surface-elevated border border-hairline rounded-md shadow-stacked-sm p-4">
+    <h2 class="font-mono-caption text-mute mb-3">Your topics</h2>
+    <div class="flex flex-col gap-1.5">
+      {RAIL_TOPICS.map((topic) => (
+        <a
+          href={`#rail-${topic.toLowerCase()}`}
+          class="jump-to-rail px-3 py-1.5 text-sm text-ink hover:bg-surface-card hover:text-primary-strong rounded-md transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong"
+        >
+          {topic}
+        </a>
+      ))}
+    </div>
+  </div>
+</aside>
+
+<script>
+  import { getEnabledTopics, setEnabledTopics, type RailTopic } from '../lib/news/topics';
+
+  // Plain anchor hrefs already jump the browser to #rail-<slug>, but a rail
+  // can be hidden right now via Customize Topics - jumping to a hidden
+  // section would land the reader on nothing. Re-enabling it through
+  // setEnabledTopics (not target.hidden directly) keeps the Customize
+  // Topics checkbox and the saved preference truthful - otherwise the next
+  // reload would silently re-hide what this link just revealed.
+  document.querySelectorAll<HTMLAnchorElement>('.jump-to-rail').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const id = link.getAttribute('href')?.slice(1);
+      const target = id ? document.getElementById(id) : null;
+      const topic = target?.dataset.topic as RailTopic | undefined;
+      if (!target || !topic) return;
+
+      if (target.hidden) {
+        e.preventDefault();
+        const enabled = getEnabledTopics();
+        setEnabledTopics([...enabled, topic]);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.focus({ preventScroll: true });
+      }
+    });
+  });
+</script>

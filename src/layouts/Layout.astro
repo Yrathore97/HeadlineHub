@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import SavedArticlesPanel from '../components/SavedArticlesPanel.astro';
+import TopicsPanel from '../components/TopicsPanel.astro';
 
 interface Props {
   title?: string;
@@ -123,6 +125,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE);
       Skip to Main Content
     </a>
     <div id="nav-progress" aria-hidden="true" class="fixed top-0 left-0 z-[200] h-[3px] w-0 bg-primary-strong opacity-0"></div>
+    <SavedArticlesPanel />
+    <TopicsPanel />
     <slot />
 
     <script>

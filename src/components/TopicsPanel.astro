@@ -1,0 +1,86 @@
+---
+import { RAIL_TOPICS } from '../lib/news/topics';
+// Included once in Layout.astro. Toggling a checkbox here shows/hides the
+// matching CategoryRail section on whichever page has one (only the
+// homepage does) via data-topic, without a reload.
+---
+
+<div
+  id="topics-panel"
+  class="fixed top-16 right-3 sm:right-6 z-[90] w-64 bg-surface-elevated border border-hairline rounded-md shadow-stacked-lg p-4 hidden"
+  role="dialog"
+  aria-label="Customize topics"
+>
+  <div class="flex items-center justify-between gap-4 mb-3">
+    <h2 class="text-sm font-semibold text-ink">Show sections for:</h2>
+    <button
+      type="button"
+      id="topics-panel-close"
+      aria-label="Close customize topics panel"
+      class="shrink-0 w-6 h-6 flex items-center justify-center text-body hover:text-ink bg-surface-card rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong"
+    >
+      ✕
+    </button>
+  </div>
+  <div class="space-y-2">
+    {RAIL_TOPICS.map((topic) => (
+      <label class="flex items-center gap-2 text-sm text-ink cursor-pointer">
+        <input type="checkbox" class="topic-checkbox" style="accent-color: var(--color-primary-strong)" value={topic} checked />
+        {topic}
+      </label>
+    ))}
+  </div>
+</div>
+
+<script>
+  import { RAIL_TOPICS, getEnabledTopics, setEnabledTopics, type RailTopic } from '../lib/news/topics';
+
+  const panel = document.getElementById('topics-panel');
+  const closeBtn = document.getElementById('topics-panel-close');
+  const toggleBtn = document.getElementById('topics-toggle-btn');
+  const checkboxes = document.querySelectorAll<HTMLInputElement>('.topic-checkbox');
+
+  function applyVisibility(enabled: RailTopic[]) {
+    for (const topic of RAIL_TOPICS) {
+      document
+        .querySelectorAll<HTMLElement>(`[data-topic="${topic}"]`)
+        .forEach((el) => (el.hidden = !enabled.includes(topic)));
+    }
+  }
+
+  function currentSelection(): RailTopic[] {
+    return Array.from(checkboxes)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value as RailTopic);
+  }
+
+  const enabled = getEnabledTopics();
+  checkboxes.forEach((cb) => (cb.checked = enabled.includes(cb.value as RailTopic)));
+  applyVisibility(enabled);
+
+  // Other UI can change the preference too (Sidebar's "jump to a hidden
+  // rail" reveals it via setEnabledTopics rather than touching .hidden
+  // directly) - listening here keeps the checkboxes truthful regardless of
+  // which control made the change, instead of only reacting to its own.
+  window.addEventListener('topics-changed', (e) => {
+    const next = (e as CustomEvent<{ topics: RailTopic[] }>).detail.topics;
+    checkboxes.forEach((cb) => (cb.checked = next.includes(cb.value as RailTopic)));
+    applyVisibility(next);
+  });
+
+  checkboxes.forEach((cb) => {
+    // setEnabledTopics dispatches topics-changed, which the listener above
+    // handles - no need to also update checkboxes/visibility here.
+    cb.addEventListener('change', () => setEnabledTopics(currentSelection()));
+  });
+
+  toggleBtn?.addEventListener('click', () => panel?.classList.toggle('hidden'));
+  closeBtn?.addEventListener('click', () => panel?.classList.add('hidden'));
+
+  document.addEventListener('click', (e) => {
+    if (!panel || panel.classList.contains('hidden')) return;
+    const target = e.target as HTMLElement;
+    if (panel.contains(target) || target === toggleBtn || toggleBtn?.contains(target)) return;
+    panel.classList.add('hidden');
+  });
+</script>

@@ -63,6 +63,26 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
     <!-- Controls -->
     <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
 
+      <!-- Customize Topics Toggle -->
+      <button
+        type="button"
+        id="topics-toggle-btn"
+        aria-label="Customize which topics show on the homepage"
+        class="hidden sm:flex px-2.5 sm:px-3 py-1.5 h-[32px] items-center gap-1 bg-surface-card hover:bg-secondary-bg text-ink border border-hairline rounded-full text-xs font-semibold shadow-stacked-sm transition-colors duration-200 cursor-pointer shrink-0"
+      >
+        Customize topics
+      </button>
+
+      <!-- Saved Articles Toggle -->
+      <button
+        type="button"
+        id="saved-toggle-btn"
+        aria-label="View saved articles"
+        class="px-2.5 sm:px-3 py-1.5 h-[32px] flex items-center gap-1 bg-surface-card hover:bg-secondary-bg text-ink border border-hairline rounded-full text-xs font-semibold shadow-stacked-sm transition-colors duration-200 cursor-pointer shrink-0"
+      >
+        Saved
+      </button>
+
       <!-- Theme Toggle Button -->
       <button
         type="button"

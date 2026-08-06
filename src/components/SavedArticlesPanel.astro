@@ -1,0 +1,133 @@
+---
+// Included once in Layout.astro so it's available on every page. The
+// "View saved articles" toggle button lives in Navbar.astro (a header
+// control); this component owns the slide-out panel and the save-state
+// logic shared by every ArticleCard's Save button on the page.
+---
+
+<div
+  id="saved-panel"
+  class="fixed inset-y-0 right-0 z-[90] w-full max-w-sm bg-surface-elevated border-l border-hairline shadow-stacked-lg translate-x-full transition-transform duration-300 ease-out flex flex-col"
+  role="dialog"
+  aria-label="Saved articles"
+  aria-hidden="true"
+>
+  <div class="flex items-center justify-between gap-4 p-4 border-b border-hairline">
+    <h2 class="text-sm font-semibold text-ink">Saved articles</h2>
+    <button
+      type="button"
+      id="saved-panel-close"
+      aria-label="Close saved panel"
+      class="shrink-0 w-7 h-7 flex items-center justify-center text-body hover:text-ink bg-surface-card rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-strong"
+    >
+      ✕
+    </button>
+  </div>
+  <div id="saved-panel-list" class="flex-1 overflow-y-auto p-4 space-y-3">
+    <p class="text-sm text-mute">Nothing saved yet. Use the Save button on any story.</p>
+  </div>
+</div>
+<div
+  id="saved-panel-backdrop"
+  class="fixed inset-0 z-[80] bg-ink/40 opacity-0 pointer-events-none transition-opacity duration-300"
+  aria-hidden="true"
+></div>
+
+<script>
+  import { getSaved, toggleSaved, isSaved, type SavedArticle } from '../lib/news/saved';
+
+  const panel = document.getElementById('saved-panel');
+  const backdrop = document.getElementById('saved-panel-backdrop');
+  const list = document.getElementById('saved-panel-list');
+  const closeBtn = document.getElementById('saved-panel-close');
+  const toggleBtn = document.getElementById('saved-toggle-btn');
+
+  function renderList(saved: SavedArticle[]) {
+    if (!list) return;
+    list.textContent = '';
+    if (saved.length === 0) {
+      const p = document.createElement('p');
+      p.className = 'text-sm text-mute';
+      p.textContent = 'Nothing saved yet. Use the Save button on any story.';
+      list.appendChild(p);
+      return;
+    }
+    // Newest saved first.
+    for (const a of [...saved].reverse()) {
+      const link = document.createElement('a');
+      link.href = a.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.className =
+        'block p-3 bg-surface-card border border-hairline rounded-md text-sm text-ink hover:border-primary-strong hover:text-primary-strong transition-colors';
+      link.textContent = a.headline;
+      list.appendChild(link);
+    }
+  }
+
+  function updateToggleLabel(saved: SavedArticle[]) {
+    if (toggleBtn) toggleBtn.textContent = saved.length > 0 ? `Saved (${saved.length})` : 'Saved';
+  }
+
+  // Every Save button on the page reflects whether its article is already
+  // saved - matters because a fresh page load has no memory of the last
+  // click, only localStorage does.
+  function syncButtonStates() {
+    document.querySelectorAll<HTMLButtonElement>('.save-btn[data-save-href]').forEach((btn) => {
+      const href = btn.dataset.saveHref ?? '';
+      setButtonState(btn, isSaved(href));
+    });
+  }
+
+  function setButtonState(btn: HTMLButtonElement, saved: boolean) {
+    btn.setAttribute('aria-pressed', String(saved));
+    btn.classList.toggle('text-primary-strong', saved);
+    btn.classList.toggle('border-primary-strong', saved);
+    const icon = btn.querySelector<SVGElement>('.save-icon');
+    icon?.setAttribute('fill', saved ? 'currentColor' : 'none');
+    const label = btn.querySelector('.save-label');
+    if (label) label.textContent = saved ? 'Saved' : 'Save';
+  }
+
+  function openPanel() {
+    panel?.classList.remove('translate-x-full');
+    panel?.setAttribute('aria-hidden', 'false');
+    if (backdrop) {
+      backdrop.classList.remove('opacity-0', 'pointer-events-none');
+    }
+    renderList(getSaved());
+  }
+
+  function closePanel() {
+    panel?.classList.add('translate-x-full');
+    panel?.setAttribute('aria-hidden', 'true');
+    backdrop?.classList.add('opacity-0', 'pointer-events-none');
+  }
+
+  toggleBtn?.addEventListener('click', openPanel);
+  closeBtn?.addEventListener('click', closePanel);
+  backdrop?.addEventListener('click', closePanel);
+
+  // Delegated: Save buttons live on every ArticleCard, rendered many times
+  // per page (and appended client-side by Load more/search) - one listener
+  // here covers all of them, present and future, instead of wiring each.
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement)?.closest<HTMLButtonElement>('.save-btn[data-save-href]');
+    if (!btn) return;
+    const href = btn.dataset.saveHref;
+    const headline = btn.dataset.saveHeadline;
+    if (!href || !headline) return;
+    const nowSaved = toggleSaved({ href, headline });
+    setButtonState(btn, nowSaved);
+  });
+
+  window.addEventListener('saved-changed', (e) => {
+    const saved = (e as CustomEvent<{ saved: SavedArticle[] }>).detail.saved;
+    updateToggleLabel(saved);
+    if (panel?.getAttribute('aria-hidden') === 'false') renderList(saved);
+  });
+
+  const initial = getSaved();
+  updateToggleLabel(initial);
+  syncButtonStates();
+</script>

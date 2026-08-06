@@ -1,0 +1,35 @@
+<section class="w-full py-12 bg-surface-dark text-canvas dark:text-ink transition-colors duration-200">
+  <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
+    <div class="max-w-2xl">
+      <span class="font-mono-caption text-primary mb-2 block font-semibold">VERIFICATION ENGINE</span>
+      <h2 class="text-2xl sm:text-3xl font-semibold tracking-[-0.96px] mb-4">Fact Check Explorer</h2>
+      <p class="text-sm sm:text-base text-stone dark:text-body leading-relaxed mb-6">
+        Paste a headline, a claim, or an article URL and it runs a three-stage pipeline: first it checks
+        published fact-checkers, then live web sources, then reasons over only what it actually retrieved.
+      </p>
+
+      <ul class="space-y-3 mb-8 text-sm text-stone dark:text-body">
+        <li class="flex gap-2.5">
+          <span class="text-primary shrink-0">✓</span>
+          A verdict of Verified, Misleading, or False is only returned when the retrieved evidence actually supports it.
+        </li>
+        <li class="flex gap-2.5">
+          <span class="text-primary shrink-0">✓</span>
+          When the evidence is thin, the tool says so — "not enough evidence to judge" — instead of guessing.
+        </li>
+        <li class="flex gap-2.5">
+          <span class="text-primary shrink-0">✓</span>
+          Every result links back to the sources it read, so you can check the reasoning yourself.
+        </li>
+      </ul>
+
+      <a
+        href="/verify"
+        class="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-sm font-bold rounded-md transition-colors shadow-stacked-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-canvas"
+      >
+        Try Fact Check
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+      </a>
+    </div>
+  </div>
+</section>
