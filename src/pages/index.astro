@@ -2,27 +2,25 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import MastheadInfoStrip from '../components/MastheadInfoStrip.astro';
+import SavedArticlesDrawer from '../components/SavedArticlesDrawer.astro';
 import HeroMesh from '../components/HeroMesh.astro';
 import LeadStory from '../components/LeadStory.astro';
 import CategoryRail from '../components/CategoryRail.astro';
+import FactCheckPromo from '../components/FactCheckPromo.astro';
+import MostReadSidebar from '../components/MostReadSidebar.astro';
 import NewsFeed from '../components/NewsFeed.astro';
 import SeoContentSection from '../components/SeoContentSection.astro';
 import Footer from '../components/Footer.astro';
 import type { Article, NewsPage } from '../lib/news/types';
 import { prepareArticles } from '../lib/news/feed';
 import { isValidLanguage, DEFAULT_LANGUAGE } from '../lib/news/languages';
+import { RAIL_TOPICS } from '../lib/news/categories';
 
 const rawLanguage = Astro.url.searchParams.get('language');
 const language = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 
-// The four categories that get a rail. Kept short deliberately: each one is a
-// separate upstream request, and the plan's rate-limit budget assumes four.
-const RAILS = [
-  { slug: 'sports', label: 'Sports' },
-  { slug: 'business', label: 'Business' },
-  { slug: 'technology', label: 'Technology' },
-  { slug: 'health', label: 'Health' },
-];
+// The rail sections a reader can show/hide via "Customize topics".
+const RAILS = RAIL_TOPICS;
 
 let top: Article[] = [];
 try {
@@ -50,21 +48,33 @@ const shownUrls = [lead?.url, ...secondary.map((a) => a.url)].filter(
 >
   <Navbar />
   <MastheadInfoStrip />
+  <SavedArticlesDrawer />
   <main id="main" class="flex-1">
     <HeroMesh />
 
-    {lead && <LeadStory lead={lead} secondary={secondary} />}
+    <div class="max-w-[1400px] mx-auto py-10 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10 lg:gap-12">
+      <div class="min-w-0">
+        {lead && <LeadStory lead={lead} secondary={secondary} />}
 
-    {RAILS.map((rail) => (
-      <CategoryRail
-        slug={rail.slug}
-        label={rail.label}
-        language={language}
-        excludeUrls={shownUrls}
-      />
-    ))}
+        {RAILS.map((rail) => (
+          <CategoryRail
+            slug={rail.slug}
+            label={rail.label}
+            language={language}
+            excludeUrls={shownUrls}
+          />
+        ))}
 
-    <NewsFeed language={language} excludeUrls={shownUrls} />
+        <FactCheckPromo />
+
+        <NewsFeed language={language} excludeUrls={shownUrls} />
+      </div>
+
+      <div class="px-4 sm:px-6">
+        <MostReadSidebar trending={top.slice(0, 5)} />
+      </div>
+    </div>
+
     <SeoContentSection />
   </main>
   <Footer />

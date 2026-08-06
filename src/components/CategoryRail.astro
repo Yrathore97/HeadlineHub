@@ -33,9 +33,9 @@ articles = prepareArticles(articles).filter((a) => !exclude.has(a.url)).slice(0,
 ---
 
 {articles.length > 0 && (
-  <section class="w-full py-8 border-b border-hairline-soft last:border-b-0">
+  <section data-topic-section={label} class="w-full py-8 border-b border-hairline-soft last:border-b-0">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between gap-4 mb-5">
+      <div class="flex items-center justify-between gap-4 mb-5 border-b border-hairline pb-4">
         <h2 class="text-xl sm:text-2xl font-semibold text-ink tracking-[-0.6px] flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-primary"></span>
           {label}
@@ -49,11 +49,9 @@ articles = prepareArticles(articles).filter((a) => !exclude.has(a.url)).slice(0,
         </a>
       </div>
 
-      <div class="flex gap-5 overflow-x-auto pb-1 snap-x snap-mandatory no-scrollbar">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {articles.map((article) => (
-          <div class="shrink-0 w-[280px] sm:w-[300px] snap-start">
-            <ArticleCard article={article} />
-          </div>
+          <ArticleCard article={article} />
         ))}
       </div>
     </div>

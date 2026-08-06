@@ -27,6 +27,15 @@ export const CATEGORIES: Category[] = [
   { slug: 'health', label: 'Health', upstream: 'health' },
 ];
 
+/** The homepage rail sections a reader can show/hide via "Customize topics".
+ *  Kept short deliberately: each one is a separate upstream request. */
+export const RAIL_TOPICS: Category[] = [
+  { slug: 'sports', label: 'Sports', upstream: 'sports' },
+  { slug: 'business', label: 'Business', upstream: 'business' },
+  { slug: 'technology', label: 'Technology', upstream: 'technology' },
+  { slug: 'health', label: 'Health', upstream: 'health' },
+];
+
 const BY_SLUG = new Map(CATEGORIES.map((c) => [c.slug, c]));
 
 export function isValidCategory(slug: unknown): slug is string {

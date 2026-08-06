@@ -1,0 +1,99 @@
+---
+---
+
+<div
+  id="saved-drawer-overlay"
+  hidden
+  class="fixed inset-0 bg-ink/30 z-[70]"
+></div>
+
+<aside
+  id="saved-drawer"
+  aria-label="Saved articles"
+  style="transform: translateX(105%);"
+  class="fixed top-0 right-0 z-[71] h-full w-[320px] max-w-[90vw] bg-surface-elevated shadow-stacked-lg p-6 overflow-y-auto transition-transform duration-300 ease-out"
+>
+  <div class="flex items-center justify-between mb-5">
+    <h2 class="text-lg font-bold text-ink">Saved articles</h2>
+    <button
+      type="button"
+      id="saved-drawer-close"
+      aria-label="Close saved panel"
+      class="w-7 h-7 flex items-center justify-center bg-secondary-bg hover:bg-secondary-pressed rounded-full text-ink text-sm cursor-pointer"
+    >
+      ✕
+    </button>
+  </div>
+
+  <p id="saved-drawer-empty" class="text-sm text-mute">
+    Nothing saved yet. Use the Save button on any story.
+  </p>
+
+  <div id="saved-drawer-list" class="flex flex-col gap-3"></div>
+</aside>
+
+<script>
+  const overlay = document.getElementById('saved-drawer-overlay');
+  const drawer = document.getElementById('saved-drawer');
+  const closeBtn = document.getElementById('saved-drawer-close');
+  const list = document.getElementById('saved-drawer-list');
+  const empty = document.getElementById('saved-drawer-empty');
+  const openToggle = document.getElementById('saved-drawer-toggle');
+
+  function close() {
+    if (drawer) drawer.style.transform = 'translateX(105%)';
+    overlay?.setAttribute('hidden', '');
+    openToggle?.setAttribute('aria-expanded', 'false');
+  }
+
+  function open() {
+    if (drawer) drawer.style.transform = 'translateX(0)';
+    overlay?.removeAttribute('hidden');
+    openToggle?.setAttribute('aria-expanded', 'true');
+  }
+
+  // The toggle button lives in the masthead, a separate component - it
+  // dispatches this event rather than reaching into our DOM directly.
+  window.addEventListener('nz-saved-drawer-toggle', () => {
+    if (drawer?.style.transform === 'translateX(0)') close();
+    else open();
+  });
+
+  closeBtn?.addEventListener('click', close);
+  overlay?.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+
+  function render() {
+    if (!list || !empty) return;
+    const saved = window.NZ.getSaved();
+    empty.hidden = saved.length > 0;
+    list.innerHTML = '';
+
+    for (const article of saved) {
+      const card = document.createElement('div');
+      card.className = 'border border-hairline rounded-md p-3';
+
+      const link = document.createElement('a');
+      link.href = article.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.className = 'block text-sm font-semibold text-ink mb-1.5 hover:text-primary-strong';
+      link.textContent = article.headline;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'text-xs font-medium text-primary-strong bg-transparent border-none cursor-pointer p-0';
+      removeBtn.textContent = 'Remove';
+      removeBtn.addEventListener('click', () => window.NZ.toggleSaved(article.href, article.headline));
+
+      card.appendChild(link);
+      card.appendChild(removeBtn);
+      list.appendChild(card);
+    }
+  }
+
+  window.addEventListener('nz-saved-changed', render);
+  render();
+</script>

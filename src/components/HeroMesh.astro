@@ -44,37 +44,31 @@ try {
 
       <!-- Main Headline -->
       <h1 class="text-2xl sm:text-4xl md:text-5xl font-semibold text-ink tracking-[-0.8px] sm:tracking-[-2px] leading-snug sm:leading-[1.05] mb-4 sm:mb-5">
-        Real-Time News Crawled, Verified & Summarized by AI.
+        Search real-time news,<br />in your language.
       </h1>
 
       <!-- Subtitle -->
       <p class="text-xs sm:text-base md:text-lg text-body max-w-2xl font-normal leading-relaxed mb-6 sm:mb-8 px-2 sm:px-0">
-        NewzWale collects live English-language headlines from Indian news sources, and checks claims against real evidence before returning a verdict.
+        NewzWale collects live headlines from Indian news sources. Search any topic, or use the Fact Check tab to verify a specific claim.
       </p>
 
-      <!-- Instant Fact-Check Quick Query Bar -->
-      <div class="w-full max-w-2xl bg-surface-elevated border border-hairline rounded-md p-1.5 sm:p-2 shadow-stacked-md mb-6 sm:mb-8 hover:border-primary focus-within:border-primary-strong focus-within:ring-1 focus-within:ring-primary-strong transition-colors">
-        <form action="/verify" method="GET" class="flex flex-col sm:flex-row items-center gap-2">
-          <div class="relative w-full flex-1 flex items-center pl-3 min-w-0">
-            <svg class="w-4 h-4 text-mute shrink-0 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <label for="hero-query" class="sr-only">Headline, claim, or article URL to fact check</label>
-            <input
-              id="hero-query"
-              type="text"
-              name="query"
-              autocomplete="off"
-              spellcheck="false"
-              placeholder="Paste headline, WhatsApp forward, or URL to verify…"
-              class="w-full min-w-0 bg-transparent text-xs sm:text-sm text-ink placeholder:text-mute border-none focus:outline-none py-1.5 sm:py-2"
-              required
-            />
-          </div>
-          <button type="submit" class="w-full sm:w-auto px-4 sm:px-5 py-2 sm:py-2.5 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-md transition-colors flex items-center justify-center gap-2 shrink-0 cursor-pointer shadow-stacked-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
-            <svg class="w-3.5 h-3.5 text-on-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Run Fact Check
-          </button>
-        </form>
-      </div>
+      <!-- Headline Search Bar -->
+      <form id="hero-search-form" class="w-full max-w-2xl flex items-center gap-2 bg-surface-card rounded-full pl-5 pr-1.5 py-1.5 shadow-stacked-md mb-6 sm:mb-8">
+        <svg class="w-4 h-4 text-mute shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <label for="hero-search" class="sr-only">Search headlines on this page</label>
+        <input
+          id="hero-search"
+          type="text"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder={`Search for news, e.g. "India cricket" or "budget 2026"…`}
+          class="flex-1 min-w-0 bg-transparent text-xs sm:text-sm text-ink placeholder:text-mute border-none focus:outline-none py-1.5"
+        />
+        <button type="submit" class="shrink-0 px-4 sm:px-5 py-2 bg-primary-strong hover:bg-primary-pressed text-on-primary text-xs font-bold rounded-full transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink">
+          Search
+        </button>
+      </form>
+      <p id="hero-search-status" role="status" aria-live="polite" class="text-xs text-mute -mt-4 mb-6 sm:mb-8 hidden"></p>
 
       <!-- Feature Pill Stats -->
       <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-6 text-xs text-body">
@@ -85,7 +79,7 @@ try {
         <span class="hidden sm:inline text-stone">•</span>
         <div class="flex items-center gap-1.5 font-medium">
           <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary-strong" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-          Multi-Source Evidence Matrix
+          13 Languages
         </div>
         <span class="hidden sm:inline text-stone">•</span>
         <div class="flex items-center gap-1.5 font-medium">
@@ -121,3 +115,39 @@ try {
   </div>
   )}
 </section>
+
+<script>
+  // Filters the article cards already on the page by title - there is no
+  // search backend, so this searches what has loaded rather than promising
+  // results it cannot fetch.
+  const form = document.getElementById('hero-search-form');
+  const input = document.getElementById('hero-search') as HTMLInputElement | null;
+  const status = document.getElementById('hero-search-status');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = (input?.value ?? '').trim().toLowerCase();
+    const cards = document.querySelectorAll<HTMLElement>('[data-article-id]');
+    let shown = 0;
+
+    cards.forEach((card) => {
+      const headline = card.querySelector('.article-headline')?.textContent?.toLowerCase() ?? '';
+      const matches = query === '' || headline.includes(query);
+      card.hidden = !matches;
+      if (matches) shown += 1;
+    });
+
+    if (!status) return;
+    if (query === '') {
+      status.classList.add('hidden');
+      status.textContent = '';
+    } else {
+      status.classList.remove('hidden');
+      status.textContent =
+        shown === 0
+          ? `No loaded headlines match "${input?.value}".`
+          : `Showing ${shown} headline${shown === 1 ? '' : 's'} matching "${input?.value}".`;
+      document.getElementById('news-feed')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+</script>

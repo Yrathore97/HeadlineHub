@@ -1,28 +1,59 @@
 ---
+import { LANGUAGES, isValidLanguage, DEFAULT_LANGUAGE } from '../lib/news/languages';
+
+const rawLanguage = Astro.url.searchParams.get('language');
+const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
-<div id="masthead-info-strip" class="w-full bg-gradient-start border-b border-hairline py-1.5 px-4 text-xs font-mono transition-colors duration-200">
+<div id="masthead-info-strip" class="w-full bg-surface-dark text-stone py-1.5 px-4 font-mono-caption transition-colors duration-200">
   <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
 
-    <!-- Left: Weather & Location -->
-    <div id="weather-widget-container" class="flex items-center gap-2 text-body shrink-0">
-      <span class="text-primary-strong">📍</span>
-      <span id="weather-location" class="font-semibold text-ink">New Delhi</span>
-      <span id="weather-temp" class="font-semibold text-primary-strong">31°C</span>
-      <span id="weather-condition">☀️ Sunny</span>
+    <!-- Left: Weather, Location & Date -->
+    <div class="flex items-center gap-4 shrink-0">
+      <div id="weather-widget-container" class="flex items-center gap-1.5">
+        <span id="weather-location" class="font-semibold text-canvas">New Delhi</span>
+        <span>·</span>
+        <span id="weather-temp" class="font-semibold text-primary">31°C</span>
+        <span id="weather-condition">☀️</span>
+      </div>
+      <span class="opacity-60" id="masthead-date-text">Tue, Aug 4, 2026</span>
+      <span id="ticker" hidden class="opacity-80 whitespace-nowrap"></span>
     </div>
 
-    <!-- Center: Today's Date in Selected Language -->
-    <div class="flex items-center gap-1.5 text-body shrink-0">
-      <span class="text-primary-strong">📅</span>
-      <span id="masthead-date-text" class="font-medium text-ink">
-        Tue, Aug 4, 2026
-      </span>
-    </div>
+    <!-- Right: Language, Saved, Theme -->
+    <div class="flex items-center gap-4 shrink-0">
+      <label class="flex items-center gap-1.5">
+        <span class="opacity-60 hidden sm:inline">Language</span>
+        <select
+          id="language-select"
+          aria-label="Choose the language of news headlines"
+          title="Changes the language of news headlines, not the site interface"
+          class="appearance-none bg-surface-dark text-stone border border-hairline rounded-md font-mono-caption px-1.5 py-0.5 cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary-strong"
+        >
+          {LANGUAGES.map((lang) => (
+            <option value={lang.code} selected={lang.code === currentLanguage}>{lang.name}</option>
+          ))}
+        </select>
+      </label>
 
-    <!-- Right: Front-Page Financial Market Index Snippets (live; hidden unless real quotes load) -->
-    <div class="flex items-center gap-3 text-[11px] shrink-0">
-      <span id="ticker" hidden class="font-semibold text-ink whitespace-nowrap"></span>
+      <button
+        type="button"
+        id="saved-drawer-toggle"
+        aria-label="View saved articles"
+        aria-expanded="false"
+        aria-controls="saved-drawer"
+        class="bg-transparent border-none text-stone hover:text-canvas font-mono-caption uppercase cursor-pointer"
+      >
+        Saved (<span data-saved-count>0</span>)
+      </button>
+
+      <button
+        type="button"
+        class="theme-toggle-trigger bg-transparent border-none text-stone hover:text-canvas font-mono-caption uppercase cursor-pointer"
+      >
+        <span class="block dark:hidden">Light</span>
+        <span class="hidden dark:block">Dark</span>
+      </button>
     </div>
 
   </div>
@@ -236,4 +267,10 @@
     .catch(() => {
       /* stays hidden - never show invented numbers */
     });
+
+  // Saved-articles drawer lives in its own component; this just asks it to
+  // toggle rather than reaching into its DOM.
+  document.getElementById('saved-drawer-toggle')?.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('nz-saved-drawer-toggle'));
+  });
 </script>
