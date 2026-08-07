@@ -5,8 +5,8 @@ const rawLanguage = Astro.url.searchParams.get('language');
 const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LANGUAGE;
 ---
 
-<div id="masthead-info-strip" class="w-full bg-surface-dark text-canvas dark:text-ink py-1.5 px-4 font-mono-caption transition-colors duration-200">
-  <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
+<div id="masthead-info-strip" class="relative w-full bg-surface-dark text-canvas dark:text-ink py-1.5 px-4 font-mono-caption transition-colors duration-200">
+  <div id="masthead-strip-scroll" class="max-w-[1400px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar">
 
     <!-- Left: Weather, Location & Date. This bar stays dark in both site
          themes, so every text colour here is the "always-dark-band" pair
@@ -59,6 +59,7 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
     </div>
 
   </div>
+  <div id="masthead-strip-fade" class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-surface-dark to-transparent transition-opacity duration-200" aria-hidden="true"></div>
 </div>
 
 <script>
@@ -243,6 +244,28 @@ const currentLanguage = isValidLanguage(rawLanguage) ? rawLanguage : DEFAULT_LAN
     updateMastheadDate(savedLang);
     initWeather();
   });
+
+  // Edge fade hint: hide once scrolled to the end, or if there's nothing to
+  // scroll to begin with.
+  const stripScroll = document.getElementById('masthead-strip-scroll');
+  const stripFade = document.getElementById('masthead-strip-fade');
+  if (stripScroll && stripFade) {
+    const updateStripFade = () => {
+      const atEnd = stripScroll.scrollLeft + stripScroll.clientWidth >= stripScroll.scrollWidth - 1;
+      stripFade.style.opacity = atEnd ? '0' : '1';
+    };
+    updateStripFade();
+    stripScroll.addEventListener('scroll', updateStripFade, { passive: true });
+    window.addEventListener('resize', updateStripFade);
+
+    // One-time "peek" nudge on load, same as the category strip.
+    if (stripScroll.scrollWidth > stripScroll.clientWidth) {
+      setTimeout(() => {
+        stripScroll.scrollTo({ left: 56, behavior: 'smooth' });
+        setTimeout(() => stripScroll.scrollTo({ left: 0, behavior: 'smooth' }), 450);
+      }, 600);
+    }
+  }
 
   // Listen to global language change events
   window.addEventListener('language-changed', (e: any) => {

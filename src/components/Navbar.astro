@@ -105,9 +105,12 @@ const activeCategory = currentPath.startsWith('/category/')
     </button>
   </div>
 
-  <!-- Category strip: horizontally scrollable on narrow screens -->
-  <div class="w-full border-t border-hairline-soft bg-surface-soft">
+  <!-- Category strip: horizontally scrollable on narrow screens. The right-edge
+       fade hints there's more to scroll to; it hides itself once you've
+       scrolled to the end. -->
+  <div class="relative w-full border-t border-hairline-soft bg-surface-soft">
     <nav
+      id="category-strip"
       aria-label="News categories"
       class="max-w-[1400px] mx-auto px-3 sm:px-6 flex items-center gap-2 overflow-x-auto no-scrollbar h-[46px]"
     >
@@ -125,6 +128,7 @@ const activeCategory = currentPath.startsWith('/category/')
         </a>
       ))}
     </nav>
+    <div id="category-strip-fade" class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-surface-soft to-transparent transition-opacity duration-200" aria-hidden="true"></div>
   </div>
 
   <!-- Mobile Drawer Menu -->
@@ -217,6 +221,30 @@ const activeCategory = currentPath.startsWith('/category/')
     else url.searchParams.set('language', code);
     window.location.assign(url.toString());
   });
+
+  // Category strip edge fade: hide once scrolled to the end, or if it
+  // doesn't overflow at all, so the hint never lies about there being more.
+  const categoryStrip = document.getElementById('category-strip');
+  const categoryFade = document.getElementById('category-strip-fade');
+  if (categoryStrip && categoryFade) {
+    const updateFade = () => {
+      const atEnd = categoryStrip.scrollLeft + categoryStrip.clientWidth >= categoryStrip.scrollWidth - 1;
+      categoryFade.style.opacity = atEnd ? '0' : '1';
+    };
+    updateFade();
+    categoryStrip.addEventListener('scroll', updateFade, { passive: true });
+    window.addEventListener('resize', updateFade);
+
+    // One-time "peek" nudge: on first load, if there's more to see, scroll a
+    // little and spring back. Motion is a far stronger scroll affordance
+    // than a static fade, especially on touch screens.
+    if (categoryStrip.scrollWidth > categoryStrip.clientWidth) {
+      setTimeout(() => {
+        categoryStrip.scrollTo({ left: 56, behavior: 'smooth' });
+        setTimeout(() => categoryStrip.scrollTo({ left: 0, behavior: 'smooth' }), 450);
+      }, 600);
+    }
+  }
 
   // Hide the header on scroll-down past the fold, reveal on scroll-up. Two
   // sticky rows (nav + category strip) cost ~107px of a phone viewport, so
