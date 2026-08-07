@@ -145,7 +145,7 @@ Bindings declared in `wrangler.jsonc`: a KV namespace for caching, a Workers AI 
 
 ## 6. Known Limitations (honest, as of this writing)
 
-- No custom domain yet  -  live at `newzwale.editall.workers.dev`.
+- Live at [www.newzwale.com](https://www.newzwale.com) (custom domain bound to the Cloudflare Worker via the dashboard, not declared in `wrangler.jsonc`). Both `newzwale.com` and `www.newzwale.com` currently resolve with a 200 and no redirect between them - a canonical redirect (pick one as primary) is worth adding at the Cloudflare DNS/rules level to avoid duplicate-content signals.
 - Image/screenshot fact-checking tab exists in the UI, explicitly disabled with "coming soon"  -  no OCR backend wired up.
 - Site *chrome* (nav labels, buttons) stays English regardless of the language selector; only headline content changes language. The control's tooltip says this explicitly rather than over-promising translation.
 - No in-site article reading  -  headlines always link out to the original publisher (a licensing decision, not a technical limitation).
