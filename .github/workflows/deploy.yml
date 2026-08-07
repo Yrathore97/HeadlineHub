@@ -32,5 +32,11 @@ jobs:
     - name: Astro Code Check & Type Check
       run: npx astro check
 
+    # GitHub withholds repository secrets from Dependabot-triggered runs, so
+    # CLOUDFLARE_API_TOKEN is empty there and the remote proxy session the
+    # build needs cannot start. Tests and astro check above still run and are
+    # what actually catch a breaking dependency; the token stays unreachable
+    # from dependency code, which is the point of the restriction.
     - name: Build Web Application
+      if: github.actor != 'dependabot[bot]'
       run: npm run build
