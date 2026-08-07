@@ -2,3 +2,7 @@
 NEWSDATA_API_KEY=
 GOOGLE_FACTCHECK_API_KEY=
 TAVILY_API_KEY=
+# Optional: fallback source when NewsData is empty/erroring. Get a free key
+# at https://open-platform.theguardian.com/access/. Feed works without it -
+# falls straight through to the RSS fallback if unset.
+GUARDIAN_API_KEY=
