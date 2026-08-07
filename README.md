@@ -10,7 +10,7 @@ Live Indian news, in 13 languages — plus a fact-checker that never guesses.
 [![Built with Astro](https://img.shields.io/badge/built%20with-Astro-BC52EE?logo=astro&logoColor=white)](https://astro.build)
 [![Deployed on Cloudflare Workers](https://img.shields.io/badge/deployed%20on-Cloudflare%20Workers-F38020?logo=cloudflare&logoColor=white)](https://workers.cloudflare.com)
 
-[**Live Site →**](https://newzwale.editall.workers.dev)
+[**Live Site →**](https://www.newzwale.com)
 
 </div>
 
